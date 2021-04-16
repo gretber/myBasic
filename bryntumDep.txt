@@ -1,0 +1,3 @@
+    "@bryntum/demo-resources": "1.0.1",
+    "@bryntum/scheduler": "npm:@bryntum/scheduler-trial@4.1.0",
+    "@bryntum/scheduler-react": "4.1.0",

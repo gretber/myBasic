@@ -1,0 +1,1 @@
+export const API_URL = 'http://mail.vej.dk/IcopalKal/icokal.nsf/jsoninital?OpenAgent'

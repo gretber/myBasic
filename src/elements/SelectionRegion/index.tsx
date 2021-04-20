@@ -30,29 +30,31 @@ const Item = ({ value }: any) => {
       />
     </FormGroup>
   );
-};
+}
 
-export const Fabrik = () => {
+export const SelectionRegion = () => {
   const initialState = [
-    "Striber",
-    "Entreprenør",
-    "Afspærring",
-    "Dortheasminde",
-    "Fræsning",
-    "Kastrup",
-    "Køge",
-    "Randers",
-    "SPV - Dortheasminde",
-    "SPØ - Kollerød",
-    "Tinglev",
-    "Troldhede",
-    "Vandel",
-    "Viborg",
+    "FD",
+    "FRÆS",
+    "Fælles Danmark",
+    "MIDT",
+    "MTV",
+    "NORD",
+    "SPV",
+    "SPØ",
+    "SYD",
+    "TEST",
+    "VS",
+    "ØST",
   ];
 
   const [ state ] = useState(initialState);
 
   const itemJSX = state.map((item: string) => <Item key={item} value={item} />);
 
-  return <>{itemJSX}</>;
-};
+  return (
+    <>
+      { itemJSX} 
+    </>
+  )
+}

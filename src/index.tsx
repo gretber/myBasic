@@ -2,25 +2,21 @@
 import ReactDOM from 'react-dom'
 import App from './App'
 
-// React Query
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { ReactQueryDevtools } from 'react-query/devtools'
-
 // Material theme
 import { ThemeProvider } from "@material-ui/core/styles"
 
 // App initializaion
 import { theme } from './@init'
 
- // Create a client
- const queryClient = new QueryClient()
+// Redux
+import { Provider as ReduxProvider } from 'react-redux'
+import { store as reduxStore } from './@init/redux'
 
 ReactDOM.render(
-    <QueryClientProvider client={queryClient}>
+    <ReduxProvider store={reduxStore}>
         <ThemeProvider theme={theme}>
             <App />
         </ThemeProvider>
-        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-    </QueryClientProvider>,
+    </ReduxProvider>,
     document.getElementById('root')
 );

@@ -5,6 +5,7 @@ import { useSelector } from '../../../hooks';
 
 const initialState = {
     isOnline: navigator.onLine,
+    isDataFetching: false,
 };
 
 type TogglersState = typeof initialState;
@@ -36,8 +37,7 @@ export const togglersReducer: Reducer<TogglersState, TogglersActions> = (state =
         case RESET_TOGGLERS_TO_INITIAL:
             return {
                 isOnline:       navigator.onLine,
-                isLoggedIn:     false,
-                isCalendarView: true,
+                isDataFetching: false
             };
 
         default: return state;

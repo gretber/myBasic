@@ -16,7 +16,6 @@ import { PeriodPicker } from "../../components/PeriodPicker";
 import { JobType } from "../../components/JobType";
 import { Selection } from "../../components/Selection";
 
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -31,9 +30,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-
-
 export const NavigationPanel = () => {
+
+  // Styles
   const classes = useStyles();
 
   return (

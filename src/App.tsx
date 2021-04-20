@@ -15,56 +15,53 @@ import {
     BryntumScheduler,
     BryntumNumberField,
     BryntumButton
-} from '@bryntum/scheduler-react'
-import { Toast, EventModel } from '@bryntum/scheduler/scheduler.umd.js'
-import axios from 'axios';
-import { schedulerConfig } from './AppConfig'
+} from '@bryntum/scheduler-react';
+import { Toast, EventModel } from '@bryntum/scheduler/scheduler.umd.js';
+import { schedulerConfig } from './AppConfig';
 import './App.scss';
 
-import { NavigationPanel } from './containers/NavigationPanel'
+import { NavigationPanel } from './containers/NavigationPanel';
 
-// React Query
-import { useBriksQuery } from './bus/briks'
+// Data
+import { useDataQuery } from './bus/briks';
 
 // Helpers
-import { formatDate } from './helpers/formatDate'
-import { swap } from './helpers/swapElArr'
+import { formatDate } from './helpers/formatDate';
+import { swap } from './helpers/swapElArr';
+
+// Types
+import { Team, Project } from './bus/briks/dataTypes';
+import { Fullscreen } from '@bryntum/scheduler';
 
 const App: FunctionComponent = () => {
+
+    // Ref
     const schedulerRef = useRef<typeof BryntumScheduler | null>(null);
 
-    const [events, setEvents] = useState([]);
-    const [resources, setResources] = useState([]);
+    // Init state
+    const [events, setEvents] = useState<Array<Project> | []>([]);
+    const [resources, setResources] = useState<Array<Team> | []>([]);
     const [timeRanges, setTimeRanges] = useState([]);
 
-    const [barMargin, setBarMargin] = useState(5);
+    const [barMargin, setBarMargin] = useState(3);
     const [selectedEvent, setSelectedEvent] = useState<EventModel | null>(null);
 
-        // const {isFetching, data} = useBriksQuery()
-        // !isFetching?console.log(data):console.log('fetching...')
+    // Get data
+    const { data, loading } = useDataQuery()
 
-    // load and set data
-    useEffect(function () {
-        axios
-            .get('data/data.json')
-            .then(response => {
-                const { data }: any = response;
-                const transformedData = data.root.projects.project.map((item: any) => {
-                    item["resourceId"] = item["leaderId"];
-                    item["eventColor"] = item["color"];
-                    item.eventColor = `#${item.eventColor}`;
-                    return { ...item, startDate: formatDate(swap(item.startDate)), endDate: formatDate(swap(item.endDate)) }
-                })
-
-                setResources(data.root.leaders.leader);
-                setEvents(transformedData);
-                //setTimeRanges(data.timeRanges.rows);
+    useEffect(()=> {
+        if("root" in data){
+            const transformedData = data.root.projects.project.map((item) => {
+                item["resourceId"] = item["teamId"];
+                item["eventColor"] = item["color"];
+                item.eventColor = `#${item.eventColor}`;
+                return { ...item, startDate: formatDate(swap(item.startDate))!, endDate: formatDate(swap(item.endDate))! }
             })
-            .catch(error => {
-                Toast.show(String(error));
-                console.warn(error);
-            });
-    }, []);
+            const teams = data.root.teams.team
+            setResources(teams);
+            setEvents(transformedData);
+        }
+    }, [loading])
 
     // event selection change handler
     const onEventSelectionChange = useCallback(({ selected }: { selected: EventModel[] }) => {
@@ -100,6 +97,19 @@ const App: FunctionComponent = () => {
         selectedEvent?.remove();
         setSelectedEvent(null);
     }, [selectedEvent]);
+
+    // Full screen
+    // const fullScreenHandler = () => {
+    //     const scheduler = schedulerRef.current.instance;
+    //     console.log(Fullscreen.isFullscreen)
+    //     Fullscreen.request(scheduler)
+    //     console.log(Fullscreen.isFullscreen)
+
+    // }
+
+    if(loading){
+        return <div>loading......</div>
+    }
 
     return (
         <Fragment>

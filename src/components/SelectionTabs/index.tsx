@@ -9,8 +9,8 @@ import Box from "@material-ui/core/Box";
 
 // Elements
 import { SelectionHold } from "../../elements/SelectionHold";
-import { Region } from "../../elements/Region";
-import { Fabrik } from "../../elements/Fabrik";
+import { SelectionRegion } from "../../elements/SelectionRegion";
+import { SelectionFabrik } from "../../elements/SelectionFabrik";
 
 
 interface TabPanelProps {
@@ -78,10 +78,10 @@ export const SelectionTabs = () => {
         <SelectionHold />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Region />
+        <SelectionRegion />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Fabrik />
+        <SelectionFabrik />
       </TabPanel>
     </div>
   );

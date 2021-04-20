@@ -1,33 +1,54 @@
-export type Todo = {
-    id: string
-    text: string
-    isCompleted: boolean
-};
+import { User, View, Projects, Teams, Factories, Leaders, Districs, JobTypes, Selections } from './dataTypes'
 
-export type Todos = Todo[];
-
-export type FetchBriks = () => Promise<Todos>;
-
-// Create
-export type CreateTodoInput = {
-    body: {
-        text: string
+export type Data = {
+    root: {
+        user: User,
+        view: View,
+        projects: Projects,
+        teams: Teams,
+        factories: Factories,
+        leaders: Leaders,
+        districs: Districs,
+        jobTypes: JobTypes,
+        selections: Selections,
     }
-};
-export type CreateTodo = (input: CreateTodoInput) => Promise<Todo>;
+} | {};
 
-// Update
-export type UpdateTodoInput = {
-    todoId: string
-    body: {
-        isCompleted: boolean
-    }
+// ----------------------------- Fetch -----------------------------
+export const SET_DATA = 'SET_DATA';
+export type SetDataActionType = {
+    type: typeof SET_DATA;
+    payload: Data;
 };
-export type UpdateTodo = (input: UpdateTodoInput) => Promise<Todo>;
+export type SetDataContract = (payload: Data) => SetDataActionType
 
-// Delete
-export type DeleteTodoInput = {
-    todoId: string
-};
-export type DeleteTodo = (input: DeleteTodoInput) => Promise<boolean>;
+// // ----------------------------- Create -----------------------------
+// export const SET_TODO = 'SET_TODO';
+// export type SetTodoActionType = {
+//     type: typeof SET_TODO;
+//     payload: Todo;
+// };
+// export type SetTodoContract = (payload: Todo) => SetTodoActionType
+
+// // ----------------------------- Update -----------------------------
+// export const UPDATE_TODO = 'UPDATE_TODO';
+// export type UpdateTodoActionType = {
+//     type: typeof UPDATE_TODO;
+//     payload: Todo;
+// };
+// export type UpdateTodoContract = (payload: Todo) => UpdateTodoActionType
+
+// // ----------------------------- Delete -----------------------------
+// export const DELETE_TODO = 'DELETE_TODO';
+// export type DeleteTodoActionType = {
+//     type: typeof DELETE_TODO;
+//     payload: string;
+// };
+// export type DeleteTodoContract = (payload: string) => DeleteTodoActionType
+
+export type TodosActionTypes =
+    | SetDataActionType
+    // | SetTodoActionType
+    // | UpdateTodoActionType
+    // | DeleteTodoActionType
 

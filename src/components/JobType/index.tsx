@@ -1,4 +1,8 @@
+// Core
 import React from "react";
+import { useSelector } from '../../hooks/useSelector';
+
+// Material
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -7,6 +11,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Input from "@material-ui/core/Input";
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,26 +50,59 @@ const MenuProps = {
 
 
 export const JobType = () => {
+  // Styles
   const classes = useStyles();
+
+  // Init State
   const [personName, setPersonName] = React.useState<string[]>([]);
-  
-  const [state, setState] = React.useState({
-    common: true,
-    fræs: true,
-    striber: true,
-    opretning: true,
+
+  // Get job types
+  const jobs = useSelector( state => {
+    if("root" in state.data){
+      return state.data.root.jobTypes.jobType;
+    }
   });
 
+  const initState = jobs?
+  jobs.reduce(function(result: any, item: any) {
+      result[item.name] = true;
+      return result;
+    }, {})
+  :null
+
+  
+  const [state, setState] = React.useState(initState);
+
   const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.checked);
-    setState({ ...state, [event.target.name]: event.target.checked });
-    console.log(event.target.checked);
+    console.log(event.target.name);
+    if(state){
+      setState({ ...state, [event.target.name]: event.target.checked });
+      console.log(event.target.checked);
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setPersonName(event.target.value as string[]);
   };
 
+  // Job list
+  const formControlLabelJSX = jobs?
+  jobs.map( job => {
+    return(
+      <FormControlLabel
+        className={classes.label}
+        control={
+          <Checkbox
+            checked={state[job.name]}
+            onChange={handleChangeCheckbox}
+            name={job.name}
+            color="primary"
+          />
+        }
+        label={job.name}
+      />
+    )
+  }):null
 
   return (
     <div>
@@ -83,54 +121,7 @@ export const JobType = () => {
             <em>Job type</em>
           </MenuItem>
           <FormGroup row className={classes.formGroup}>
-            <FormControlLabel
-              className={classes.label}
-              control={
-                <Checkbox
-                  checked={state.common}
-                  onChange={handleChangeCheckbox}
-                  name="common"
-                  color="primary"
-                />
-              }
-              label="Primary"
-            />
-            <FormControlLabel
-              className={classes.label}
-              control={
-                <Checkbox
-                  checked={state.fræs}
-                  onChange={handleChangeCheckbox}
-                  name="fræs"
-                  color="primary"
-                />
-              }
-              label="Fræs"
-            />
-            <FormControlLabel
-              className={classes.label}
-              control={
-                <Checkbox
-                  checked={state.striber}
-                  onChange={handleChangeCheckbox}
-                  name="striber"
-                  color="primary"
-                />
-              }
-              label="Striber"
-            />
-            <FormControlLabel
-              className={classes.label}
-              control={
-                <Checkbox
-                  checked={state.opretning}
-                  onChange={handleChangeCheckbox}
-                  name="opretning"
-                  color="primary"
-                />
-              }
-              label="Opretning"
-            />
+            { formControlLabelJSX }
           </FormGroup>
         </Select>
       </FormControl>

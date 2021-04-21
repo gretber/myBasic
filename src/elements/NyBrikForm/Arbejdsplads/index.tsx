@@ -1,5 +1,5 @@
 // Core
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 
 // Material
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -21,9 +21,13 @@ export const Arbejdsplads = ({ projectName = '' }: any) => {
   
   const [ input, setInput ] = useState('')
 
+  useMemo(() => {
+    setInput(projectName)
+  }, [projectName])
+
   return (
     <form className={classes.root} noValidate autoComplete="off">
-      <TextField id="outlined-basic" label="Arbejdsplads" variant="outlined" onChange={(event)=>setInput(event.target.value)} value={input?input:projectName} />
+      <TextField id="outlined-basic" label="Arbejdsplads" variant="outlined" onChange={(event)=>setInput(event.target.value)} value={input} />
     </form>
   );
 }

@@ -30,6 +30,7 @@ export const Project = ({ setProjectName }: any) => {
         if(project.projectNo !== 'null'){
           projects.push({ number: project.projectNo, title: project.name })
         }
+        return
       })
     }
   })
@@ -40,7 +41,6 @@ export const Project = ({ setProjectName }: any) => {
       const title = event.target.innerText.match(/(?<=-).+/)[0];
       setProjectName(title)
     }
-
   }
 
   return (

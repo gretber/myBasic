@@ -8,19 +8,15 @@ import Checkbox from "@material-ui/core/Checkbox";
 
 // Hooks
 import { useSelector } from "../../hooks/useSelector";
-import { State } from "@bryntum/scheduler";
 
-// Types
-import { SelectionValues } from '../../bus/briks/dataTypes';
-
-type Item = {
+type ItemType = {
   item: string;
   index: number;
   value: boolean;
   setState: any;
 }
 
-const Item: FC<Item> = ({ item, index, value, setState }) => {
+const Item: FC<ItemType> = ({ item, index, value, setState }) => {
 
   
   const [ el, setEl ] = useState(value)
@@ -58,8 +54,6 @@ export const SelectionFabrik = () => {
       return state.data.root.selections.selection[2].values.value;
     }
   });
-
-  //const initialState = factory?factory.map( item => item ):null
 
   const [ state, setState ] = useState(initialState);
 

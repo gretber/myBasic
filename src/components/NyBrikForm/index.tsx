@@ -1,5 +1,5 @@
 // Core
-import React from "react";
+import React, { useState } from "react";
 
 // Material
 import List from "@material-ui/core/List";
@@ -21,11 +21,14 @@ import { FabrikVare } from "../../elements/NyBrikForm/FabrikVare";
 import { Ejendomme } from "../../elements/NyBrikForm/Ejendomme";
 
 export const NyBrikForm = () => {
+  // State for Project and Arbejdsplads
+  const [ projectName, setProjectName ] = useState('')
+
   return (
     <List>
       <Region />
-      <Project />
-      <Arbejdsplads />
+      <Project setProjectName={setProjectName} />
+      <Arbejdsplads projectName={projectName} />
       <KalkuleBesk />
       <KundeNavn />
       <DatePeriod />

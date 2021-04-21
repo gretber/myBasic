@@ -15,10 +15,10 @@ export type View = {
 export type Project = {
             id: string,
             regionId: string,
-            leaderId: string,
+            leaderId: string | "null",
             projectNo: string | "null",
             factoryItemName: string,
-            factoryItemId: string,
+            factoryItemId: string | "null",
             customerId: string,
             customerName: string | "null",
             state: string,

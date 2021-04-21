@@ -53,9 +53,6 @@ export const JobType = () => {
   // Styles
   const classes = useStyles();
 
-  // Init State
-  const [personName, setPersonName] = React.useState<string[]>([]);
-
   // Get job types
   const jobs = useSelector( state => {
     if("root" in state.data){
@@ -71,6 +68,8 @@ export const JobType = () => {
   :null
 
   
+  // Init State
+  const [jobType, setJobType] = React.useState<string[]>([]);
   const [state, setState] = React.useState(initState);
 
   const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +81,7 @@ export const JobType = () => {
   };
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setPersonName(event.target.value as string[]);
+    setJobType(event.target.value as string[]);
   };
 
   // Job list
@@ -91,6 +90,7 @@ export const JobType = () => {
     return(
       <FormControlLabel
         className={classes.label}
+        key={job.name}
         control={
           <Checkbox
             checked={state[job.name]}
@@ -110,7 +110,7 @@ export const JobType = () => {
         <Select
           multiple
           displayEmpty
-          value={personName}
+          value={jobType}
           onChange={handleChange}
           input={<Input />}
           MenuProps={MenuProps}

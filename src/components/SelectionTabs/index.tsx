@@ -67,7 +67,7 @@ export const SelectionTabs = () => {
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label="simple tabs example"
+          aria-label="selection tab"
         >
           <Tab label="Hold" {...a11yProps(0)} />
           <Tab label="Region" {...a11yProps(1)} />

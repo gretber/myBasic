@@ -44,10 +44,10 @@ export const NavigationPanel = () => {
           <div className={classes.gap} />
           <JobType />
           <PeriodPicker />
-          <Button>
+          <Button disabled>
             <FullscreenIcon />
           </Button>
-          <Button>
+          <Button disabled>
             <ExitToAppIcon />
           </Button>
         </Toolbar>

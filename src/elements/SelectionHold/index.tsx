@@ -12,6 +12,9 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 
+// Hooks
+import { useSelector } from '../../hooks/useSelector';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     iconCenter: {
@@ -24,59 +27,71 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const SortableItem = SortableElement(({ value }: any) => {
+const SortableItem = SortableElement(({ item, value, setState, elem }: any) => {
+  console.log(elem)
   const classes = useStyles();
-  const [state, setState] = React.useState({
-    [value]: true,
-  });
+
+  const [ el, setEl ] = useState(value)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+  console.log(elem)
+    
+    setState( (prevState: any) => {
+      prevState[elem]['-selected'] = event.target.checked
+      setEl(event.target.checked)
+      return prevState
+    } )
   };
+
+
   return (
     <FormGroup className={classes.iconCenter} row>
       <DragHandleIcon className={classes.dragIcon} />
       <FormControlLabel
         control={
           <Checkbox
-            checked={state[value]}
+            checked={el}
             onChange={handleChange}
-            name={value}
+            name={item}
             color="primary"
           />
         }
-        label={value}
+        label={item}
       />
     </FormGroup>
   );
 
 });
 
-const SortableList = SortableContainer(({ items }: any) => {
+const SortableList = SortableContainer(({ state, setState }: any) => {
   return (
     <ul>
-      {items.map((value: any, index: any) => (
-        <SortableItem key={`item-${value}`} index={index} value={value} />
+      {state.map((item: any, index: number) => (
+        <SortableItem key={`item-${item.name}`} index={index} elem={index} item={item.name} value={item['-selected']} setState={setState} />
       ))}
     </ul>
   );
 });
 
 export const SelectionHold = () => {
-  const initialState = {
-    items: ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"],
-  };
 
-  const [ items, setItems ] = useState(initialState)
+  // Get data
+  const initialState = useSelector( state => {
+    if("root" in state.data){
+      return state.data.root.selections.selection[0].values.value;
+    }
+  });
+
+  const [ state, setState ] = useState(initialState)
+
   const onSortEnd = ({ oldIndex, newIndex }: any) => {
-    setItems(({ items }) => ({
-      items: arrayMove(items, oldIndex, newIndex),
-    }));
+    setState((prevState: any) => arrayMove(prevState, oldIndex, newIndex));
   };
  
   return (
     <SortableList
-      items={items.items}
+      state={state}
+      setState={setState}
       onSortEnd={onSortEnd}
     />
   );

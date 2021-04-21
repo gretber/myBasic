@@ -1,18 +1,36 @@
 // Core
-import React, { useState } from "react";
+import React, { useState, FC } from "react";
 
 // Material
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 
-const Item = ({ value }: any) => {
-  const [state, setState] = React.useState({
-    [value]: true,
-  });
+// Hooks
+import { useSelector } from "../../hooks/useSelector";
+import { State } from "@bryntum/scheduler";
+
+// Types
+import { SelectionValues } from '../../bus/briks/dataTypes';
+
+type Item = {
+  item: string;
+  index: number;
+  value: boolean;
+  setState: any;
+}
+
+const Item: FC<Item> = ({ item, index, value, setState }) => {
+
+  
+  const [ el, setEl ] = useState(value)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+    setState( (prevState: any) => {
+      prevState[index]['-selected'] = event.target.checked
+      setEl(event.target.checked)
+      return prevState
+    } )
   };
 
   return (
@@ -20,39 +38,32 @@ const Item = ({ value }: any) => {
       <FormControlLabel
         control={
           <Checkbox
-            checked={state[value]}
+            checked={el}
             onChange={handleChange}
-            name={value}
+            name={item}
             color="primary"
           />
         }
-        label={value}
+        label={item}
       />
     </FormGroup>
   );
 };
 
 export const SelectionFabrik = () => {
-  const initialState = [
-    "Striber",
-    "Entreprenør",
-    "Afspærring",
-    "Dortheasminde",
-    "Fræsning",
-    "Kastrup",
-    "Køge",
-    "Randers",
-    "SPV - Dortheasminde",
-    "SPØ - Kollerød",
-    "Tinglev",
-    "Troldhede",
-    "Vandel",
-    "Viborg",
-  ];
+  
+  // Get data
+  const initialState = useSelector( state => {
+    if("root" in state.data){
+      return state.data.root.selections.selection[2].values.value;
+    }
+  });
 
-  const [ state ] = useState(initialState);
+  //const initialState = factory?factory.map( item => item ):null
 
-  const itemJSX = state.map((item: string) => <Item key={item} value={item} />);
+  const [ state, setState ] = useState(initialState);
+
+  const itemJSX = state?state.map((item: any, index: number) => <Item key={item.name} index={index} item={item.name} value={item['-selected']} setState={setState} />):null;
 
   return <>{itemJSX}</>;
 };

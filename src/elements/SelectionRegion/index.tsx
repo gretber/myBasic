@@ -6,55 +6,55 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 
-const Item = ({ value }: any) => {
-  const [state, setState] = React.useState({
-    [value]: true,
-  });
+// Hooks
+import { useSelector } from '../../hooks/useSelector';
+
+const Item = ({ item, index, value, setState }: any) => {
+
+  const [ el, setEl ] = useState(value)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+    setState( (prevState: any) => {
+      prevState[index]['-selected'] = event.target.checked
+      setEl(event.target.checked)
+      return prevState
+    } )
   };
+
 
   return (
     <FormGroup row>
       <FormControlLabel
         control={
           <Checkbox
-            checked={state[value]}
+            checked={el}
             onChange={handleChange}
-            name={value}
+            name={item}
             color="primary"
           />
         }
-        label={value}
+        label={item}
       />
     </FormGroup>
   );
 }
 
 export const SelectionRegion = () => {
-  const initialState = [
-    "FD",
-    "FRÆS",
-    "Fælles Danmark",
-    "MIDT",
-    "MTV",
-    "NORD",
-    "SPV",
-    "SPØ",
-    "SYD",
-    "TEST",
-    "VS",
-    "ØST",
-  ];
 
-  const [ state ] = useState(initialState);
+  // Get data
+  const initialState = useSelector( state => {
+    if("root" in state.data){
+      return state.data.root.selections.selection[1].values.value;
+    }
+  });
 
-  const itemJSX = state.map((item: string) => <Item key={item} value={item} />);
+  const [ state, setState ] = useState(initialState);
+
+  const itemJSX = state?state.map((item: any, index: number) => <Item key={item.name} index={index} item={item.name} value={item['-selected']} setState={setState} />):null;
 
   return (
     <>
-      { itemJSX} 
+      { itemJSX } 
     </>
   )
 }

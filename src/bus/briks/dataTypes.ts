@@ -93,16 +93,21 @@ export type JobTypes = {
 type SelectionType = "team" | "region" | "factory"
 
 type SelectionValue = {
-                  selected: boolean,
-                  id: string,
+                  '-selected': boolean,
+                  '-id': string,
                   name: string
 }
-type SelectionValues = Array<SelectionValue>
-type Selection = [
+export type SelectionValues = Array<SelectionValue>
+
+
+type Selection = 
   {
     type: SelectionType,
-    value: SelectionValues
+    values: {
+      value: SelectionValues
+    }
   }
-]
 
-export type Selections = Array<Selection>
+export type Selections = {
+  selection: Array<Selection>
+}

@@ -79,7 +79,7 @@ const App: FunctionComponent = () => {
         if (!resource) {
             Toast.show('There is no resource available');
             return;
-        }
+        } 
 
         endDate.setHours(endDate.getHours() + 2);
 
@@ -114,6 +114,11 @@ const App: FunctionComponent = () => {
     return (
         <Fragment>
             <NavigationPanel />
+            {/* <BryntumButton
+                    icon="b-fa-trash"
+                    cls="b-red"
+                    onClick={()=>{}}
+                /> */}
             {/* <BryntumDemoHeader
                 title="Brik"
                 href="/"

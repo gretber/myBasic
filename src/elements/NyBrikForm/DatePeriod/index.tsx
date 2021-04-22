@@ -68,7 +68,7 @@ export const DatePeriod = () => {
           margin="normal"
           id="end-date"
           label="Slut dato"
-          value={date}
+          value={selectedEndDate}
           onChange={handleEndDateChange}
           KeyboardButtonProps={{
             "aria-label": "change date",

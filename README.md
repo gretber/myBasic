@@ -6,20 +6,29 @@ For deployment:
 
 To start the project:
 
-  In windows terminal execute:
-    npm config set @bryntum:registry https://npm.bryntum.com
+In windows terminal go to work folder execute:
 
-  then:
-    npm login --registry=https://npm.bryntum.com
+  git clone https://github.com/gretber/myBasic.git
 
-      Use as login:
-        gretber13..gmail.com
+then go to the myBasic folder:
 
-      Use as password:
-        trial
+  cd myBasic
 
-      Use as email:
-        gretber13@gmail.com
+then execute:
+
+  npm config set @bryntum:registry https://npm.bryntum.com
+
+then:
+  npm login --registry=https://npm.bryntum.com
+
+    Use as login:
+      gretber13..gmail.com
+
+    Use as password:
+      trial
+
+    Use as email:
+      gretber13@gmail.com
 
 then execute:
   npm install

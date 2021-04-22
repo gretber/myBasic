@@ -1,6 +1,8 @@
-
+// Core
 import "date-fns";
 import React from "react";
+
+// Material
 import Grid from "@material-ui/core/Grid";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -19,13 +21,22 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const DatePeriod = () => {
   const classes = useStyles();
-  const [selectedStartDate, setSelectedStartDate] = React.useState<Date | null>(new Date("2021-08-18"));
+
+  // Start date
+  const [selectedStartDate, setSelectedStartDate] = React.useState<Date | null>(new Date());
 
   const handleStartDateChange = (date: any) => {
     setSelectedStartDate(date);
   };
 
-  const [selectedEndDate, setSelectedEndtDate] = React.useState<Date | null>(new Date("2021-08-18"));
+  // End date
+  const [selectedEndDate, setSelectedEndtDate] = React.useState<Date | null>(new Date());
+
+  // Cannot be less than the start
+
+  console.log(selectedEndDate?Date.parse(selectedEndDate.toString()):'')
+  const date = selectedEndDate?Date.parse(selectedEndDate.toString()):''
+  console.log(new Date(1518064494000))
 
   const handleEndDateChange = (date: any) => {
     setSelectedEndtDate(date);
@@ -57,7 +68,7 @@ export const DatePeriod = () => {
           margin="normal"
           id="end-date"
           label="Slut dato"
-          value={selectedEndDate}
+          value={date}
           onChange={handleEndDateChange}
           KeyboardButtonProps={{
             "aria-label": "change date",

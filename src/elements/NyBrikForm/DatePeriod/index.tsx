@@ -1,6 +1,6 @@
 // Core
 import "date-fns";
-import React from "react";
+import React, { useMemo, useEffect, useCallback } from "react";
 
 // Material
 import Grid from "@material-ui/core/Grid";
@@ -11,6 +11,10 @@ import {
 } from "@material-ui/pickers";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
+// Helpers
+import { lagInDays } from '../../../helpers/lagInDays';
+import { getBusinessDays } from '../../../helpers/getBusinessDays';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     datePicker: {
@@ -19,28 +23,39 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const DatePeriod = () => {
+export const DatePeriod = ({ startDate, setStartDate, endDate, setEndDate, setVarighed, isWorkWeekends }: any) => {
   const classes = useStyles();
 
-  // Start date
-  const [selectedStartDate, setSelectedStartDate] = React.useState<Date | null>(new Date());
-
+  // Start date handler
   const handleStartDateChange = (date: any) => {
-    setSelectedStartDate(date);
+    if(endDate.getTime() < date.getTime()){
+      setStartDate(date);
+      setEndDate(date)
+      setVarighed(1)
+    } else {
+      setStartDate(date);
+      setVarighed(lagInDays(date, endDate, isWorkWeekends))
+    }
   };
 
-  // End date
-  const [selectedEndDate, setSelectedEndtDate] = React.useState<Date | null>(new Date());
-
-  // Cannot be less than the start
-
-  console.log(selectedEndDate?Date.parse(selectedEndDate.toString()):'')
-  const date = selectedEndDate?Date.parse(selectedEndDate.toString()):''
-  console.log(new Date(1518064494000))
-
+  // End date handler
   const handleEndDateChange = (date: any) => {
-    setSelectedEndtDate(date);
+    if(date.getTime() < startDate.getTime()){
+
+      setEndDate(date)
+      setStartDate(date)
+      setVarighed(1)
+
+    } else {
+      setEndDate(date);
+      setVarighed(lagInDays(startDate, date, isWorkWeekends))
+    }
   };
+
+  // End date cannot be less than the start
+  useEffect(()=> {
+    setVarighed(lagInDays(startDate, endDate, isWorkWeekends))
+  },[isWorkWeekends])
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -53,7 +68,7 @@ export const DatePeriod = () => {
           margin="normal"
           id="start-date"
           label="Start dato"
-          value={selectedStartDate}
+          value={startDate}
           onChange={handleStartDateChange}
           KeyboardButtonProps={{
             "aria-label": "change date",
@@ -68,7 +83,7 @@ export const DatePeriod = () => {
           margin="normal"
           id="end-date"
           label="Slut dato"
-          value={selectedEndDate}
+          value={endDate}
           onChange={handleEndDateChange}
           KeyboardButtonProps={{
             "aria-label": "change date",

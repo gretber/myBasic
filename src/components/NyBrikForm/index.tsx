@@ -1,5 +1,5 @@
 // Core
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // Material
 import List from "@material-ui/core/List";
@@ -20,9 +20,26 @@ import { Fabrik } from "../../elements/NyBrikForm/Fabrik";
 import { FabrikVare } from "../../elements/NyBrikForm/FabrikVare";
 import { Ejendomme } from "../../elements/NyBrikForm/Ejendomme";
 
+// Helpers
+import { addDays } from '../../helpers/addDays';
+import { getBusinessDays } from '../../helpers/getBusinessDays';
+import { lagInDays } from '../../helpers/lagInDays';
+
 export const NyBrikForm = () => {
   // State for Project and Arbejdsplads
   const [ projectName, setProjectName ] = useState('')
+
+  // Start date
+  const [ startDate, setStartDate ] = useState<Date | null>(new Date());
+
+  // End date
+  const [ endDate, setEndDate ] = useState<Date | null>(new Date());
+
+  // State for varighed toggler
+  const [ isWorkWeekends, setIsWorkWeekends ] = useState(false)
+
+  // State for Date period and Varighed
+  const [ varighed, setVarighed ] = useState(lagInDays(startDate, endDate, isWorkWeekends));
 
   return (
     <List>
@@ -31,8 +48,8 @@ export const NyBrikForm = () => {
       <Arbejdsplads projectName={projectName} />
       <KalkuleBesk />
       <KundeNavn />
-      <DatePeriod />
-      <Varighed />
+      <DatePeriod setVarighed={setVarighed} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} isWorkWeekends={isWorkWeekends} />
+      <Varighed varighed={varighed} setVarighed={setVarighed} setEndDate={setEndDate} startDate={startDate} isWorkWeekends={isWorkWeekends} setIsWorkWeekends={setIsWorkWeekends} />
       <Status />
       <JobType />
       <Hold />

@@ -1,5 +1,5 @@
 // Core
-import React from "react";
+import React, { useMemo, useState } from "react";
 
 // Material
 import TextField from "@material-ui/core/TextField";
@@ -9,6 +9,9 @@ import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+
+//Helpers
+import { addDays } from '../../../helpers/addDays';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,17 +26,21 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Varighed = () => {
+export const Varighed = ( { varighed, setVarighed, setEndDate, startDate, isWorkWeekends, setIsWorkWeekends }: any) => {
   const classes = useStyles();
 
-  const [state, setState] = React.useState({
-    weekendArbejde: false,
-  });
-
+  // Switch toggle change event
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+    setIsWorkWeekends((prevState: boolean)=>!prevState);
   };
 
+  // Text field handler
+  const handlerCountChange = (event: any) => {
+    if(event.target.value>0){
+          setVarighed(event.target.value)
+          setEndDate(addDays(startDate, (event.target.value-1)))
+    }
+  }
 
   return (
     <FormControl component="fieldset">
@@ -45,6 +52,8 @@ export const Varighed = () => {
           InputLabelProps={{
             shrink: true,
           }}
+          value={varighed}
+          onChange={handlerCountChange}
           variant="outlined"
           InputProps={{
             endAdornment: <InputAdornment position="end">dage</InputAdornment>,
@@ -54,7 +63,7 @@ export const Varighed = () => {
           className={classes.formControlLabel}
           control={
             <Switch
-              checked={state.weekendArbejde}
+              checked={isWorkWeekends}
               onChange={handleChange}
               name="weekendArbejde"
               color="primary"

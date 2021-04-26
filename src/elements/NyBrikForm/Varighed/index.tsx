@@ -1,5 +1,5 @@
 // Core
-import React, { useMemo, useState } from "react";
+import React from "react";
 
 // Material
 import TextField from "@material-ui/core/TextField";
@@ -12,6 +12,8 @@ import Switch from "@material-ui/core/Switch";
 
 //Helpers
 import { addDays } from '../../../helpers/addDays';
+import { subDays } from '../../../helpers/subDays';
+import { lagInDays } from '../../../helpers/lagInDays';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Varighed = ( { varighed, setVarighed, setEndDate, startDate, isWorkWeekends, setIsWorkWeekends }: any) => {
+export const Varighed = ( { varighed, setVarighed, setEndDate, startDate, isWorkWeekends, setIsWorkWeekends, endDate }: any) => {
   const classes = useStyles();
 
   // Switch toggle change event
@@ -36,9 +38,20 @@ export const Varighed = ( { varighed, setVarighed, setEndDate, startDate, isWork
 
   // Text field handler
   const handlerCountChange = (event: any) => {
-    if(event.target.value>0){
-          setVarighed(event.target.value)
-          setEndDate(addDays(startDate, (event.target.value-1)))
+    if(event.target.value > 0){
+
+      setVarighed((prevState: number)=>{
+
+        if(prevState < event.target.value){
+
+          setEndDate(addDays(endDate, 1))
+          return lagInDays(startDate, addDays(endDate, 1), isWorkWeekends)
+        } else {
+          
+          setEndDate(subDays(endDate, 1))
+          return lagInDays(startDate, subDays(endDate, 1), isWorkWeekends)
+        }
+      })
     }
   }
 

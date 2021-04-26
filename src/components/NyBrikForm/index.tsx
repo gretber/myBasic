@@ -1,5 +1,5 @@
 // Core
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 // Material
 import List from "@material-ui/core/List";
@@ -21,8 +21,6 @@ import { FabrikVare } from "../../elements/NyBrikForm/FabrikVare";
 import { Ejendomme } from "../../elements/NyBrikForm/Ejendomme";
 
 // Helpers
-import { addDays } from '../../helpers/addDays';
-import { getBusinessDays } from '../../helpers/getBusinessDays';
 import { lagInDays } from '../../helpers/lagInDays';
 
 export const NyBrikForm = () => {
@@ -49,7 +47,7 @@ export const NyBrikForm = () => {
       <KalkuleBesk />
       <KundeNavn />
       <DatePeriod setVarighed={setVarighed} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} isWorkWeekends={isWorkWeekends} />
-      <Varighed varighed={varighed} setVarighed={setVarighed} setEndDate={setEndDate} startDate={startDate} isWorkWeekends={isWorkWeekends} setIsWorkWeekends={setIsWorkWeekends} />
+      <Varighed varighed={varighed} setVarighed={setVarighed} setEndDate={setEndDate} startDate={startDate} endDate={endDate} isWorkWeekends={isWorkWeekends} setIsWorkWeekends={setIsWorkWeekends} />
       <Status />
       <JobType />
       <Hold />

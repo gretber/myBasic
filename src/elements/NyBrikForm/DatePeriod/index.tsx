@@ -1,6 +1,6 @@
 // Core
 import "date-fns";
-import React, { useMemo, useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 
 // Material
 import Grid from "@material-ui/core/Grid";
@@ -13,7 +13,6 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
 // Helpers
 import { lagInDays } from '../../../helpers/lagInDays';
-import { getBusinessDays } from '../../../helpers/getBusinessDays';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

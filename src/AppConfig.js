@@ -2,7 +2,7 @@
  * Application configuration
  */
 const schedulerConfig = {
-    resourceImagePath: 'users/',
+    resourceImagePath: './',
             //     "startDate": "01/03/2021",
             // "endDate": "01/04/2021",
     minHeight: '20em',

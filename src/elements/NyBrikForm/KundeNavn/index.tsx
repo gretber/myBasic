@@ -28,12 +28,12 @@ export const KundeNavn = () => {
     if("root" in state.data){
       return state.data.root.projects.project.map( project => {
         if(project.customerName !== 'null'){
-          if( customers.findIndex( (el: any) => el.customer === project.customerName) == -1){
+          if( customers.findIndex( (el: any) => el.customer === project.customerName) === -1){
             customers.push({ customer: project.customerName })
           }
-          
+    
         }
-        return
+        return ''
       })
     }
   })

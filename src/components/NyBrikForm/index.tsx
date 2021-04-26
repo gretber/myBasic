@@ -24,11 +24,12 @@ import { Ejendomme } from "../../elements/NyBrikForm/Ejendomme";
 import { lagInDays } from '../../helpers/lagInDays';
 
 export const NyBrikForm = () => {
+
   // State for Project and Arbejdsplads
   const [ projectName, setProjectName ] = useState('')
 
   // Start date
-  const [ startDate, setStartDate ] = useState<Date | null>(new Date());
+  const [ startDate, setStartDate ] = useState<Date | null>(new Date( (new Date()).getTime() - 1000 * 60 ));
 
   // End date
   const [ endDate, setEndDate ] = useState<Date | null>(new Date());

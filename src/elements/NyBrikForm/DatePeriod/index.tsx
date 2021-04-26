@@ -28,9 +28,11 @@ export const DatePeriod = ({ startDate, setStartDate, endDate, setEndDate, setVa
   // Start date handler
   const handleStartDateChange = (date: any) => {
     if(endDate.getTime() < date.getTime()){
+
       setStartDate(date);
       setEndDate(date)
-      setVarighed(1)
+      setVarighed(lagInDays(date, date, isWorkWeekends))
+      
     } else {
       setStartDate(date);
       setVarighed(lagInDays(date, endDate, isWorkWeekends))
@@ -39,11 +41,12 @@ export const DatePeriod = ({ startDate, setStartDate, endDate, setEndDate, setVa
 
   // End date handler
   const handleEndDateChange = (date: any) => {
-    if(date.getTime() < startDate.getTime()){
+
+    if(date.getTime() <= startDate.getTime()){
 
       setEndDate(date)
       setStartDate(date)
-      setVarighed(1)
+      setVarighed(lagInDays(date, date, isWorkWeekends))
 
     } else {
       setEndDate(date);

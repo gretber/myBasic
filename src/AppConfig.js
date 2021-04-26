@@ -19,7 +19,7 @@ const schedulerConfig = {
         {
             type: 'resourceInfo',
             text: 'Staff',
-            showImage: true,
+            showImage: false,
             width: 230
         },
         // {

@@ -36,10 +36,11 @@ export const Project = ({ setProjectName }: any) => {
   })
 
   // Handler
-  const handlerOnChange = (event: any) => {
-    if(event.target.innerText){
-      const title = event.target.innerText.match(/(?<=-).+/)[0];
-      setProjectName(title)
+  const handlerOnChange = (event: any, value: any) => {
+    if(value && ('title' in value)){
+      setProjectName(value.title)
+    } else {
+      setProjectName('')
     }
   }
 

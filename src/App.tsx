@@ -51,6 +51,7 @@ const App: FunctionComponent = () => {
 
     useEffect(()=> {
         if("root" in data){
+            console.log(data.root.projects.project)
             const transformedData = data.root.projects.project.map((item) => {
                 item["resourceId"] = item["teamId"];
                 item["eventColor"] = item["color"];

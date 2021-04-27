@@ -43,12 +43,13 @@ const styles = (theme: Theme) =>
     root: {
       margin: 0,
       padding: theme.spacing(2),
+      backgroundColor: theme.palette.primary.main,
     },
     closeButton: {
       position: "absolute",
       right: theme.spacing(1),
       top: theme.spacing(1),
-      color: theme.palette.grey[500],
+      color: '#000',
     },
   });
 
@@ -98,6 +99,14 @@ export const NyBrik = () => {
     },
   }))(MuiDialogActions);
 
+
+
+  const [ newBrik, setNewBrik ] = useState({id: null})
+
+  console.log("newBrik: ", newBrik)
+
+
+
   const list = (anchor: Anchor) => (
     <div className={classes.list} role="presentation">
       <DialogTitle
@@ -108,7 +117,7 @@ export const NyBrik = () => {
       </DialogTitle>
       <Divider />
 
-      <NyBrikForm />
+      <NyBrikForm setNewBrik={setNewBrik} />
 
       <Divider />
       <DialogActions>
@@ -120,7 +129,7 @@ export const NyBrik = () => {
         </Button>
         <Button
           onClick={toggleDrawer("left", false)}
-          color="secondary"
+          color="primary"
         >
           <SaveRoundedIcon />
           SAVE

@@ -1,9 +1,15 @@
+// Core
 import React from "react";
+
+// Material
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
+
+// Hooks
+import { useSelector } from '../../../hooks/useSelector';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,12 +24,30 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const JobType = () => {
+  // Styles
   const classes = useStyles();
+
+  // Get job types
+  const jobs = useSelector( state => {
+    if("root" in state.data){
+      return state.data.root.jobTypes.jobType;
+    }
+  });
+
+  // Init State
   const [jobType, setJobType] = React.useState("");
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    console.log(event.target.value)
     setJobType(event.target.value as string);
   };
+
+  // Job list
+  const formControlLabelJSX = jobs?
+  jobs.map( job => {
+    return <MenuItem key={job.id} value={job.name}>{job.name}</MenuItem>
+
+  }):null
 
   return (
     <div>
@@ -39,10 +63,7 @@ export const JobType = () => {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value={"common"}>Common</MenuItem>
-          <MenuItem value={"fræs"}>Fræs</MenuItem>
-          <MenuItem value={"striber"}>Striber</MenuItem>
-          <MenuItem value={"opretning"}>Opretning</MenuItem>
+          {formControlLabelJSX}
         </Select>
       </FormControl>
     </div>

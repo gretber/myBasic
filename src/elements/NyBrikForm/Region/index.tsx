@@ -1,5 +1,5 @@
 // Core
-import React from "react";
+import React, { useState } from "react";
 
 // Material
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-export const Region = () => {
+export const Region = ({setRegionId}: any) => {
   // Styles
   const classes = useStyles();
 
@@ -30,11 +30,23 @@ export const Region = () => {
     }
   })
 
+  // Handler
+  const handlerOnChange = (event: any, value: any) => {
+    if(value && ('id' in value)){
+      setRegionId(value.id)
+    } else {
+      setRegionId('')
+    }
+  }
+
+
+
   return (
     <div>
       <Autocomplete
         className={classes.Autocomplete}
         id="region"
+        onChange={handlerOnChange}
         options={regions?regions:[]}
         getOptionLabel={(option: any) => option.name}
         renderInput={(params) => (

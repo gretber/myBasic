@@ -27,12 +27,13 @@ export const DatePeriod = ({ startDate, setStartDate, endDate, setEndDate, setVa
 
   // Start date handler
   const handleStartDateChange = (date: any) => {
+    // Start date cannot be higher than the end date
     if(endDate.getTime() < date.getTime()){
 
       setStartDate(date);
       setEndDate(date)
       setVarighed(lagInDays(date, date, isWorkWeekends))
-      
+
     } else {
       setStartDate(date);
       setVarighed(lagInDays(date, endDate, isWorkWeekends))
@@ -41,7 +42,7 @@ export const DatePeriod = ({ startDate, setStartDate, endDate, setEndDate, setVa
 
   // End date handler
   const handleEndDateChange = (date: any) => {
-
+    // End date cannot be less than the start
     if(date.getTime() <= startDate.getTime()){
 
       setEndDate(date)
@@ -54,7 +55,7 @@ export const DatePeriod = ({ startDate, setStartDate, endDate, setEndDate, setVa
     }
   };
 
-  // End date cannot be less than the start
+  // When varighed toggler changing
   useEffect(()=> {
     setVarighed(lagInDays(startDate, endDate, isWorkWeekends))
   },[isWorkWeekends])

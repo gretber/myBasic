@@ -1,6 +1,5 @@
 // Core
 import React from "react";
-import { useSelector } from '../../hooks/useSelector';
 
 // Material
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -12,6 +11,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Input from "@material-ui/core/Input";
 
+// Hooks
+import { useSelector } from '../../hooks/useSelector';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,7 +74,7 @@ export const JobType = () => {
   const [state, setState] = React.useState(initState);
 
   const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.name);
+
     if(state){
       setState({ ...state, [event.target.name]: event.target.checked });
       console.log(event.target.checked);

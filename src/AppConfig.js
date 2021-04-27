@@ -6,8 +6,8 @@ const schedulerConfig = {
             //     "startDate": "01/03/2021",
             // "endDate": "01/04/2021",
     minHeight: '20em',
-    startDate: new Date(2021, 3, 0),
-    endDate: new Date(2021, 4, 0),
+    startDate: new Date(2020, 11, 0),
+    endDate: new Date(2021, 3, 0),
 
     viewPreset: 'weekAndDayLetter',
 

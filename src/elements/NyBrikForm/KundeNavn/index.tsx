@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const KundeNavn = () => {
+export const KundeNavn = ({ setCustomerName }: any) => {
   // Styles
   const classes = useStyles();
 
@@ -38,11 +38,21 @@ export const KundeNavn = () => {
     }
   })
 
+  // Handler
+  const handlerOnChange = ( event: any, value: any ) => {
+    if(value && ('customer' in value)){
+      setCustomerName(value.customer)
+    } else {
+      setCustomerName(null)
+    }
+  }
+
   return (
     <div>
       <Autocomplete
         className={classes.Autocomplete}
         id="kunde navn"
+        onChange={handlerOnChange}
         options={customers}
         getOptionLabel={(option: any) => option?option.customer:''}
         renderInput={(params) => (

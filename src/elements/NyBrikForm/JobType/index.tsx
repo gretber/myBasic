@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const JobType = () => {
+export const JobType = ({ jobType, setJobType }: any) => {
   // Styles
   const classes = useStyles();
 
@@ -34,11 +34,7 @@ export const JobType = () => {
     }
   });
 
-  // Init State
-  const [jobType, setJobType] = React.useState("");
-
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    console.log(event.target.value)
     setJobType(event.target.value as string);
   };
 

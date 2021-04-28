@@ -58,9 +58,9 @@ export const Status = () => {
           onChange={handleSelectChange}
           label="Status"
         >
-          <MenuItem value={"ikke-planlagt"}>Ikke planlagt</MenuItem>
+          <MenuItem value={"ikke-planlagt"}>Budgetteret</MenuItem>
           <MenuItem value={"planlagt"}>Planlagt</MenuItem>
-          <MenuItem value={"afsluttet"}>Afsluttet</MenuItem>
+          <MenuItem value={"afsluttet"}>Udført Sag</MenuItem>
           <MenuItem value={"slettet"}>Slettet</MenuItem>
         </Select>
       </FormControl>

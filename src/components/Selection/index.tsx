@@ -17,6 +17,7 @@ import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
+import SaveRoundedIcon from "@material-ui/icons/SaveRounded";
 
 // Components
 import { SelectionTabs } from "../SelectionTabs";
@@ -109,10 +110,12 @@ export const Selection = () => {
           <SelectionTabs />
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
+          <Button autoFocus onClick={handleClose} color="secondary">
             Cancel
           </Button>
+
           <Button autoFocus onClick={handleClose} color="primary">
+            <SaveRoundedIcon />
             Save
           </Button>
         </DialogActions>

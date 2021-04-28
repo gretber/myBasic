@@ -22,7 +22,7 @@ import { Ejendomme } from "../../elements/NyBrikForm/Ejendomme";
 
 // Helpers
 import { lagInDays } from '../../helpers/lagInDays';
-import { addDays } from '../../helpers/addDays';
+import { convertDate } from '../../helpers/convertDate';
 
 export const NyBrikForm = ({setNewBrik}: any) => {
 
@@ -44,7 +44,7 @@ export const NyBrikForm = ({setNewBrik}: any) => {
     })
   },[projectName])
 
-  // State for kunde navn
+  // State for kunde navn (customer)
   const [ customerName, setCustomerName ] = useState(null);
 
   useEffect(()=>{
@@ -58,8 +58,9 @@ export const NyBrikForm = ({setNewBrik}: any) => {
   const [ startDate, setStartDate ] = useState<Date | null>(new Date( (new Date()).getTime() - 1000 * 60 ));
 
   useEffect(()=>{
+    const date = convertDate(startDate)
     setNewBrik((prevState: any)=> {
-      return {...prevState, startDate}
+      return {...prevState, startDate: date}
     })
   },[startDate])
 
@@ -67,18 +68,88 @@ export const NyBrikForm = ({setNewBrik}: any) => {
   const [ endDate, setEndDate ] = useState<Date | null>(new Date());
 
   useEffect(()=>{
+    const date = convertDate(endDate)
     setNewBrik((prevState: any)=> {
-      return {...prevState, endDate}
+      return {...prevState, endDate: date}
     })
   },[endDate])
 
-  // console.log(startDate?.getTime())
-  // console.log(addDays((endDate?endDate:new Date()), 5).getTime())
-  // State for varighed toggler
+  // State fo Varighed toggler work weekends
   const [ isWorkWeekends, setIsWorkWeekends ] = useState(false)
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, weekendWork: isWorkWeekends}
+    })
+  },[isWorkWeekends])
 
   // State for Date period and Varighed
   const [ varighed, setVarighed ] = useState(lagInDays(startDate, endDate, isWorkWeekends));
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, duration: varighed}
+    })
+  },[varighed])
+
+  // State for job type
+  const [jobType, setJobType] = useState("");
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, jobType}
+    })
+  },[jobType])
+
+  // State for teams (HOLD)
+  const [ teamId, setTeamId ] = useState('')
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, teamId}
+    })
+  },[teamId])
+
+  // State for enterprise Leder
+  const [ leaderId, setLeaderId ] = useState('')
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, leaderId}
+    })
+  },[leaderId])
+
+  // State for fabrik (factory)
+  const [factoryItemName, setFactoryItemName] = useState('')
+  const [factoryItemId, setFactoryItemId] = useState('')
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, factoryItemName}
+    })
+  },[factoryItemName])
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, factoryItemId}
+    })
+  },[factoryItemId])
+
+  // State for Ejendomme (area, tons)
+  const [area, setArea] = useState(0)
+  const [tons, setTons] = useState(0)
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, area}
+    })
+  },[area])
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, tons}
+    })
+  },[tons])
 
   return (
     <List>
@@ -88,7 +159,7 @@ export const NyBrikForm = ({setNewBrik}: any) => {
 
       <Arbejdsplads projectName={projectName} />
 
-      <KalkuleBesk />
+      {/* <KalkuleBesk /> */}
 
       <KundeNavn setCustomerName={setCustomerName} />
 
@@ -98,17 +169,17 @@ export const NyBrikForm = ({setNewBrik}: any) => {
 
       <Status />
 
-      <JobType />
+      <JobType jobType={jobType} setJobType={setJobType} />
 
-      <Hold />
+      <Hold setTeamId={setTeamId}/>
 
-      <EnterpriseLeder />
+      <EnterpriseLeder setLeaderId={setLeaderId} />
 
-      <Fabrik />
+      <Fabrik setFactoryItemName={setFactoryItemName} setFactoryItemId={setFactoryItemId} />
 
       <FabrikVare />
 
-      <Ejendomme />
+      <Ejendomme area={area} setArea={setArea} tons={tons} setTons={setTons} />
     </List>
   );
 }

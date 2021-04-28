@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Fabrik = () => {
+export const Fabrik = ({setFactoryItemName, setFactoryItemId}: any ) => {
   // Style
   const classes = useStyles();
 
@@ -29,18 +29,21 @@ export const Fabrik = () => {
     }
   });
 
-  // const projects = useSelector( state => {
-  //   if("root" in state.data){
-  //     return state.data.root.projects.project
-  //   }
-  // });
-  // const test = projects?.filter( project => project.factoryId === 'DOR' )
-  // const factoryName = test?.map( item => item.factoryItemName )
-  // console.log(factoryName?.filter( item => item.length > 4 ))
-
-    // Handler
+  // Handler
   const handlerOnChange = (event: any, value: any) => {
-    console.log(value)
+    // Set factory name
+    if(value && ('name' in value)){
+      setFactoryItemName(value.name)
+    } else {
+      setFactoryItemName('')
+    }
+
+    // Set factory id
+    if(value && ('id' in value)){
+      setFactoryItemId(value.id)
+    } else {
+      setFactoryItemId('')
+    }
   }
 
   return (

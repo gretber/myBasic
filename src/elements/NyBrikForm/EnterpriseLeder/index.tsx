@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const EnterpriseLeder = () => {
+export const EnterpriseLeder = ({setLeaderId}: any) => {
   // Styles
   const classes = useStyles();
 
@@ -29,11 +29,21 @@ export const EnterpriseLeder = () => {
     }
   });
 
+  // Handler
+  const handlerOnChange = (event: any, value: any) => {
+    if(value && ('id' in value)){
+      setLeaderId(value.id)
+    } else {
+      setLeaderId('')
+    }
+  }
+
   return (
     <div>
       <Autocomplete
         className={classes.Autocomplete}
         id="enterprise-leder"
+        onChange={handlerOnChange}
         options={leaders?leaders:[]}
         getOptionLabel={(option) => option.name}
         renderInput={(params) => (

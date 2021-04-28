@@ -18,29 +18,35 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Hold = () => {
+export const Hold = ({setTeamId}: any) => {
   // Styles
   const classes = useStyles();
 
   // Get data
   const teams = useSelector( state => {
     if("root" in state.data){
-      const teams = state.data.root.selections.selection[0].values.value;
-      // Exclude firs item
-      const allHold = teams.filter( (item, index) => index > 0 )
-      const hold = allHold.map( item => item.name.match(/^\S+/) )
-      const res = hold.map( item  => item?[item[0]]:[] )
-      return res
+      const teams = state.data.root.teams.team
+      return teams
     }
   });
+
+  // Handler
+  const handlerOnChange = (event: any, value: any) => {
+    if(value && ('id' in value)){
+      setTeamId(value.id)
+    } else {
+      setTeamId('')
+    }
+  }
 
   return (
     <div>
       <Autocomplete
         className={classes.Autocomplete}
         id="hold"
+        onChange={handlerOnChange}
         options={teams?teams:[]}
-        getOptionLabel={(option) => option[0]}
+        getOptionLabel={(option) => option.name}
         renderInput={(params) => (
           <TextField {...params} label="Hold" variant="outlined" />
         )}

@@ -48,8 +48,15 @@ const App: FunctionComponent = () => {
 
     // Get data
     const { data, loading } = useDataQuery()
+    const testTimeRanges: any = [{
+                name:"Lunch",
+                startDate: "2021-01-08",
+                endDate: "2021-01-10",
+                cls: "striped"
+            }]
 
     useEffect(()=> {
+
         if("root" in data){
             console.log(data.root.projects.project)
             const transformedData = data.root.projects.project.map((item) => {
@@ -61,6 +68,7 @@ const App: FunctionComponent = () => {
             const teams = data.root.teams.team
             setResources(teams);
             setEvents(transformedData);
+            setTimeRanges(testTimeRanges)
         }
     }, [loading])
 

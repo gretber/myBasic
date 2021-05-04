@@ -10,13 +10,9 @@ import React, {
     useCallback
 } from 'react'
 import {
-    BryntumDemoHeader,
-    BryntumThemeCombo,
     BryntumScheduler,
-    BryntumNumberField,
-    BryntumButton
 } from '@bryntum/scheduler-react';
-import { Toast, EventModel } from '@bryntum/scheduler/scheduler.umd.js';
+import { EventModel } from '@bryntum/scheduler/scheduler.umd.js';
 import { schedulerConfig } from './AppConfig';
 import './App.scss';
 
@@ -31,7 +27,6 @@ import { swap } from './helpers/swapElArr';
 
 // Types
 import { Team, Project } from './bus/briks/dataTypes';
-import { Fullscreen } from '@bryntum/scheduler';
 
 const App: FunctionComponent = () => {
 
@@ -42,8 +37,6 @@ const App: FunctionComponent = () => {
     const [events, setEvents] = useState<Array<Project> | []>([]);
     const [resources, setResources] = useState<Array<Team> | []>([]);
     const [timeRanges, setTimeRanges] = useState([]);
-
-    const [barMargin, setBarMargin] = useState(3);
     const [selectedEvent, setSelectedEvent] = useState<EventModel | null>(null);
 
     // Get data
@@ -58,7 +51,6 @@ const App: FunctionComponent = () => {
     useEffect(()=> {
 
         if("root" in data){
-            console.log(data.root.projects.project)
             const transformedData = data.root.projects.project.map((item) => {
                 item["resourceId"] = item["teamId"];
                 item["eventColor"] = item["color"];
@@ -78,43 +70,57 @@ const App: FunctionComponent = () => {
         setSelectedEvent(selected.length ? selected[0] : null);
     }, []);
 
-    // add event handler
-    const addEvent = useCallback(() => {
-        const scheduler = schedulerRef.current.instance;
-        const startDate = new Date(scheduler.startDate.getTime());
-        const endDate = new Date(startDate.getTime());
-        const resource = scheduler.resourceStore.first;
+    const config = { ...schedulerConfig }
 
-        if (!resource) {
-            Toast.show('There is no resource available');
-            return;
-        } 
+    const beforeEventEditShow = (event: any) => {
+        console.log('event', event.eventRecord.data)
+        // Current id
+        const regionId = event.eventRecord.data.regionId;
+        const leaderId = event.eventRecord.data.leaderId;
+        const factoryId = event.eventRecord.data.factoryId;
 
-        endDate.setHours(endDate.getHours() + 2);
+        // Get fields
+        const region = event.editor.widgetMap.region;
+        const varighed = event.editor.widgetMap.varighed;
+        const weekendWork = event.editor.widgetMap.weekendWork;
+        const jobType = event.editor.widgetMap.jobType;
+        const team = event.editor.widgetMap.team;
+        const leader = event.editor.widgetMap.leader;
+        const factory = event.editor.widgetMap.factory;
 
-        scheduler.eventStore.add({
-            resourceId: resource.id,
-            startDate: startDate,
-            endDate: endDate,
-            name: 'New task',
-            eventType: 'Meeting'
-        });
-    }, []);
+        if("root" in data){
+            // Region
+            const currentRegion = data.root.districs.district.find( item => item.id === regionId)
+            region.items = data.root.districs.district.map( item => item.name)
+            region.placeholder = currentRegion?.name
 
-    // remove event handler
-    const removeEvent = useCallback(() => {
-        selectedEvent?.remove();
-        setSelectedEvent(null);
-    }, [selectedEvent]);
+            // Varighed
+            varighed.value = event.eventRecord.data.duration
 
-    // Full screen
-    // const fullScreenHandler = () => {
-    //     const scheduler = schedulerRef.current.instance;
-    //     console.log(Fullscreen.isFullscreen)
-    //     Fullscreen.request(scheduler)
-    //     console.log(Fullscreen.isFullscreen)
+            // Weekend arbejde
+            weekendWork.checked = event.eventRecord.data.weekendWork
 
-    // }
+            // Job Type
+            jobType.items = data.root.jobTypes.jobType.map( item => item.name)
+            jobType.placeholder = event.eventRecord.data.jobType
+
+            // Hold
+            team.items = data.root.teams.team.map( item => item.name)
+            team.placeholder = event.eventRecord.data.teamId
+
+            // Enterprise leder
+            const currentLeader = data.root.leaders.leader.find( item => item.id === leaderId)
+            leader.items = data.root.leaders.leader.map( item => item.name)
+            leader.placeholder = currentLeader?.name
+
+            // Fabrik
+            const currentFactory = data.root.factories.factory.find( item => item.id === factoryId)
+            factory.items = data.root.factories.factory.map( item => item.name)
+            factory.placeholder = currentFactory?.name
+        }
+    };
+
+    
 
     if(loading){
         return <div>loading......</div>
@@ -123,51 +129,15 @@ const App: FunctionComponent = () => {
     return (
         <Fragment>
             <NavigationPanel />
-            {/* <BryntumButton
-                    icon="b-fa-trash"
-                    cls="b-red"
-                    onClick={()=>{}}
-                /> */}
-            {/* <BryntumDemoHeader
-                title="Brik"
-                href="/"
-                children={<BryntumThemeCombo />}
-            />
-            <div className="demo-toolbar align-right">
-                {(() => {
-                    return selectedEvent ? (
-                        <div className="selected-event">
-                            <label>Selected event: </label>
-                            <span>{selectedEvent.name}</span>
-                        </div>
-                    ) : (
-                        ''
-                    );
-                })()}
-
-                <BryntumNumberField
-                    label="Bar margin"
-                    min={0}
-                    max={15}
-                    value={barMargin}
-                    onChange={({ value }: { value: number }) => setBarMargin(value)}
-                />
-                <BryntumButton icon="b-fa-plus" cls="b-green" onClick={addEvent} />
-                <BryntumButton
-                    icon="b-fa-trash"
-                    cls="b-red"
-                    onClick={removeEvent}
-                    disabled={!selectedEvent}
-                />
-            </div> */}
             <BryntumScheduler
                 ref={schedulerRef}
-                {...schedulerConfig}
+                {...config}
                 events={events}
                 resources={resources}
                 timeRanges={timeRanges}
-                barMargin={barMargin}
+                barMargin={3}
                 onEventSelectionChange={onEventSelectionChange}
+                onBeforeEventEditShow={beforeEventEditShow}
             />
         </Fragment>
     );

@@ -1,6 +1,3 @@
-// Core
-import React, { useState } from "react";
-
 // Material
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -19,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-export const Region = ({setRegionId}: any) => {
+export const Region = ({setRegionId, projectName, regionId}: any) => {
   // Styles
   const classes = useStyles();
 
@@ -27,6 +24,14 @@ export const Region = ({setRegionId}: any) => {
   const regions = useSelector( state => {
      if("root" in state.data){
       return state.data.root.districs.district
+    }
+  })
+
+  // Get region name
+  const regionName = useSelector( state => {
+     if("root" in state.data && regionId){
+      const region = state.data.root.districs.district.filter( item => item.id === regionId)
+      return region[0].name
     }
   })
 
@@ -44,13 +49,14 @@ export const Region = ({setRegionId}: any) => {
   return (
     <div>
       <Autocomplete
+        disabled={!!projectName}
         className={classes.Autocomplete}
         id="region"
         onChange={handlerOnChange}
         options={regions?regions:[]}
         getOptionLabel={(option: any) => option.name}
         renderInput={(params) => (
-          <TextField {...params} label="Region" variant="outlined" />
+          <TextField {...params} label={regionName?regionName:"Region"} variant="outlined" />
         )}
       />
     </div>

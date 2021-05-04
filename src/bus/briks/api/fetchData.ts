@@ -9,14 +9,13 @@ import { setTodosAction } from '../actions';
 import { FetchData } from './types';
 import { Data } from '../types';
 
-const briksUrlTest = 'http://mail.vej.dk/sn/icokal.nsf/jsoninital?OpenAgent';
-//const API_URL = 'http://mail.vej.dk/IcopalKal/icokal.nsf/jsoninital?OpenAgent'
+const InitBriksUrl = process.env.REACT_APP_INIT_BRIK_URL;
 
 export const fetchData: FetchData = async () => {
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
     const encoded = window.btoa('lei-lmk:AAABBB')
     try {
-        const response = await fetch(`${briksUrlTest}`, {
+        const response = await fetch(`${InitBriksUrl}`, {
             method:  'GET',
             credentials: 'include',
             headers: {

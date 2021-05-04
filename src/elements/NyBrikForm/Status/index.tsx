@@ -30,23 +30,22 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Status = () => {
+export const Status = ({ status, state, setStatus, setState }: any) => {
   const classes = useStyles();
 
-  const [state, setState] = React.useState({
-    clips: false,
-  });
-
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+    if(event.target.checked){
+      setStatus('2')
+    } else {
+      setStatus('0')
+    }
   };
 
-  const [status, setStatus] = React.useState("");
+  
 
   const handleSelectChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setStatus(event.target.value as string);
+    setState(event.target.value as string);
   };
-
   return (
     <FormControl component="fieldset" className={classes.wrapper}>
       <FormControl variant="outlined" className={classes.formControl}>
@@ -54,14 +53,14 @@ export const Status = () => {
         <Select
           labelId="status"
           id="status"
-          value={status}
+          value={state}
           onChange={handleSelectChange}
           label="Status"
         >
-          <MenuItem value={"ikke-planlagt"}>Budgetteret</MenuItem>
-          <MenuItem value={"planlagt"}>Planlagt</MenuItem>
-          <MenuItem value={"afsluttet"}>Udført Sag</MenuItem>
-          <MenuItem value={"slettet"}>Slettet</MenuItem>
+          <MenuItem value={"1"}>Budgetteret</MenuItem>
+          <MenuItem value={"2"}>Planlagt</MenuItem>
+          <MenuItem value={"3"}>Udført Sag</MenuItem>
+          <MenuItem value={"4"}>Slettet</MenuItem>
         </Select>
       </FormControl>
 
@@ -70,7 +69,7 @@ export const Status = () => {
           className={classes.formControlLabel}
           control={
             <Switch
-              checked={state.clips}
+              checked={(status === '0')?false:true}
               onChange={handleSwitchChange}
               name="clips"
               color="primary"

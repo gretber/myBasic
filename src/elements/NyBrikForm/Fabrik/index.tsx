@@ -1,5 +1,5 @@
 // Core
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // Material
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -18,37 +18,40 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Fabrik = ({setFactoryItemName, setFactoryItemId}: any ) => {
+export const Fabrik = ({ factoryId, setFactoryId }: any ) => {
   // Style
   const classes = useStyles();
 
+  const [ factory, setFactory ] = useState<any>(null)
+
   // Get data
-  const factories = useSelector( state => {
+  const factories: any = useSelector( state => {
     if("root" in state.data){
       return state.data.root.factories.factory
     }
   });
 
+
+  useEffect(()=>{
+    const factory = factories?factories.find( (item: any) => item.id === factoryId ):null
+    setFactory(factory)
+  },[factoryId])
+
   // Handler
   const handlerOnChange = (event: any, value: any) => {
     // Set factory name
-    if(value && ('name' in value)){
-      setFactoryItemName(value.name)
+    if(value && ('id' in value)){
+      setFactoryId(value.id)
     } else {
-      setFactoryItemName('')
+      setFactoryId('')
     }
 
-    // Set factory id
-    if(value && ('id' in value)){
-      setFactoryItemId(value.id)
-    } else {
-      setFactoryItemId('')
-    }
   }
 
   return (
     <div>
       <Autocomplete
+        value={factory?factory:null}
         className={classes.Autocomplete}
         id="fabrik"
         onChange={handlerOnChange}

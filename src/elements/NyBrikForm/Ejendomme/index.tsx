@@ -24,14 +24,14 @@ export const Ejendomme = ({ area, setArea, tons, setTons }: any) => {
   // Area Handler
   const handlerOnAreaChange = (event: any) => {
     if(event.target.value > 0){
-      setArea(event.target.value)
+      setArea(parseInt(event.target.value))
     }
   }
 
   // Tons Handler
   const handlerOnTonsChange = (event: any) => {
     if(event.target.value > 0){
-      setTons(event.target.value)
+      setTons(parseInt(event.target.value))
     }
   }
 

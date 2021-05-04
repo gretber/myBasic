@@ -100,14 +100,15 @@ export const NyBrik = () => {
   }))(MuiDialogActions);
 
 
+  const [ newBrik, setNewBrik ] = useState({id: null, projectNo: null})
 
-  const [ newBrik, setNewBrik ] = useState({id: null})
+  console.log(newBrik)
+  const onSaveClick = () => {
+    console.log("SAVE")
+    toggleDrawer("left", false)
+  }
 
-  console.log("newBrik: ", newBrik)
-
-
-
-  const list = (anchor: Anchor) => (
+  const list = (
     <div className={classes.list} role="presentation">
       <DialogTitle
         id="customized-dialog-title"
@@ -128,6 +129,7 @@ export const NyBrik = () => {
           CANCEL
         </Button>
         <Button
+          onMouseDown={onSaveClick}
           onClick={toggleDrawer("left", false)}
           color="primary"
         >
@@ -149,7 +151,7 @@ export const NyBrik = () => {
         open={state["left"]}
         onClose={toggleDrawer("left", false)}
       >
-        {list("left")}
+        {list}
       </Drawer>
     </div>
   );

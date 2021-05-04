@@ -53,6 +53,14 @@ export const NyBrikForm = ({setNewBrik}: any) => {
     })
   },[customerName])
 
+  // State for customerID
+  const [ customerId, setCustomerId ] = useState(null)
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, customerId}
+    })
+  },[customerId])
 
   // Start date
   const [ startDate, setStartDate ] = useState<Date | null>(new Date( (new Date()).getTime() - 1000 * 60 ));
@@ -122,6 +130,13 @@ export const NyBrikForm = ({setNewBrik}: any) => {
   // State for fabrik (factory)
   const [factoryItemName, setFactoryItemName] = useState('')
   const [factoryItemId, setFactoryItemId] = useState('')
+  const [factoryId, setFactoryId] = useState('')
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, factoryId}
+    })
+  },[factoryId])
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
@@ -134,6 +149,23 @@ export const NyBrikForm = ({setNewBrik}: any) => {
       return {...prevState, factoryItemId}
     })
   },[factoryItemId])
+
+  // State for status and clips
+
+  const [status, setStatus] = React.useState('0');
+  const [state, setState] = React.useState('');
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, status}
+    })
+  },[status])
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, state}
+    })
+  },[state])
 
   // State for Ejendomme (area, tons)
   const [area, setArea] = useState(0)
@@ -153,21 +185,21 @@ export const NyBrikForm = ({setNewBrik}: any) => {
 
   return (
     <List>
-      <Region setRegionId={setRegionId} />
+      <Region setRegionId={setRegionId} projectName={projectName} regionId={regionId}/>
 
-      <Project setProjectName={setProjectName} />
+      <Project setFactoryId={setFactoryId} setProjectName={setProjectName} regionId={regionId} setRegionId={setRegionId} setCustomerName={setCustomerName} setCustomerId={setCustomerId} />
 
       <Arbejdsplads projectName={projectName} />
 
       {/* <KalkuleBesk /> */}
 
-      <KundeNavn setCustomerName={setCustomerName} />
+      <KundeNavn setCustomerName={setCustomerName} projectName={projectName}  customerName={customerName} />
 
       <DatePeriod setVarighed={setVarighed} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} isWorkWeekends={isWorkWeekends} />
 
       <Varighed varighed={varighed} setVarighed={setVarighed} setEndDate={setEndDate} startDate={startDate} endDate={endDate} isWorkWeekends={isWorkWeekends} setIsWorkWeekends={setIsWorkWeekends} />
 
-      <Status />
+      <Status status={status} setStatus={setStatus} state={state} setState={setState} />
 
       <JobType jobType={jobType} setJobType={setJobType} />
 
@@ -175,9 +207,9 @@ export const NyBrikForm = ({setNewBrik}: any) => {
 
       <EnterpriseLeder setLeaderId={setLeaderId} />
 
-      <Fabrik setFactoryItemName={setFactoryItemName} setFactoryItemId={setFactoryItemId} />
+      <Fabrik setFactoryId={setFactoryId} factoryId={factoryId} />
 
-      <FabrikVare />
+      <FabrikVare factoryId={factoryId} setFactoryItemName={setFactoryItemName} setFactoryItemId={setFactoryItemId} />
 
       <Ejendomme area={area} setArea={setArea} tons={tons} setTons={setTons} />
     </List>

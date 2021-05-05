@@ -1,4 +1,4 @@
-import { User, View, Projects, Teams, Factories, Leaders, Districs, JobTypes, Selections } from './dataTypes'
+import { User, View, Projects, Teams, Factories, Leaders, Districs, JobTypes, Selections, Project } from './dataTypes'
 
 export type Data = {
     root: {
@@ -21,6 +21,17 @@ export type SetDataActionType = {
     payload: Data;
 };
 export type SetDataContract = (payload: Data) => SetDataActionType
+
+
+// ----------------------------- Create -----------------------------
+export const SET_NU_BRIK = 'SET_NU_BRIK';
+export type SetNuBrikActionType = {
+    type: typeof SET_NU_BRIK;
+    payload: Project;
+};
+export type SetNuBrikContract = (payload: Project) => SetNuBrikActionType
+
+
 
 // // ----------------------------- Create -----------------------------
 // export const SET_TODO = 'SET_TODO';
@@ -48,6 +59,7 @@ export type SetDataContract = (payload: Data) => SetDataActionType
 
 export type TodosActionTypes =
     | SetDataActionType
+    | SetNuBrikActionType
     // | SetTodoActionType
     // | UpdateTodoActionType
     // | DeleteTodoActionType

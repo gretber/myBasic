@@ -6,6 +6,11 @@ export const setTodosAction: types.SetDataContract = (payload) => ({
     payload,
 });
 
+export const setNuBrikAction: types.SetNuBrikContract = (payload) => ({
+    type: types.SET_NU_BRIK,
+    payload,
+});
+
 // export const setTodoAction: types.SetTodoContract = (payload) => ({
 //     type: types.SET_TODO,
 //     payload,

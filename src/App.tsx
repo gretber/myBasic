@@ -28,6 +28,36 @@ import { swap } from './helpers/swapElArr';
 // Types
 import { Team, Project } from './bus/briks/dataTypes';
 
+// // Test
+// import { store } from './@init';
+// import { setNuBrikAction } from './bus/briks/actions';
+
+//   const initialBrik = {
+//     id: null,
+//     regionId: "ØST",
+//     leaderId: "SAK",
+//     projectNo: null,
+//     factoryItemName: "",
+//     factoryItemId: "KST",
+//     customerId: null,
+//     customerName: null,
+//     state: "",
+//     status: "",
+//     name: "",
+//     name2: "",
+//     startDate: "04/02/2021",
+//     endDate: "14/02/2021",
+//     duration: 11,
+//     weekendWork: true,
+//     jobType: "qwe",
+//     teamId: "SPV",
+//     factoryId: "",
+//     tons: 0.0,
+//     area: 0.0,
+//     color: "",
+//     details: ""
+//   }
+
 const App: FunctionComponent = () => {
 
     // Ref
@@ -36,33 +66,29 @@ const App: FunctionComponent = () => {
     // Init state
     const [events, setEvents] = useState<Array<Project> | []>([]);
     const [resources, setResources] = useState<Array<Team> | []>([]);
-    const [timeRanges, setTimeRanges] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState<EventModel | null>(null);
 
     // Get data
     const { data, loading } = useDataQuery()
-    const testTimeRanges: any = [{
-                name:"Lunch",
-                startDate: "2021-01-08",
-                endDate: "2021-01-10",
-                cls: "striped"
-            }]
 
     useEffect(()=> {
 
         if("root" in data){
             const transformedData = data.root.projects.project.map((item) => {
                 item["resourceId"] = item["teamId"];
-                item["eventColor"] = item["color"];
-                item.eventColor = `#${item.eventColor}`;
+                if(!("eventColor" in item)){
+                    item["eventColor"] = item["color"];
+                    item.eventColor = `#${item.eventColor}`;
+                }
                 return { ...item, startDate: formatDate(swap(item.startDate))!, endDate: formatDate(swap(item.endDate))! }
             })
+
             const teams = data.root.teams.team
             setResources(teams);
             setEvents(transformedData);
-            setTimeRanges(testTimeRanges)
         }
-    }, [loading])
+        
+    }, [loading, data])
 
     // event selection change handler
     const onEventSelectionChange = useCallback(({ selected }: { selected: EventModel[] }) => {
@@ -73,7 +99,7 @@ const App: FunctionComponent = () => {
     const config = { ...schedulerConfig }
 
     const beforeEventEditShow = (event: any) => {
-        console.log('event', event.eventRecord.data)
+
         // Current id
         const regionId = event.eventRecord.data.regionId;
         const leaderId = event.eventRecord.data.leaderId;
@@ -134,7 +160,6 @@ const App: FunctionComponent = () => {
                 {...config}
                 events={events}
                 resources={resources}
-                timeRanges={timeRanges}
                 barMargin={3}
                 onEventSelectionChange={onEventSelectionChange}
                 onBeforeEventEditShow={beforeEventEditShow}

@@ -10,6 +10,16 @@ export const dataReducer: Reducer<types.Data, types.TodosActionTypes> = (state =
         case types.SET_DATA:
             return action.payload;
 
+        case types.SET_NU_BRIK:
+            if('root' in state){
+                return { ...state, root: {...state.root, projects: { project: [...state.root.projects.project, action.payload] }}}
+            } else {
+                return state
+            }
+            
+            
+            
+
         // case types.SET_TODO:
         //     return [ action.payload, ...state ];
 

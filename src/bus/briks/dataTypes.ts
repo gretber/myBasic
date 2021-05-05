@@ -13,31 +13,32 @@ export type View = {
 }
 
 export type Project = {
-            id: string,
+            id: string | null,
             regionId: string,
-            leaderId: string | "null",
-            projectNo: string | "null",
+            leaderId: string | null,
+            projectNo: string | null,
             factoryItemName: string,
-            factoryItemId: string | "null",
-            customerId: string,
-            customerName: string | "null",
+            factoryItemId: string | null,
+            customerId: string | null,
+            customerName: string | null,
             state: string,
             status: string,
             name: string,
-            name2: string | "null",
+            name2: string | null,
             startDate: string,
             endDate: string,
-            duration: number,
-            weekendWork: false,
-            jobType: string | "null",
+            duration?: number,
+            weekendWork: boolean,
+            jobType: string | null,
             teamId: string,
             factoryId: string,
-            tons: 0.0,
-            area: 0.0,
+            tons: number,
+            area: number,
             color: string,
             details: string,
             resourceId?: string,
-            eventColor?: string
+            eventColor?: string,
+            durationDays?: number
 }
 
 export type Projects = {

@@ -23,6 +23,15 @@ import NoteAddRoundedIcon from "@material-ui/icons/NoteAddRounded";
 // Elements
 import { NyBrikForm } from "../../components/NyBrikForm";
 
+// Store
+import { store } from '../../@init';
+
+// Actions
+import { setNuBrikAction } from '../../bus/briks/actions';
+
+// Types
+import { Project } from '../../bus/briks/dataTypes'
+
 const useStyles = makeStyles({
   list: {
     width: "500px",
@@ -99,14 +108,73 @@ export const NyBrik = () => {
     },
   }))(MuiDialogActions);
 
-
-  const [ newBrik, setNewBrik ] = useState({id: null, projectNo: null})
-
-  console.log(newBrik)
-  const onSaveClick = () => {
-    console.log("SAVE")
-    toggleDrawer("left", false)
+  const initialBrik = {
+    id: null,
+    regionId: "",
+    leaderId: "",
+    projectNo: null,
+    factoryItemName: "",
+    factoryItemId: null,
+    customerId: null,
+    customerName: null,
+    state: "",
+    status: "",
+    name: "",
+    name2: "",
+    startDate: "",
+    endDate: "",
+    duration: 0,
+    weekendWork: false,
+    jobType: null,
+    teamId: "",
+    factoryId: "",
+    tons: 0.0,
+    area: 0.0,
+    color: "",
+    eventColor: "#72FF5C",
+    details: ""
   }
+
+  const [ newBrik, setNewBrik ] = useState<Project>(initialBrik)
+
+  const onSave = () => {
+    const body = {
+      root: {
+        projects: {
+          project: [
+            newBrik
+          ]
+        }
+      }
+    };
+
+    ( async () => {
+      const createBrikUrl = process.env.REACT_APP_CREATE_PROJECT;
+
+      const encoded = window.btoa('lei-lmk:AAABBB')
+
+      const response = await fetch(`${createBrikUrl}`, {
+
+            method:  'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${encoded}`,
+            },
+
+            body: JSON.stringify(body),
+        });
+
+        if (response.status !== 200) {
+          throw new Error('Todo create failed');
+        }
+
+        store.dispatch(setNuBrikAction(newBrik));
+
+    })();
+  }
+
+
 
   const list = (
     <div className={classes.list} role="presentation">
@@ -129,7 +197,7 @@ export const NyBrik = () => {
           CANCEL
         </Button>
         <Button
-          onMouseDown={onSaveClick}
+          onMouseDown={onSave}
           onClick={toggleDrawer("left", false)}
           color="primary"
         >

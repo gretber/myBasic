@@ -3,7 +3,7 @@ import { ItemType } from '../types';
 
 export const selectionItemsDetail = async ( setOptions: any, active: boolean, factoryId: string ) => {
   const selectionItemsDetail = process.env.REACT_APP_SELECTION_ITEM_DETAILS;
-  console.log(factoryId)
+
   const encoded = window.btoa('lei-lmk:AAABBB')
   const response = await fetch(`${selectionItemsDetail}${factoryId}`, {
         method:  'GET',

@@ -40,7 +40,7 @@ export const NyBrikForm = ({setNewBrik}: any) => {
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
-      return {...prevState, projectName}
+      return {...prevState, name: projectName}
     })
   },[projectName])
 

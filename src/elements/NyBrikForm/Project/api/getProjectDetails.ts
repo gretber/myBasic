@@ -14,7 +14,7 @@ export const getProjectDetails = async (setRegionId: any, projectNo: string, set
 
         
   const project: any = await response.json();
-  console.log(project)
+
   setRegionId(project.root.projects.project[0].regionId);
   setCustomerName(project.root.projects.project[0].customerName)
   setFactoryId(project.root.projects.project[0].factoryId)

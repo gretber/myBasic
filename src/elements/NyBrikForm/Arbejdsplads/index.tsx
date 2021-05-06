@@ -16,18 +16,19 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Arbejdsplads = ({ projectName = '' }: any) => {
+export const Arbejdsplads = ({ projectName, setProjectName }: any) => {
+  
+  // Style
   const classes = useStyles();
   
-  const [ input, setInput ] = useState('')
-
-  useMemo(() => {
-    setInput(projectName)
-  }, [projectName])
+  // Handler
+  const onChangeHandler = (event: any) => {
+    setProjectName(event.target.value)
+  }
 
   return (
     <form className={classes.root} noValidate autoComplete="off">
-      <TextField id="arbejdsplads" label="Arbejdsplads" variant="outlined" onChange={(event)=>setInput(event.target.value)} value={input} />
+      <TextField id="arbejdsplads" label="Arbejdsplads" variant="outlined" onChange={onChangeHandler} value={projectName} />
     </form>
   );
 }

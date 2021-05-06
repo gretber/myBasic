@@ -36,13 +36,30 @@ export const NyBrikForm = ({setNewBrik}: any) => {
   },[regionId])
 
   // State for Project and Arbejdsplads
-  const [ projectName, setProjectName ] = useState('')
+  const [ projectName, setProjectName ] = useState("")
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
       return {...prevState, name: projectName}
     })
   },[projectName])
+
+  const [ projectNo, setProjectNo ] = useState(null)
+
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, projectNo}
+    })
+  },[projectNo])
+
+  // State for Kalkule Besk
+  const [ name2, setName2 ] = useState(null)
+  
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, name2}
+    })
+  },[name2])
 
   // State for kunde navn (customer)
   const [ customerName, setCustomerName ] = useState(null);
@@ -153,7 +170,7 @@ export const NyBrikForm = ({setNewBrik}: any) => {
   // State for status and clips
 
   const [status, setStatus] = React.useState('0');
-  const [state, setState] = React.useState('');
+  const [state, setState] = React.useState('2');
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
@@ -187,11 +204,11 @@ export const NyBrikForm = ({setNewBrik}: any) => {
     <List>
       <Region setRegionId={setRegionId} projectName={projectName} regionId={regionId}/>
 
-      <Project setFactoryId={setFactoryId} setProjectName={setProjectName} regionId={regionId} setRegionId={setRegionId} setCustomerName={setCustomerName} setCustomerId={setCustomerId} />
+      <Project setFactoryId={setFactoryId} setProjectNo={setProjectNo} setProjectName={setProjectName} regionId={regionId} setRegionId={setRegionId} setCustomerName={setCustomerName} setCustomerId={setCustomerId} />
 
-      <Arbejdsplads projectName={projectName} />
+      <Arbejdsplads projectName={projectName} setProjectName={setProjectName} />
 
-      {/* <KalkuleBesk /> */}
+      <KalkuleBesk setName2={setName2} />
 
       <KundeNavn setCustomerName={setCustomerName} projectName={projectName}  customerName={customerName} />
 

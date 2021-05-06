@@ -59,7 +59,7 @@ export const Varighed = ( { varighed, setVarighed, setEndDate, startDate, isWork
     <FormControl component="fieldset">
       <FormGroup className={classes.formGroup}>
         <TextField
-          id="outlined-number"
+          id="duration"
           label="Varighed"
           type="number"
           InputLabelProps={{

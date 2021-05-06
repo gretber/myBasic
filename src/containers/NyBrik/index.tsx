@@ -30,7 +30,10 @@ import { store } from '../../@init';
 import { setNuBrikAction } from '../../bus/briks/actions';
 
 // Types
-import { Project } from '../../bus/briks/dataTypes'
+import { Project } from '../../bus/briks/dataTypes';
+
+// Hooks
+import { useTodosMutations } from '../../bus/briks/';
 
 const useStyles = makeStyles({
   list: {
@@ -65,10 +68,15 @@ const styles = (theme: Theme) =>
 type Anchor = "left";
 
 export const NyBrik = () => {
+  // Styles
   const classes = useStyles();
+
+  // Init
   const [state, setState] = useState({
     left: false,
   });
+
+  const { createBrik } = useTodosMutations();
 
   const toggleDrawer = (anchor: Anchor, open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent
@@ -117,7 +125,7 @@ export const NyBrik = () => {
     factoryItemId: null,
     customerId: null,
     customerName: null,
-    state: "",
+    state: "2",
     status: "",
     name: "",
     name2: "",
@@ -131,55 +139,26 @@ export const NyBrik = () => {
     tons: 0.0,
     area: 0.0,
     color: "",
-    eventColor: "#72FF5C",
+    eventColor: "#469e38",
     details: ""
   }
 
   const [ newBrik, setNewBrik ] = useState<Project>(initialBrik)
 
+  // console.log("newBrik", newBrik)
+  
+  // Clean request data
+  const bodyNewBrik = { ...newBrik }
+  delete bodyNewBrik.eventColor
+
   const onSave = () => {
-    const body = {
-      root: {
-        projects: {
-          project: [
-            newBrik
-          ]
-        }
-      }
-    };
-
-    ( async () => {
-      const createBrikUrl = process.env.REACT_APP_CREATE_PROJECT;
-
-      const encoded = window.btoa('lei-lmk:AAABBB')
-
-      const response = await fetch(`${createBrikUrl}`, {
-
-            method:  'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Basic ${encoded}`,
-            },
-
-            body: JSON.stringify(body),
-        });
-
-        if (response.status !== 200) {
-          throw new Error('Todo create failed');
-        }
-
-        store.dispatch(setNuBrikAction(newBrik));
-
-    })();
+    createBrik(newBrik)
   }
-
-
 
   const list = (
     <div className={classes.list} role="presentation">
       <DialogTitle
-        id="customized-dialog-title"
+        id="title"
         onClose={toggleDrawer("left", false)}
       >
         Ny brik

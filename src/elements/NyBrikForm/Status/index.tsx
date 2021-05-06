@@ -41,26 +41,41 @@ export const Status = ({ status, state, setStatus, setState }: any) => {
     }
   };
 
-  
-
-  const handleSelectChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setState(event.target.value as string);
+  const handleSelectChange = (event: React.ChangeEvent<{ value: any }>) => {
+    setState(event.target.value.toString());
   };
   return (
     <FormControl component="fieldset" className={classes.wrapper}>
-      <FormControl variant="outlined" className={classes.formControl}>
+      {/* <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel id="status">Status</InputLabel>
         <Select
           labelId="status"
           id="status"
+          defaultValue={20}
           value={state}
           onChange={handleSelectChange}
           label="Status"
         >
-          <MenuItem value={"1"}>Budgetteret</MenuItem>
-          <MenuItem value={"2"}>Planlagt</MenuItem>
-          <MenuItem value={"3"}>Udført Sag</MenuItem>
-          <MenuItem value={"4"}>Slettet</MenuItem>
+          <MenuItem value={10}>Budgetteret</MenuItem>
+          <MenuItem value={20}>Planlagt</MenuItem>
+          <MenuItem value={30}>Udført Sag</MenuItem>
+          <MenuItem value={40}>Slettet</MenuItem>
+        </Select>
+      </FormControl> */}
+      <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel htmlFor="status" id="status">Status</InputLabel>
+        <Select
+          defaultValue={2}
+          labelId="status"
+          id="status"
+          onChange={handleSelectChange}
+          label="Status"
+          value={state}
+        >
+          <MenuItem value={1}>Budgetteret</MenuItem>
+          <MenuItem value={2}>Planlagt</MenuItem>
+          <MenuItem value={3}>Udført Sag</MenuItem>
+          <MenuItem value={4}>Slettet</MenuItem>
         </Select>
       </FormControl>
 

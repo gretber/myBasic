@@ -1,6 +1,10 @@
+// Core
 import React from "react";
+
+// Material
 import TextField from "@material-ui/core/TextField";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,11 +43,14 @@ export const Ejendomme = ({ area, setArea, tons, setTons }: any) => {
     <form className={classes.root} noValidate autoComplete="off">
       <div className={classes.wrapper}>
         <TextField
-          id="kg-pr-m2"
-          label="Kg pr. m2"
+          id="m2"
+          label="Area"
           type="number"
           onChange={handlerOnAreaChange}
           value={area}
+          InputProps={{
+            endAdornment: <InputAdornment position="end">m2</InputAdornment>,
+          }}
           InputLabelProps={{
             shrink: true,
           }}
@@ -56,6 +63,9 @@ export const Ejendomme = ({ area, setArea, tons, setTons }: any) => {
           type="number"
           onChange={handlerOnTonsChange}
           value={tons}
+          InputProps={{
+            endAdornment: <InputAdornment position="end">tons</InputAdornment>,
+          }}
           InputLabelProps={{
             shrink: true,
           }}

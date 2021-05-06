@@ -1,14 +1,11 @@
+// Type
+import { Project } from '../dataTypes';
 
 // Fetch
 export type FetchData = () => Promise<void>;
 
-// // Create
-// export type CreateTodoInput = {
-//     body: {
-//         text: string
-//     }
-// };
-// export type CreateTodoType = (input: CreateTodoInput) => Promise<void>;
+// Create
+export type CreateBrikType = (input: Project) => Promise<void>;
 
 // // Update
 // export type UpdateTodoInput = {

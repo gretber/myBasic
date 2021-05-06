@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Project = ({ setProjectName, regionId, setRegionId, setCustomerName, setCustomerId, setFactoryId }: any) => {
+export const Project = ({ setProjectName, setProjectNo, regionId, setRegionId, setCustomerName, setCustomerId, setFactoryId }: any) => {
   // Styles
   const classes = useStyles();
 
@@ -69,6 +69,7 @@ export const Project = ({ setProjectName, regionId, setRegionId, setCustomerName
     if(value && ('name' in value) && ('id' in value)){
       getProjectDetails(setRegionId, value.id, setCustomerName, setCustomerId, setFactoryId)
       setProjectName(value.name)
+      setProjectNo(value.id)
     } else {
       setRegionId('')
       setProjectName('')
@@ -78,7 +79,7 @@ export const Project = ({ setProjectName, regionId, setRegionId, setCustomerName
   return (
     <Autocomplete
       className={classes.Autocomplete}
-      id="asynchronous-demo"
+      id="project"
       onChange={handlerOnChange}
       open={open}
       onOpen={() => {

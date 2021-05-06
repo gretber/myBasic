@@ -87,7 +87,7 @@ export const KundeNavn = ({ setCustomerName, projectName, customerName }: any) =
     <Autocomplete
       disabled={!!projectName}
       className={classes.Autocomplete}
-      id="asynchronous-demo"
+      id="kunde-navn"
       onChange={handlerOnChange}
       open={open}
       onOpen={() => {

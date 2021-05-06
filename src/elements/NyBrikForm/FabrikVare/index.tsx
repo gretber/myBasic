@@ -74,7 +74,7 @@ export const FabrikVare = ({ factoryId, setFactoryItemName, setFactoryItemId }: 
       disabled={!factoryId}
       className={classes.Autocomplete}
       onChange={handlerOnChange}
-      id="asynchronous-demo"
+      id="fabrik-vare"
       style={{ width: 300 }}
       open={open}
       onOpen={() => {

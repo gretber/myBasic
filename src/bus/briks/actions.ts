@@ -11,11 +11,6 @@ export const setNuBrikAction: types.SetNuBrikContract = (payload) => ({
     payload,
 });
 
-// export const setTodoAction: types.SetTodoContract = (payload) => ({
-//     type: types.SET_TODO,
-//     payload,
-// });
-
 // export const updateTodoAction: types.UpdateTodoContract = (payload) => ({
 //     type: types.UPDATE_TODO,
 //     payload,

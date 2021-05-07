@@ -14,7 +14,7 @@ const Item = ({ item, index, value, setState }: any) => {
   const [ el, setEl ] = useState(value)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState( (prevState: any) => {
+  setState( (prevState: any) => {
       prevState[index]['-selected'] = event.target.checked
       setEl(event.target.checked)
       return prevState
@@ -39,18 +39,9 @@ const Item = ({ item, index, value, setState }: any) => {
   );
 }
 
-export const SelectionRegion = () => {
+export const SelectionRegion = ({ region, setRegion }: any) => {
 
-  // Get data
-  const initialState = useSelector( state => {
-    if("root" in state.data){
-      return state.data.root.selections.selection[1].values.value;
-    }
-  });
-
-  const [ state, setState ] = useState(initialState);
-
-  const itemJSX = state?state.map((item: any, index: number) => <Item key={item.name} index={index} item={item.name} value={item['-selected']} setState={setState} />):null;
+  const itemJSX = region?region.map((item: any, index: number) => <Item key={item.name} index={index} item={item.name} value={item['-selected']} setState={setRegion} />):null;
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { User, View, Projects, Teams, Factories, Leaders, Districs, JobTypes, Selections, Project } from './dataTypes'
+import { User, View, Projects, Teams, Factories, Leaders, Districs, JobTypes, Selections, Project, SelectionValues } from './dataTypes'
 
 export type Data = {
     root: {
@@ -32,22 +32,20 @@ export type SetNuBrikActionType = {
 export type SetNuBrikContract = (payload: Project) => SetNuBrikActionType
 
 
-
-// // ----------------------------- Create -----------------------------
-// export const SET_TODO = 'SET_TODO';
-// export type SetTodoActionType = {
-//     type: typeof SET_TODO;
-//     payload: Todo;
-// };
-// export type SetTodoContract = (payload: Todo) => SetTodoActionType
-
 // // ----------------------------- Update -----------------------------
-// export const UPDATE_TODO = 'UPDATE_TODO';
-// export type UpdateTodoActionType = {
-//     type: typeof UPDATE_TODO;
-//     payload: Todo;
-// };
-// export type UpdateTodoContract = (payload: Todo) => UpdateTodoActionType
+export const UPDATE_SELECTION = 'UPDATE_SELECTION';
+type UpdateSelectionPayload = {
+            root: {
+                selections: Selections
+            }
+}
+
+export type UpdateSelectionActionType = {
+    type: typeof UPDATE_SELECTION;
+    payload: UpdateSelectionPayload
+};
+
+export type UpdateSelectionContract = (payload: UpdateSelectionPayload) => UpdateSelectionActionType
 
 // // ----------------------------- Delete -----------------------------
 // export const DELETE_TODO = 'DELETE_TODO';
@@ -60,7 +58,7 @@ export type SetNuBrikContract = (payload: Project) => SetNuBrikActionType
 export type TodosActionTypes =
     | SetDataActionType
     | SetNuBrikActionType
-    // | SetTodoActionType
+    | UpdateSelectionActionType
     // | UpdateTodoActionType
     // | DeleteTodoActionType
 

@@ -24,8 +24,6 @@ export const createBrik: CreateBrikType = async (newBrik) => {
     }
   };
 
-  console.log("body of request", body)
-
   const createBrikUrl = process.env.REACT_APP_CREATE_PROJECT;
   store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
   try {

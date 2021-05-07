@@ -24,39 +24,11 @@ import { useDataQuery } from './bus/briks';
 // Helpers
 import { formatDate } from './helpers/formatDate';
 import { swap } from './helpers/swapElArr';
+import { sortSelectedRegions } from './helpers/sortSelectedRegions';
+import { sortSelectedFabriks } from './helpers/sortSelectedFabriks';
 
 // Types
-import { Team, Project } from './bus/briks/dataTypes';
-
-// // Test
-// import { store } from './@init';
-// import { setNuBrikAction } from './bus/briks/actions';
-
-//   const initialBrik = {
-//     id: null,
-//     regionId: "ØST",
-//     leaderId: "SAK",
-//     projectNo: null,
-//     factoryItemName: "",
-//     factoryItemId: "KST",
-//     customerId: null,
-//     customerName: null,
-//     state: "",
-//     status: "",
-//     name: "",
-//     name2: "",
-//     startDate: "04/02/2021",
-//     endDate: "14/02/2021",
-//     duration: 11,
-//     weekendWork: true,
-//     jobType: "qwe",
-//     teamId: "SPV",
-//     factoryId: "",
-//     tons: 0.0,
-//     area: 0.0,
-//     color: "",
-//     details: ""
-//   }
+import { Team, Project, SelectionValue } from './bus/briks/dataTypes';
 
 const App: FunctionComponent = () => {
 
@@ -65,7 +37,7 @@ const App: FunctionComponent = () => {
 
     // Init state
     const [events, setEvents] = useState<Array<Project> | []>([]);
-    const [resources, setResources] = useState<Array<Team> | []>([]);
+    const [resources, setResources] = useState<Array<SelectionValue> | []>([]);
     const [selectedEvent, setSelectedEvent] = useState<EventModel | null>(null);
 
     // Get data
@@ -76,6 +48,7 @@ const App: FunctionComponent = () => {
         if("root" in data){
             const transformedData = data.root.projects.project.map((item) => {
                 item["resourceId"] = item["teamId"];
+
                 if(!("eventColor" in item)){
                     item["eventColor"] = item["color"];
                     item.eventColor = `#${item.eventColor}`;
@@ -83,11 +56,28 @@ const App: FunctionComponent = () => {
                 return { ...item, startDate: formatDate(swap(item.startDate))!, endDate: formatDate(swap(item.endDate))! }
             })
 
-            const teams = data.root.teams.team
-            setResources(teams);
-            setEvents(transformedData);
+            // Sorted Teams
+            const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
+            // Transform teams
+            selectionTeams.map( (item: any) =>  {
+                item["resourceId"] = item["-id"]
+                item["id"] = item["-id"]
+            })
+
+            // Sort Regions
+            const selectionRegion = data.root.selections.selection[1].values.value
+            const sortedRegions = sortSelectedRegions(transformedData, selectionRegion) 
+
+            // Sort Fabrik
+            const selectionFabriks = data.root.selections.selection[2].values.value
+            console.log("selectionFabriks", selectionFabriks)
+            const sortedFabriks = sortSelectedFabriks(sortedRegions, selectionFabriks)
+            console.log("sortedFabriks", sortedFabriks)
+
+            setResources(selectionTeams);
+            setEvents(sortedFabriks);
         }
-        
+
     }, [loading, data])
 
     // event selection change handler

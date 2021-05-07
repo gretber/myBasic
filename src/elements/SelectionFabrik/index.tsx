@@ -46,7 +46,7 @@ const Item: FC<ItemType> = ({ item, index, value, setState }) => {
   );
 };
 
-export const SelectionFabrik = () => {
+export const SelectionFabrik = ({ fabrik, setFabrik }: any) => {
   
   // Get data
   const initialState = useSelector( state => {
@@ -55,9 +55,7 @@ export const SelectionFabrik = () => {
     }
   });
 
-  const [ state, setState ] = useState(initialState);
-
-  const itemJSX = state?state.map((item: any, index: number) => <Item key={item.name} index={index} item={item.name} value={item['-selected']} setState={setState} />):null;
+  const itemJSX = fabrik?fabrik.map((item: any, index: number) => <Item key={item.name} index={index} item={item.name} value={item['-selected']} setState={setFabrik} />):null;
 
   return <>{itemJSX}</>;
 };

@@ -5,7 +5,7 @@ import { useSelector } from '../../hooks';
 // Api
 import { fetchData,
     createBrik,
-    // updateTodo,
+    updateSelection,
     // deleteTodo
 } from './api';
 
@@ -26,12 +26,12 @@ export const useDataQuery = () => {
     };
 };
 
-export const useTodosMutations = () => {
+export const useBriksMutations = () => {
     const { togglersRedux: { isDataFetching }} = useTogglersRedux();
 
     return {
         createBrik,
-        // updateTodo,
+        updateSelection,
         // deleteTodo,
         loading: isDataFetching,
     };

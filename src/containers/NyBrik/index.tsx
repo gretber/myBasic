@@ -33,7 +33,7 @@ import { setNuBrikAction } from '../../bus/briks/actions';
 import { Project } from '../../bus/briks/dataTypes';
 
 // Hooks
-import { useTodosMutations } from '../../bus/briks/';
+import { useBriksMutations } from '../../bus/briks/';
 
 const useStyles = makeStyles({
   list: {
@@ -76,7 +76,7 @@ export const NyBrik = () => {
     left: false,
   });
 
-  const { createBrik } = useTodosMutations();
+  const { createBrik } = useBriksMutations();
 
   const toggleDrawer = (anchor: Anchor, open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent

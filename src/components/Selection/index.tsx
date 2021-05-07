@@ -1,5 +1,5 @@
 // Core
-import React from "react";
+import React, {useState} from "react";
 
 // Material
 import {
@@ -21,6 +21,10 @@ import SaveRoundedIcon from "@material-ui/icons/SaveRounded";
 
 // Components
 import { SelectionTabs } from "../SelectionTabs";
+
+// Hooks
+import { useBriksMutations } from '../../bus/briks';
+import { useSelector } from '../../hooks/useSelector';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -82,7 +86,34 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const Selection = () => {
-  const [open, setOpen] = React.useState(false);
+  
+  const { updateSelection } = useBriksMutations();
+
+  // Get hold data
+  const initialHoldState = useSelector( state => {
+    if("root" in state.data){
+      return state.data.root.selections.selection[0].values.value;
+    }
+  });
+
+  // Get region data
+  const initialRegionState = useSelector( state => {
+    if("root" in state.data){
+      return state.data.root.selections.selection[1].values.value;
+    }
+  });
+
+  // Get fabrik data
+  const initialFabrikState = useSelector( state => {
+    if("root" in state.data){
+      return state.data.root.selections.selection[2].values.value;
+    }
+  });
+
+  const [open, setOpen] = useState(false);
+  const [hold, setHold] = useState<any>(initialHoldState)
+  const [region, setRegion] = useState<any>(initialRegionState)
+  const [fabrik, setFabrik] = useState<any>(initialFabrikState)
 
   const classes = useStyles();
 
@@ -92,6 +123,36 @@ export const Selection = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleOnSaveClick = () => {
+    updateSelection({
+      root: {
+        selections: {
+          selection: [
+            {
+              type: 'team',
+              values: {
+                value: hold
+              }
+            },
+            {
+              type: 'region',
+              values: {
+                value: region
+              }
+            },
+            {
+              type: 'factory',
+              values: {
+                value: fabrik
+              }
+            }
+          ]
+        }
+      }
+    })
+    setOpen(false);
+  }
 
   return (
     <div>
@@ -107,14 +168,14 @@ export const Selection = () => {
           Selection
         </DialogTitle>
         <DialogContent className={classes.dialogContent} dividers>
-          <SelectionTabs />
+          <SelectionTabs hold={hold} setHold={setHold} region={region} setRegion={setRegion} fabrik={fabrik} setFabrik={setFabrik} />
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose} color="secondary">
             Cancel
           </Button>
 
-          <Button autoFocus onClick={handleClose} color="primary">
+          <Button autoFocus onClick={handleOnSaveClick} color="primary">
             <SaveRoundedIcon />
             Save
           </Button>

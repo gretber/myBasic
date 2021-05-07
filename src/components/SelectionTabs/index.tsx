@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export const SelectionTabs = () => {
+export const SelectionTabs = ({ hold, setHold, region, setRegion, fabrik, setFabrik }: any) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -75,13 +75,13 @@ export const SelectionTabs = () => {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <SelectionHold />
+        <SelectionHold hold={hold} setHold={setHold} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <SelectionRegion />
+        <SelectionRegion region={region} setRegion={setRegion} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <SelectionFabrik />
+        <SelectionFabrik fabrik={fabrik} setFabrik={setFabrik} />
       </TabPanel>
     </div>
   );

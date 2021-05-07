@@ -3,7 +3,7 @@ import { store } from '../../../@init';
 
 // Actions
 import { togglerCreatorAction } from '../../client';
-import { setTodosAction } from '../actions';
+import { setBriksAction } from '../actions';
 
 // Types
 import { FetchData } from './types';
@@ -30,7 +30,7 @@ export const fetchData: FetchData = async () => {
 
         const data: Data = await response.json();
 
-        store.dispatch(setTodosAction(data));
+        store.dispatch(setBriksAction(data));
     } catch (error) {
         console.log(error);
     } finally {

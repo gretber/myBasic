@@ -97,6 +97,7 @@ export type SelectionValue = {
                   '-selected': boolean,
                   '-id': string,
                   resourceId?: string, 
+                  id?: string,
                   name: string
 }
 export type SelectionValues = Array<SelectionValue>

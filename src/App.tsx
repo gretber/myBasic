@@ -1,6 +1,8 @@
 /**
  * Application
  */
+
+// Core
 import React, {
     Fragment,
     FunctionComponent,
@@ -13,10 +15,16 @@ import {
     BryntumScheduler,
 } from '@bryntum/scheduler-react';
 import { EventModel } from '@bryntum/scheduler/scheduler.umd.js';
+
+// Config
 import { schedulerConfig } from './AppConfig';
 import './App.scss';
 
+// Components
 import { NavigationPanel } from './containers/NavigationPanel';
+
+// Material
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Data
 import { useDataQuery } from './bus/briks';
@@ -26,6 +34,9 @@ import { formatDate } from './helpers/formatDate';
 import { swap } from './helpers/swapElArr';
 import { sortSelectedRegions } from './helpers/sortSelectedRegions';
 import { sortSelectedFabriks } from './helpers/sortSelectedFabriks';
+
+// Moment
+import moment from 'moment';
 
 // Types
 import { Team, Project, SelectionValue } from './bus/briks/dataTypes';
@@ -39,6 +50,7 @@ const App: FunctionComponent = () => {
     const [events, setEvents] = useState<Array<Project> | []>([]);
     const [resources, setResources] = useState<Array<SelectionValue> | []>([]);
     const [selectedEvent, setSelectedEvent] = useState<EventModel | null>(null);
+    const [config, setConfig] = useState({...schedulerConfig});
 
     // Get data
     const { data, loading } = useDataQuery()
@@ -46,6 +58,20 @@ const App: FunctionComponent = () => {
     useEffect(()=> {
 
         if("root" in data){
+
+            // Set Config
+            setConfig( (prevState: any) => {
+                const newState = { ...prevState }
+                const startDate = moment(data.root.view.startDate, "DD/MM/YYYY").toDate()
+                const endDate = moment(data.root.view.endDate, "DD/MM/YYYY").toDate()
+
+                newState.startDate = startDate
+                newState.endDate = endDate
+
+                return newState
+            })
+
+
             const transformedData = data.root.projects.project.map((item) => {
                 item["resourceId"] = item["teamId"];
 
@@ -56,29 +82,48 @@ const App: FunctionComponent = () => {
                 return { ...item, startDate: formatDate(swap(item.startDate))!, endDate: formatDate(swap(item.endDate))! }
             })
 
-            // Sorted Teams
-            const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
-            // Transform teams
-            selectionTeams.map( (item: any) =>  {
-                item["resourceId"] = item["-id"]
-                item["id"] = item["-id"]
-            })
-
-            // Sort Regions
-            const selectionRegion = data.root.selections.selection[1].values.value
-            const sortedRegions = sortSelectedRegions(transformedData, selectionRegion) 
-
             // Sort Fabrik
             const selectionFabriks = data.root.selections.selection[2].values.value
-            console.log("selectionFabriks", selectionFabriks)
-            const sortedFabriks = sortSelectedFabriks(sortedRegions, selectionFabriks)
-            console.log("sortedFabriks", sortedFabriks)
+            const sortedFabriks = sortSelectedFabriks(transformedData, selectionFabriks)
 
-            setResources(selectionTeams);
-            setEvents(sortedFabriks);
+            if(sortedFabriks.length === 0){
+                // Sorted Teams
+                const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
+                
+                // Transform teams
+                const copySelectionTeams = [...selectionTeams]
+                copySelectionTeams.map( (item: any) =>  {
+                    item["resourceId"] = item["-id"]
+                    item["id"] = item["-id"]
+                })
+
+                // Sort Regions
+                const selectionRegion = data.root.selections.selection[1].values.value
+                const sortedRegions = sortSelectedRegions(transformedData, selectionRegion) 
+
+                setEvents(sortedRegions);
+                setResources(copySelectionTeams);
+            } else {
+                // Sorted Teams
+                const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
+                
+                // Transform teams
+                const copySelectionTeams = [...selectionTeams]
+                copySelectionTeams.map( (item: any) =>  {
+                    item["resourceId"] = item["-id"]
+                    item["id"] = item["-id"]
+                })
+
+                // Sort Regions
+                const selectionRegion = data.root.selections.selection[1].values.value
+                const sortedRegions = sortSelectedRegions(sortedFabriks, selectionRegion) 
+
+                setEvents(sortedRegions);
+                setResources(copySelectionTeams);
+            }
         }
 
-    }, [loading, data])
+    }, [data, loading])
 
     // event selection change handler
     const onEventSelectionChange = useCallback(({ selected }: { selected: EventModel[] }) => {
@@ -86,7 +131,7 @@ const App: FunctionComponent = () => {
         setSelectedEvent(selected.length ? selected[0] : null);
     }, []);
 
-    const config = { ...schedulerConfig }
+    
 
     const beforeEventEditShow = (event: any) => {
 
@@ -136,10 +181,15 @@ const App: FunctionComponent = () => {
         }
     };
 
-    
-
     if(loading){
-        return <div>loading......</div>
+        return (
+            <Fragment>
+                {(Object.keys(data).length !== 0) && <NavigationPanel />}
+                <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "500px", marginBottom: "500px"}}>
+                    <CircularProgress color="primary" />
+                </div>
+            </Fragment>
+        )
     }
 
     return (

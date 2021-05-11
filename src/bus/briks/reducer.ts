@@ -18,6 +18,7 @@ export const dataReducer: Reducer<types.Data, types.TodosActionTypes> = (state =
             }
         case types.UPDATE_SELECTION:
             console.log("REDUCER", action.payload)
+            
             if('root' in state){
                 return { ...state, root: {...state.root, selections: action.payload.root.selections} }
             } else {

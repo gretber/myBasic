@@ -1,10 +1,10 @@
 export  const sortSelectedRegions = (projects: any, regions: any) => {
   let sorted: any = [];
 
-  regions.forEach( (el: any) => {
-    if (el['-selected'] === true) {
-      projects.forEach((elem: any, j: any) => {
-          if (el.name === elem.regionId) {
+  regions.forEach( (region: any) => {
+    if (region['-selected'] === true) {
+      projects.forEach((project: any, j: any) => {
+          if (region.name === project.regionId) {
               sorted.push(projects[j]);
           }
       });

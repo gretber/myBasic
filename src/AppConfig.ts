@@ -20,7 +20,7 @@ const schedulerConfig: any = {
             type: 'resourceInfo',
             text: 'Team',
             showEventCount: true,
-            showImage: false,
+            showImage: true,
             width: 230,
         },
         // {
@@ -29,6 +29,30 @@ const schedulerConfig: any = {
         //     width: 130
         // }
     ],
+
+    resourceStore: {
+        filters: [
+            function(item: any) {
+                const team = item.data.resourceId
+                const events = item.$project.initialConfig.eventsData
+                const arr = events.filter( (item: any) =>  item.resourceId === team)
+                if(arr.length>0){
+                    return item
+                }
+            }
+        ],
+
+    },
+
+    // eventStore: {
+    //     filters: [
+    //         function(item: any) {
+    //             console.log(item)
+    //             return item
+    //         }
+    //     ],
+    // },
+
 
     //*********** Custome edit event ***********//
     features : {

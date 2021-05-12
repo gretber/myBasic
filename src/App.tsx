@@ -71,7 +71,7 @@ const App: FunctionComponent = () => {
                 return newState
             })
 
-
+            // Transform data
             const transformedData = data.root.projects.project.map((item) => {
                 item["resourceId"] = item["teamId"];
 
@@ -85,12 +85,13 @@ const App: FunctionComponent = () => {
             // Sort Fabrik
             const selectionFabriks = data.root.selections.selection[2].values.value
             const sortedFabriks = sortSelectedFabriks(transformedData, selectionFabriks)
+            const selectedFabriksCount = selectionFabriks.filter( (item: any) => item["-selected"] === true )
+            if(selectedFabriksCount.length === 0){
 
-            if(sortedFabriks.length === 0){
-                // Sorted Teams
+                // Sort by selected Teams
                 const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
                 
-                // Transform teams
+                // Transform teams ( add resourceId, id fields )
                 const copySelectionTeams = [...selectionTeams]
                 copySelectionTeams.map( (item: any) =>  {
                     item["resourceId"] = item["-id"]
@@ -99,7 +100,7 @@ const App: FunctionComponent = () => {
 
                 // Sort Regions
                 const selectionRegion = data.root.selections.selection[1].values.value
-                const sortedRegions = sortSelectedRegions(transformedData, selectionRegion) 
+                const sortedRegions = sortSelectedRegions(transformedData, selectionRegion)
 
                 setEvents(sortedRegions);
                 setResources(copySelectionTeams);
@@ -116,9 +117,34 @@ const App: FunctionComponent = () => {
 
                 // Sort Regions
                 const selectionRegion = data.root.selections.selection[1].values.value
-                const sortedRegions = sortSelectedRegions(sortedFabriks, selectionRegion) 
+                const sortedRegions = sortSelectedRegions(sortedFabriks, selectionRegion)
 
-                setEvents(sortedRegions);
+                // // Sort by view date
+                // const events = sortedRegions.map( (item: any) => {
+                //     if((moment(item.endDate, "YYYY-MM-DD").unix()) > (moment(config.startDate).unix()) || ((moment(item.startDate, "YYYY-MM-DD").unix()) < (moment(config.endtDate).unix()))) {
+                //         return item
+                //     } 
+                //     return
+
+                // })
+
+                // console.log(events) 
+
+                const events = sortedRegions.filter( (item: any) => {
+                    // Project date
+                    const projectStartDate = moment(item.startDate, "YYYY-MM-DD").unix()
+                    const projectEndDate = moment(item.endDate, "YYYY-MM-DD").unix()
+
+                    // View date
+                    const viewStartDate = moment(config.startDate).unix()
+                    const viewEndDate = moment(config.endDate).unix()
+
+                    return projectEndDate > viewStartDate || projectStartDate < viewEndDate
+                })
+                // console.log(sortedRegions)
+                // console.log(events)
+
+                setEvents(events);
                 setResources(copySelectionTeams);
             }
         }

@@ -24,19 +24,21 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const SortableItem = SortableElement(({ item, value, setStateSort, elem }: any) => {
+const SortableItem = SortableElement(({ item, value, setHold, elem, isFabrikChosen }: any) => {
 
   const classes = useStyles();
   const [ el, setEl ] = useState(value)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
-    setStateSort( (prevState: any) => {
+    setHold( (prevState: any) => {
         prevState[elem]['-selected'] = event.target.checked
         setEl(event.target.checked)
         return prevState
       })
   };
+
+  const disabled = isFabrikChosen;
 
   return (
     <FormGroup className={classes.iconCenter} row>
@@ -44,6 +46,7 @@ const SortableItem = SortableElement(({ item, value, setStateSort, elem }: any) 
       <FormControlLabel
         control={
           <Checkbox
+            disabled={disabled}
             checked={el}
             onChange={handleChange}
             name={item}
@@ -57,18 +60,32 @@ const SortableItem = SortableElement(({ item, value, setStateSort, elem }: any) 
 
 });
 
-const SortableList = SortableContainer(({ stateSort, setStateSort }: any) => {
+const SortableList = SortableContainer(({ stateSort, setHold, isFabrikChosen }: any) => {
+
+  useEffect(()=>{
+    if(isFabrikChosen){
+      setHold((prevState: any) => {
+        const newState = prevState.map( (item: any) => {
+          return (
+            {...item, "-selected": true}
+          ) 
+        })
+
+        return newState
+      })
+    }
+  },[isFabrikChosen])
 
   return (
     <ul>
       {stateSort.map((item: any, index: number) => (
-        <SortableItem key={`item-${item.name}`} index={index} elem={index} item={item.name} value={item['-selected']} setStateSort={setStateSort} />
+        <SortableItem key={`item-${item.name}`} index={index} elem={index} item={item.name} value={isFabrikChosen?true:item['-selected']} setHold={setHold} isFabrikChosen={isFabrikChosen} />
       ))}
     </ul>
   );
 });
 
-export const SelectionHold = ({ hold, setHold }: any) => {
+export const SelectionHold = ({ hold, setHold, isFabrikChosen }: any) => {
 
 
   const onSortEnd = ({ oldIndex, newIndex }: any) => {
@@ -78,7 +95,8 @@ export const SelectionHold = ({ hold, setHold }: any) => {
   return (
     <SortableList
       stateSort={hold}
-      setStateSort={setHold}
+      setHold={setHold}
+      isFabrikChosen={isFabrikChosen}
       onSortEnd={onSortEnd}
     />
   );

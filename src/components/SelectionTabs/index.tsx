@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export const SelectionTabs = ({ hold, setHold, region, setRegion, fabrik, setFabrik }: any) => {
+export const SelectionTabs = ({ hold, setHold, region, setRegion, fabrik, setFabrik, isFabrikChosen, setIsFabrikChosen}: any) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -75,13 +75,16 @@ export const SelectionTabs = ({ hold, setHold, region, setRegion, fabrik, setFab
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <SelectionHold hold={hold} setHold={setHold} />
+        <SelectionHold hold={hold} setHold={setHold} isFabrikChosen={isFabrikChosen} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <SelectionRegion region={region} setRegion={setRegion} />
+        <SelectionRegion region={region} setRegion={setRegion} isFabrikChosen={isFabrikChosen} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <SelectionFabrik fabrik={fabrik} setFabrik={setFabrik} />
+        <SelectionFabrik  fabrik={fabrik}
+                          setFabrik={setFabrik}
+                          isFabrikChosen={isFabrikChosen}
+                          setIsFabrikChosen={setIsFabrikChosen}/>
       </TabPanel>
     </div>
   );

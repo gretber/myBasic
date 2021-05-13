@@ -1,5 +1,5 @@
 // Core
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 // Material
 import {
@@ -114,6 +114,7 @@ export const Selection = () => {
   const [hold, setHold] = useState<any>(initialHoldState)
   const [region, setRegion] = useState<any>(initialRegionState)
   const [fabrik, setFabrik] = useState<any>(initialFabrikState)
+  const [isFabrikChosen, setIsFabrikChosen] = useState<any>(false)
 
   const classes = useStyles();
 
@@ -154,6 +155,13 @@ export const Selection = () => {
     setOpen(false);
   }
 
+  useEffect(()=>{
+    if(fabrik){
+      const chosenFabrik = fabrik.findIndex( (item: any) =>  item["-selected"] === true )
+      chosenFabrik === -1?setIsFabrikChosen(false):setIsFabrikChosen(true)
+    }
+  },[open])
+
   return (
     <div>
       <Button variant="outlined" color="secondary" onClick={handleClickOpen}>
@@ -167,9 +175,18 @@ export const Selection = () => {
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           Selection
         </DialogTitle>
+
         <DialogContent className={classes.dialogContent} dividers>
-          <SelectionTabs hold={hold} setHold={setHold} region={region} setRegion={setRegion} fabrik={fabrik} setFabrik={setFabrik} />
+          <SelectionTabs  hold={hold}
+                          setHold={setHold}
+                          region={region}
+                          setRegion={setRegion}
+                          fabrik={fabrik}
+                          setFabrik={setFabrik}
+                          isFabrikChosen={isFabrikChosen}
+                          setIsFabrikChosen={setIsFabrikChosen}/>
         </DialogContent>
+
         <DialogActions>
           <Button autoFocus onClick={handleClose} color="secondary">
             Cancel

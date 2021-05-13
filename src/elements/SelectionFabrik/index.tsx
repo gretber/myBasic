@@ -1,5 +1,5 @@
 // Core
-import React, { useState, FC } from "react";
+import React, { useState, useEffect } from "react";
 
 // Material
 import FormGroup from "@material-ui/core/FormGroup";
@@ -9,16 +9,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 // Hooks
 import { useSelector } from "../../hooks/useSelector";
 
-type ItemType = {
-  item: string;
-  index: number;
-  value: boolean;
-  setState: any;
-}
+const Item = ({ item, index, value, setState, fabrik, setIsFabrikChosen }: any) => {
 
-const Item: FC<ItemType> = ({ item, index, value, setState }) => {
-
-  
   const [ el, setEl ] = useState(value)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +20,13 @@ const Item: FC<ItemType> = ({ item, index, value, setState }) => {
       return prevState
     } )
   };
+
+  useEffect(()=>{
+    if(fabrik){
+      const chosenFabrik = fabrik.findIndex( (item: any) =>  item["-selected"] === true )
+      chosenFabrik === -1?setIsFabrikChosen(false):setIsFabrikChosen(true)
+    }
+  },[el])
 
   return (
     <FormGroup row>
@@ -46,7 +45,7 @@ const Item: FC<ItemType> = ({ item, index, value, setState }) => {
   );
 };
 
-export const SelectionFabrik = ({ fabrik, setFabrik }: any) => {
+export const SelectionFabrik = ({ fabrik, setFabrik, setIsFabrikChosen }: any) => {
   
   // Get data
   const initialState = useSelector( state => {
@@ -55,7 +54,17 @@ export const SelectionFabrik = ({ fabrik, setFabrik }: any) => {
     }
   });
 
-  const itemJSX = fabrik?fabrik.map((item: any, index: number) => <Item key={item.name} index={index} item={item.name} value={item['-selected']} setState={setFabrik} />):null;
+  const itemJSX = fabrik?fabrik.map((item: any, index: number) => {
+    return (
+      <Item fabrik={fabrik}
+            key={item.name}
+            index={index}
+            item={item.name}
+            value={item['-selected']}
+            setState={setFabrik}
+            setIsFabrikChosen={setIsFabrikChosen}/>
+    )})
+    :null;
 
   return <>{itemJSX}</>;
 };

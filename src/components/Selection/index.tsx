@@ -157,8 +157,8 @@ export const Selection = () => {
 
   useEffect(()=>{
     if(fabrik){
-      const chosenFabrik = fabrik.findIndex( (item: any) =>  item["-selected"] === true )
-      chosenFabrik === -1?setIsFabrikChosen(false):setIsFabrikChosen(true)
+      const isFabrikChosen = fabrik.findIndex( (item: any) =>  item["-selected"] === true )
+      isFabrikChosen === -1?setIsFabrikChosen(false):setIsFabrikChosen(true)
     }
   },[open])
 

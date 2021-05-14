@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-
 export const Region = ({setRegionId, projectName, regionId}: any) => {
   // Styles
   const classes = useStyles();
@@ -43,8 +42,6 @@ export const Region = ({setRegionId, projectName, regionId}: any) => {
       setRegionId('')
     }
   }
-
-
 
   return (
     <div>

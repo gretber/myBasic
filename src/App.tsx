@@ -160,7 +160,7 @@ const App: FunctionComponent = () => {
     
 
     const beforeEventEditShow = (event: any) => {
-
+        console.log("event.eventRecord.data", event.eventRecord.data)
         // Current id
         const regionId = event.eventRecord.data.regionId;
         const leaderId = event.eventRecord.data.leaderId;
@@ -180,6 +180,7 @@ const App: FunctionComponent = () => {
             const currentRegion = data.root.districs.district.find( item => item.id === regionId)
             region.items = data.root.districs.district.map( item => item.name)
             region.placeholder = currentRegion?.name
+            region.value = currentRegion?.name
 
             // Varighed
             varighed.value = event.eventRecord.data.duration
@@ -207,6 +208,14 @@ const App: FunctionComponent = () => {
         }
     };
 
+    const handlerOnBeforeSave = (event: any) => {
+        console.log("On save", event)
+    }
+
+    const handlerOnEventResize = (event: any ) => {
+        console.log("Resize", event)
+    } 
+
     if(loading){
         return (
             <Fragment>
@@ -227,6 +236,8 @@ const App: FunctionComponent = () => {
                 events={events}
                 resources={resources}
                 barMargin={3}
+                onBeforeEventResizeFinalize={handlerOnEventResize}
+                onBeforeEventSave={handlerOnBeforeSave}
                 onEventSelectionChange={onEventSelectionChange}
                 onBeforeEventEditShow={beforeEventEditShow}
             />

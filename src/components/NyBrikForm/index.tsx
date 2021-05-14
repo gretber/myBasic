@@ -24,7 +24,7 @@ import { Ejendomme } from "../../elements/NyBrikForm/Ejendomme";
 import { lagInDays } from '../../helpers/lagInDays';
 import { convertDate } from '../../helpers/convertDate';
 
-export const NyBrikForm = ({setNewBrik}: any) => {
+export const NyBrikForm = ({ setNewBrik }: any) => {
 
   // State for region
   const [ regionId, setRegionId ] = useState('');
@@ -202,21 +202,46 @@ export const NyBrikForm = ({setNewBrik}: any) => {
 
   return (
     <List>
-      <Region setRegionId={setRegionId} projectName={projectName} regionId={regionId}/>
+      <Region setRegionId={setRegionId}
+              projectName={projectName}
+              regionId={regionId} />
 
-      <Project setFactoryId={setFactoryId} setProjectNo={setProjectNo} setProjectName={setProjectName} regionId={regionId} setRegionId={setRegionId} setCustomerName={setCustomerName} setCustomerId={setCustomerId} />
+      <Project  setFactoryId={setFactoryId}
+                setProjectNo={setProjectNo}
+                setProjectName={setProjectName}
+                regionId={regionId}
+                setRegionId={setRegionId}
+                setCustomerName={setCustomerName}
+                setCustomerId={setCustomerId} />
 
-      <Arbejdsplads projectName={projectName} setProjectName={setProjectName} />
+      <Arbejdsplads projectName={projectName}
+                    setProjectName={setProjectName} />
 
       <KalkuleBesk setName2={setName2} />
 
-      <KundeNavn setCustomerName={setCustomerName} projectName={projectName}  customerName={customerName} />
+      <KundeNavn  setCustomerName={setCustomerName}
+                  projectName={projectName}
+                  customerName={customerName} />
 
-      <DatePeriod setVarighed={setVarighed} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} isWorkWeekends={isWorkWeekends} />
+      <DatePeriod setVarighed={setVarighed}
+                  startDate={startDate}
+                  setStartDate={setStartDate}
+                  endDate={endDate}
+                  setEndDate={setEndDate}
+                  isWorkWeekends={isWorkWeekends} />
 
-      <Varighed varighed={varighed} setVarighed={setVarighed} setEndDate={setEndDate} startDate={startDate} endDate={endDate} isWorkWeekends={isWorkWeekends} setIsWorkWeekends={setIsWorkWeekends} />
+      <Varighed varighed={varighed}
+                setVarighed={setVarighed}
+                setEndDate={setEndDate}
+                startDate={startDate}
+                endDate={endDate}
+                isWorkWeekends={isWorkWeekends}
+                setIsWorkWeekends={setIsWorkWeekends} />
 
-      <Status status={status} setStatus={setStatus} state={state} setState={setState} />
+      <Status status={status}
+              setStatus={setStatus}
+              state={state}
+              setState={setState} />
 
       <JobType jobType={jobType} setJobType={setJobType} />
 
@@ -226,7 +251,9 @@ export const NyBrikForm = ({setNewBrik}: any) => {
 
       <Fabrik setFactoryId={setFactoryId} factoryId={factoryId} />
 
-      <FabrikVare factoryId={factoryId} setFactoryItemName={setFactoryItemName} setFactoryItemId={setFactoryItemId} />
+      <FabrikVare factoryId={factoryId}
+                  setFactoryItemName={setFactoryItemName}
+                  setFactoryItemId={setFactoryItemId} />
 
       <Ejendomme area={area} setArea={setArea} tons={tons} setTons={setTons} />
     </List>

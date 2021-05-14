@@ -12,6 +12,10 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 
+// Material
+import Button from "@material-ui/core/Button";
+import { Divider } from '@material-ui/core';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     iconCenter: {
@@ -27,15 +31,14 @@ const useStyles = makeStyles((theme: Theme) =>
 const SortableItem = SortableElement(({ item, value, setHold, elem, isFabrikChosen }: any) => {
 
   const classes = useStyles();
-  const [ el, setEl ] = useState(value)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
     setHold( (prevState: any) => {
-        prevState[elem]['-selected'] = event.target.checked
-        setEl(event.target.checked)
-        return prevState
-      })
+      const newState = [...prevState]
+      newState[elem]['-selected'] = event.target.checked
+      return newState
+    })
   };
 
   const disabled = isFabrikChosen;
@@ -47,7 +50,7 @@ const SortableItem = SortableElement(({ item, value, setHold, elem, isFabrikChos
         control={
           <Checkbox
             disabled={disabled}
-            checked={el}
+            checked={value}
             onChange={handleChange}
             name={item}
             color="primary"
@@ -87,18 +90,54 @@ const SortableList = SortableContainer(({ stateSort, setHold, isFabrikChosen }: 
 
 export const SelectionHold = ({ hold, setHold, isFabrikChosen }: any) => {
 
+  const onSelectAll = () => {
+    setHold((prevState: any)=>{
+      const newState = prevState.map( (item: any) => {
+        return (
+          {...item, "-selected": true}
+        )
+      })
+      return newState
+    })
+  }
+
+  const onUnselectAll = () => {
+    setHold((prevState: any)=>{
+      const newState = prevState.map( (item: any) => {
+        return (
+          {...item, "-selected": false}
+        )
+      })
+      return newState
+    })
+  }
 
   const onSortEnd = ({ oldIndex, newIndex }: any) => {
     setHold((prevState: any) => arrayMove(prevState, oldIndex, newIndex));
   };
  
   return (
+    <>
+    <Button variant="contained"
+            color="primary"
+            style={{margin: "0 16px 16px 16px"}}
+            onClick={onSelectAll}>
+      Select all
+    </Button>
+    <Button variant="outlined"
+            color="secondary"
+            style={{margin: "0 0 16px 0"}}
+            onClick={onUnselectAll}>
+      Unselect all
+    </Button>
+    <Divider />
     <SortableList
       stateSort={hold}
       setHold={setHold}
       isFabrikChosen={isFabrikChosen}
       onSortEnd={onSortEnd}
     />
+    </>
   );
   
 }

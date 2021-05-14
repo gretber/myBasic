@@ -84,7 +84,9 @@ export const SelectionTabs = ({ hold, setHold, region, setRegion, fabrik, setFab
         <SelectionFabrik  fabrik={fabrik}
                           setFabrik={setFabrik}
                           isFabrikChosen={isFabrikChosen}
-                          setIsFabrikChosen={setIsFabrikChosen}/>
+                          setIsFabrikChosen={setIsFabrikChosen}
+                          setRegion={setRegion}
+                          setHold={setHold} />
       </TabPanel>
     </div>
   );

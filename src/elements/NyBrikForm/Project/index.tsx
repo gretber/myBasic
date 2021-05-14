@@ -8,9 +8,6 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 
-//Hooks
-import { useSelector } from '../../../hooks/useSelector';
-
 // Types
 import { ProjectNo } from './types';
 
@@ -34,6 +31,7 @@ export const Project = ({ setProjectName, setProjectNo, regionId, setRegionId, s
 
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<Array<ProjectNo>|[]>([]);
+  
   const loading = open && options.length === 0;
 
   useEffect(() => {
@@ -92,8 +90,7 @@ export const Project = ({ setProjectName, setProjectNo, regionId, setRegionId, s
       getOptionLabel={(option: any) => `${option.id} - ${option.name}`}
       renderOption={(option) => (
         <React.Fragment>
-          <Typography variant='h6'>{option.id}</Typography>
-          <Typography variant='body1'>{option.name}</Typography>
+          <Typography variant='body1'>{`${option.id} - ${option.name}`}</Typography>
         </React.Fragment>
       )}
       options={options}

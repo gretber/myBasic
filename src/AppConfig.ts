@@ -20,7 +20,7 @@ const schedulerConfig: any = {
             type: 'resourceInfo',
             text: 'Team',
             showEventCount: true,
-            showImage: true,
+            showImage: false,
             width: 230,
         },
         // {
@@ -67,7 +67,7 @@ const schedulerConfig: any = {
                         deleteButton : null,
                         saveButton: {
                             weight : 2,
-                            color: 'b-orange'
+                            color: 'b-orange',
                         },
                         cancelButton: {
                             weight : 1
@@ -244,5 +244,6 @@ const schedulerConfig: any = {
 
 
 };
+
 
 export { schedulerConfig };

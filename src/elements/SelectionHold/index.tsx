@@ -41,15 +41,13 @@ const SortableItem = SortableElement(({ item, value, setHold, elem, isFabrikChos
     })
   };
 
-  const disabled = isFabrikChosen;
-
   return (
     <FormGroup className={classes.iconCenter} row>
       <DragHandleIcon className={classes.dragIcon} />
       <FormControlLabel
         control={
           <Checkbox
-            disabled={disabled}
+            disabled={isFabrikChosen}
             checked={value}
             onChange={handleChange}
             name={item}
@@ -119,12 +117,14 @@ export const SelectionHold = ({ hold, setHold, isFabrikChosen }: any) => {
   return (
     <>
     <Button variant="contained"
+            disabled={isFabrikChosen}
             color="primary"
             style={{margin: "0 16px 16px 16px"}}
             onClick={onSelectAll}>
       Select all
     </Button>
     <Button variant="outlined"
+            disabled={isFabrikChosen}
             color="secondary"
             style={{margin: "0 0 16px 0"}}
             onClick={onUnselectAll}>

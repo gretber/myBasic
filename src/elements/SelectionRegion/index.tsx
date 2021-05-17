@@ -62,12 +62,14 @@ export const SelectionRegion = ({ region, setRegion, isFabrikChosen }: any) => {
   return (
     <>
       <Button variant="contained"
+              disabled={isFabrikChosen}
               color="primary"
               style={{margin: "0 16px 16px 16px"}}
               onClick={onSelectAll}>
         Select all
       </Button>
       <Button variant="outlined"
+              disabled={isFabrikChosen}
               color="secondary"
               style={{margin: "0 0 16px 0"}}
               onClick={onUnselectAll}>

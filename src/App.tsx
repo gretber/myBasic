@@ -72,7 +72,7 @@ const App: FunctionComponent = () => {
             })
 
             // Transform data
-            const transformedData = data.root.projects.project.map((item) => {
+            const transformedProjects = data.root.projects.project.map((item) => {
                 item["resourceId"] = item["teamId"];
 
                 if(!("eventColor" in item)){
@@ -84,8 +84,9 @@ const App: FunctionComponent = () => {
 
             // Sort Fabrik
             const selectionFabriks = data.root.selections.selection[2].values.value
-            const sortedFabriks = sortSelectedFabriks(transformedData, selectionFabriks)
+            const sortedFabriks = sortSelectedFabriks(transformedProjects, selectionFabriks)
             const selectedFabriksCount = selectionFabriks.filter( (item: any) => item["-selected"] === true )
+
             if(selectedFabriksCount.length === 0){
 
                 // Sort by selected Teams
@@ -100,11 +101,13 @@ const App: FunctionComponent = () => {
 
                 // Sort Regions
                 const selectionRegion = data.root.selections.selection[1].values.value
-                const sortedRegions = sortSelectedRegions(transformedData, selectionRegion)
+                const sortedRegions = sortSelectedRegions(transformedProjects, selectionRegion)
 
                 setEvents(sortedRegions);
                 setResources(copySelectionTeams);
+
             } else {
+
                 // Sorted Teams
                 const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
                 
@@ -114,21 +117,9 @@ const App: FunctionComponent = () => {
                     item["resourceId"] = item["-id"]
                     item["id"] = item["-id"]
                 })
-
                 // Sort Regions
                 const selectionRegion = data.root.selections.selection[1].values.value
                 const sortedRegions = sortSelectedRegions(sortedFabriks, selectionRegion)
-
-                // // Sort by view date
-                // const events = sortedRegions.map( (item: any) => {
-                //     if((moment(item.endDate, "YYYY-MM-DD").unix()) > (moment(config.startDate).unix()) || ((moment(item.startDate, "YYYY-MM-DD").unix()) < (moment(config.endtDate).unix()))) {
-                //         return item
-                //     } 
-                //     return
-
-                // })
-
-                // console.log(events) 
 
                 const events = sortedRegions.filter( (item: any) => {
                     // Project date
@@ -141,11 +132,21 @@ const App: FunctionComponent = () => {
 
                     return projectEndDate > viewStartDate || projectStartDate < viewEndDate
                 })
-                // console.log(sortedRegions)
-                // console.log(events)
+
+                const sortTeams: any = []
+
+                 copySelectionTeams.map( (team: any) => {
+                    const hasIvent = sortedRegions.find( (event: any) => {
+                        return event.teamId === team.id
+                    })
+
+                    if (hasIvent){
+                        sortTeams.push(team)
+                    }
+                })
 
                 setEvents(events);
-                setResources(copySelectionTeams);
+                setResources(sortTeams);
             }
         }
 
@@ -157,10 +158,13 @@ const App: FunctionComponent = () => {
         setSelectedEvent(selected.length ? selected[0] : null);
     }, []);
 
-    
-
     const beforeEventEditShow = (event: any) => {
-        console.log("event.eventRecord.data", event.eventRecord.data)
+        //console.log("event.eventRecord.data", event.eventRecord.data)
+
+
+        
+
+
         // Current id
         const regionId = event.eventRecord.data.regionId;
         const leaderId = event.eventRecord.data.leaderId;
@@ -168,6 +172,7 @@ const App: FunctionComponent = () => {
 
         // Get fields
         const region = event.editor.widgetMap.region;
+        const project = event.editor.widgetMap.project
         const varighed = event.editor.widgetMap.varighed;
         const weekendWork = event.editor.widgetMap.weekendWork;
         const jobType = event.editor.widgetMap.jobType;
@@ -181,6 +186,56 @@ const App: FunctionComponent = () => {
             region.items = data.root.districs.district.map( item => item.name)
             region.placeholder = currentRegion?.name
             region.value = currentRegion?.name
+
+            // Project 
+            const projectNo: any = event.eventRecord.data.projectNo
+            const getProjectDetails = async (projectNo: any) => {
+                const projectDetails = process.env.REACT_APP_GET_PROJECT_DETAILS;
+
+                const encoded = window.btoa('lei-lmk:AAABBB')
+                const response = await fetch(`${projectDetails}${projectNo}`, {
+                        method:  'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Basic ${encoded}`,
+                        },
+                    });
+
+                        
+                const projects: any = await response.json();
+                console.log("project", projects.root.projects.project[0])
+                const modifyingItem = projects.root.projects.project[0]
+                project.value = `${modifyingItem.projectNo} - ${modifyingItem.name}`
+            };
+
+            const selectionProjectDetails = async ( regionId: string ) => {
+                const exportSelectionListProjectDetails = process.env.REACT_APP_SELECTION_PROJECT_DETAILS;
+
+                const encoded = window.btoa('lei-lmk:AAABBB')
+                const response = await fetch(`${exportSelectionListProjectDetails}${regionId}`, {
+                        method:  'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Basic ${encoded}`,
+                        },
+                    });
+
+                        
+                const projects: any = await response.json();
+                console.log("projects", projects.root.projectsList.projectNo)   
+                project.items = projects.root.projectsList.projectNo.map((item: any)=> `${item.id} - ${item.name}`)
+            };
+
+            if(regionId){
+                selectionProjectDetails(regionId)
+            }
+            
+            if(!(projectNo === 'null')){
+                console.log("projectNo", projectNo)
+                project.value = getProjectDetails(projectNo)
+            }
 
             // Varighed
             varighed.value = event.eventRecord.data.duration

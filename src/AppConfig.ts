@@ -30,19 +30,23 @@ const schedulerConfig: any = {
         // }
     ],
 
-    resourceStore: {
-        filters: [
-            function(item: any) {
-                const team = item.data.resourceId
-                const events = item.$project.initialConfig.eventsData
-                const arr = events.filter( (item: any) =>  item.resourceId === team)
-                if(arr.length>0){
-                    return item
-                }
-            }
-        ],
+    // Filter by resource
 
-    },
+    // resourceStore: {
+    //     filters: [
+    //         function(item: any) {
+    //             const team = item.data.resourceId
+    //             const events = item.$project.initialConfig.eventsData
+    //             const arr = events.filter( (item: any) =>  item.resourceId === team)
+    //             if(arr.length>0){
+    //                 return item
+    //             }
+    //         }
+    //     ],
+
+    // },
+
+    // Filter by events
 
     // eventStore: {
     //     filters: [

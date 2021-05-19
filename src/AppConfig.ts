@@ -1,4 +1,4 @@
-import { SchedulerConfig } from '@bryntum/scheduler/scheduler.umd.js';
+
 /**
  * Application configuration
  */
@@ -69,10 +69,12 @@ const schedulerConfig: any = {
                 bbar : {
                     items : {
                         deleteButton : null,
+
                         saveButton: {
                             weight : 2,
                             color: 'b-orange',
                         },
+
                         cancelButton: {
                             weight : 1
                         }
@@ -97,12 +99,14 @@ const schedulerConfig: any = {
                     label  : 'Project',
                     items: [],
                     placeholder: '',
+                    clearable: true,
                 },
 
-                nameField: {
+                arbejdsplads: {
                     weight : 3,
                     type   : 'text',
-                    label  : 'Arbejdsplads'
+                    name  : 'arbejdsplads',
+                    label  : 'Arbejdsplads',
                 },
 
                 kalkuleBesk: {
@@ -112,11 +116,13 @@ const schedulerConfig: any = {
                     label  : 'Kalkule Besk'
                 },
 
-                KundeNavn: {
+                kundeNavn: {
                     weight : 5,
                     type   : 'combo',
                     name   : 'kunde-navn',
-                    label  : 'Kunde Navn'
+                    label  : 'Kunde Navn',
+                    items: [],
+                    placeholder: '',
                 },
 
                 resourceField : {
@@ -224,7 +230,7 @@ const schedulerConfig: any = {
                     placeholder: '',
                 },
 
-
+                nameField: null,
                 endTimeField: null,
 
             }

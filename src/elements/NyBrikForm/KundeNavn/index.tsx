@@ -75,14 +75,6 @@ export const KundeNavn = ({ setCustomerName, projectName, customerName }: any) =
     }
   }
 
-  // // Get customer name
-  // const regionName = useSelector( state => {
-  //    if("root" in state.data && regionId){
-  //     const region = state.data.root.districs.district.filter( item => item.id === regionId)
-  //     return region[0].name
-  //   }
-  // })
-
   return (
     <Autocomplete
       disabled={!!projectName}

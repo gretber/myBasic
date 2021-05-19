@@ -34,6 +34,9 @@ import { formatDate } from './helpers/formatDate';
 import { swap } from './helpers/swapElArr';
 import { sortSelectedRegions } from './helpers/sortSelectedRegions';
 import { sortSelectedFabriks } from './helpers/sortSelectedFabriks';
+import { getProjectDetails } from '../src/editEventHelpers/getProjectDetails';
+import { selectionProjectDetails } from '../src/editEventHelpers/selectionProjectDetails';
+import { getAllCustomers } from '../src/editEventHelpers/getAllCustomers';
 
 // Moment
 import moment from 'moment';
@@ -43,6 +46,32 @@ import { Team, Project, SelectionValue } from './bus/briks/dataTypes';
 
 const App: FunctionComponent = () => {
 
+    const initialBrik = {
+    id: null,
+    regionId: "",
+    leaderId: "",
+    projectNo: null,
+    factoryItemName: "",
+    factoryItemId: null,
+    customerId: null,
+    customerName: null,
+    state: "2",
+    status: "",
+    name: "",
+    name2: "",
+    startDate: "",
+    endDate: "",
+    duration: 0,
+    weekendWork: false,
+    jobType: null,
+    teamId: "",
+    factoryId: "",
+    tons: 0.0,
+    area: 0.0,
+    color: "",
+    details: ""
+  }
+
     // Ref
     const schedulerRef = useRef<typeof BryntumScheduler | null>(null);
 
@@ -51,6 +80,9 @@ const App: FunctionComponent = () => {
     const [resources, setResources] = useState<Array<SelectionValue> | []>([]);
     const [selectedEvent, setSelectedEvent] = useState<EventModel | null>(null);
     const [config, setConfig] = useState({...schedulerConfig});
+
+    // Edit brik states
+    const [editBrik, setEditBrik] = useState(initialBrik)
 
     // Get data
     const { data, loading } = useDataQuery()
@@ -65,8 +97,8 @@ const App: FunctionComponent = () => {
                 const startDate = moment(data.root.view.startDate, "DD/MM/YYYY").toDate()
                 const endDate = moment(data.root.view.endDate, "DD/MM/YYYY").toDate()
 
-                newState.startDate = startDate
-                newState.endDate = endDate
+                // newState.startDate = startDate
+                // newState.endDate = endDate
 
                 return newState
             })
@@ -153,89 +185,109 @@ const App: FunctionComponent = () => {
     }, [data, loading])
 
     // event selection change handler
-    const onEventSelectionChange = useCallback(({ selected }: { selected: EventModel[] }) => {
-        console.log(selected[0])
-        setSelectedEvent(selected.length ? selected[0] : null);
-    }, []);
+    // const onEventSelectionChange = useCallback(({ selected }: { selected: EventModel[] }) => {
+    //     console.log(selected[0])
+    //     setSelectedEvent(selected.length ? selected[0] : null);
+    // }, []);
 
     const beforeEventEditShow = (event: any) => {
-        //console.log("event.eventRecord.data", event.eventRecord.data)
+        console.log("event.eventRecord.data", event.eventRecord.data)
 
-
-        
-
+        setEditBrik( (prevState: any) =>{
+            const newState = {
+                ...prevState,
+                id:              event.eventRecord.data.id,
+                regionId:        event.eventRecord.data.regionId,
+                leaderId:        event.eventRecord.data.leaderId,
+                projectNo:       event.eventRecord.data.projectNo,
+                factoryItemName: event.eventRecord.data.factoryItemName,
+                factoryItemId:   event.eventRecord.data.factoryItemId,
+                customerId:      event.eventRecord.data.customerId,
+                customerName:    event.eventRecord.data.customerName,
+                state:           event.eventRecord.data.state,
+                status:          event.eventRecord.data.status,
+                name:            event.eventRecord.data.name,
+                name2:           event.eventRecord.data.name,
+                startDate:       event.eventRecord.data.startDate,
+                endDate:         event.eventRecord.data.endDate,
+                duration:        event.eventRecord.data.duration,
+                weekendWork:     event.eventRecord.data.weekendWork,
+                jobType:         event.eventRecord.data.jobType,
+                teamId:          event.eventRecord.data.teamId,
+                factoryId:       event.eventRecord.data.factoryId,
+                tons:            event.eventRecord.data.tons,
+                area:            event.eventRecord.data.area,
+                color:           event.eventRecord.data.color,
+                details:         event.eventRecord.data.details,
+            }
+            return newState
+        })
 
         // Current id
-        const regionId = event.eventRecord.data.regionId;
-        const leaderId = event.eventRecord.data.leaderId;
+        const regionId  = event.eventRecord.data.regionId;
+        const leaderId  = event.eventRecord.data.leaderId;
         const factoryId = event.eventRecord.data.factoryId;
 
         // Get fields
-        const region = event.editor.widgetMap.region;
-        const project = event.editor.widgetMap.project
-        const varighed = event.editor.widgetMap.varighed;
-        const weekendWork = event.editor.widgetMap.weekendWork;
-        const jobType = event.editor.widgetMap.jobType;
-        const team = event.editor.widgetMap.team;
-        const leader = event.editor.widgetMap.leader;
-        const factory = event.editor.widgetMap.factory;
+        const region       = event.editor.widgetMap.region;
+        const project      = event.editor.widgetMap.project;
+        const arbejdsplads = event.editor.widgetMap.arbejdsplads;
+        const varighed     = event.editor.widgetMap.varighed;
+        const weekendWork  = event.editor.widgetMap.weekendWork;
+        const jobType      = event.editor.widgetMap.jobType;
+        const team         = event.editor.widgetMap.team;
+        const leader       = event.editor.widgetMap.leader;
+        const factory      = event.editor.widgetMap.factory;
+        const kundeNavn    = event.editor.widgetMap.kundeNavn;
 
         if("root" in data){
             // Region
             const currentRegion = data.root.districs.district.find( item => item.id === regionId)
             region.items = data.root.districs.district.map( item => item.name)
-            region.placeholder = currentRegion?.name
+
             region.value = currentRegion?.name
+
+            // On regeon select
+            region.onSelect = (event: any) => {
+                if(event.record){
+                    const currentRegionId = data.root.districs.district.find( item => item.name === event.record.data.text)
+                    selectionProjectDetails(currentRegionId?.id, project)
+                }
+            }
 
             // Project 
             const projectNo: any = event.eventRecord.data.projectNo
-            const getProjectDetails = async (projectNo: any) => {
-                const projectDetails = process.env.REACT_APP_GET_PROJECT_DETAILS;
-
-                const encoded = window.btoa('lei-lmk:AAABBB')
-                const response = await fetch(`${projectDetails}${projectNo}`, {
-                        method:  'GET',
-                        credentials: 'include',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Basic ${encoded}`,
-                        },
-                    });
-
-                        
-                const projects: any = await response.json();
-                console.log("project", projects.root.projects.project[0])
-                const modifyingItem = projects.root.projects.project[0]
-                project.value = `${modifyingItem.projectNo} - ${modifyingItem.name}`
-            };
-
-            const selectionProjectDetails = async ( regionId: string ) => {
-                const exportSelectionListProjectDetails = process.env.REACT_APP_SELECTION_PROJECT_DETAILS;
-
-                const encoded = window.btoa('lei-lmk:AAABBB')
-                const response = await fetch(`${exportSelectionListProjectDetails}${regionId}`, {
-                        method:  'GET',
-                        credentials: 'include',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Basic ${encoded}`,
-                        },
-                    });
-
-                        
-                const projects: any = await response.json();
-                console.log("projects", projects.root.projectsList.projectNo)   
-                project.items = projects.root.projectsList.projectNo.map((item: any)=> `${item.id} - ${item.name}`)
-            };
 
             if(regionId){
-                selectionProjectDetails(regionId)
+                selectionProjectDetails(regionId, project)
             }
-            
-            if(!(projectNo === 'null')){
-                console.log("projectNo", projectNo)
-                project.value = getProjectDetails(projectNo)
+
+            if(projectNo !== 'null'){
+                getProjectDetails(projectNo, project, arbejdsplads)
+                region.disabled = true
+                kundeNavn.disabled = true
+            } else {
+                region.disabled = false
+                kundeNavn.disabled = false
             }
+
+            project.onSelect = (event: any) => {
+                if(event.record&&event.record.data.parentIndex){
+                    console.log(event.record.data)
+                    arbejdsplads.value = event.record.data.text.split('-')[1].trim()
+                }
+                region.disabled = true
+                kundeNavn.disabled = true
+            }
+
+            project.onClear = () => {
+                arbejdsplads.value = ''
+                region.disabled = false
+                kundeNavn.disabled = false
+            }
+
+            // Kunde Navn
+            //getAllCustomers(kundeNavn)
 
             // Varighed
             varighed.value = event.eventRecord.data.duration
@@ -263,13 +315,19 @@ const App: FunctionComponent = () => {
         }
     };
 
+    const handlerOnAfterEventDrop = (event: any) => {
+        console.log("On after event drop", event)
+    }
+
     const handlerOnBeforeSave = (event: any) => {
-        console.log("On save", event)
+        console.log("On save event", event)
+        console.log("On save", editBrik)
     }
 
     const handlerOnEventResize = (event: any ) => {
         console.log("Resize", event)
-    } 
+        console.log("event.eventRecord", event.resourceRecord)
+    }
 
     if(loading){
         return (
@@ -293,7 +351,8 @@ const App: FunctionComponent = () => {
                 barMargin={3}
                 onBeforeEventResizeFinalize={handlerOnEventResize}
                 onBeforeEventSave={handlerOnBeforeSave}
-                onEventSelectionChange={onEventSelectionChange}
+                onAfterEventDrop={handlerOnAfterEventDrop}
+                //onEventSelectionChange={onEventSelectionChange}
                 onBeforeEventEditShow={beforeEventEditShow}
             />
         </Fragment>

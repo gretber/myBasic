@@ -4,6 +4,7 @@ import { store } from '../../../@init';
 // Actions
 import { togglerCreatorAction } from '../../client';
 import { updateSelectionAction } from '../actions';
+import { fetchData } from './fetchData';
 
 // Types
 import { UpdateSelection } from './types';
@@ -41,10 +42,10 @@ export const updateSelection: UpdateSelection = async (body) => {
   store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
 
   try {
+    store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
+    const encoded = window.btoa('lei-lmk:AAABBB')
 
-  const encoded = window.btoa('lei-lmk:AAABBB')
-
-  const response = await fetch(`${updateSelectionUrl}`, {
+    const response = await fetch(`${updateSelectionUrl}`, {
         method:  'POST',
         credentials: 'include',
         headers: {
@@ -60,7 +61,7 @@ export const updateSelection: UpdateSelection = async (body) => {
     }
     
       store.dispatch(updateSelectionAction(body));
-
+      fetchData();
   } catch (error) {
       console.log(error);
   } finally {

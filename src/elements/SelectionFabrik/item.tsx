@@ -1,12 +1,12 @@
 // Core
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 // Material
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 
-export const Item = ({ item, index, value, setFabrik, fabrik, isFabrikChosen, setIsFabrikChosen, setRegion, setHold }: any) => {
+export const Item = ({ item, index, value, setFabrik, fabrik, setIsFabrikChosen }: any) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFabrik( (prevState: any) => {
@@ -22,34 +22,6 @@ export const Item = ({ item, index, value, setFabrik, fabrik, isFabrikChosen, se
       isFabrikChosen === -1?setIsFabrikChosen(false):setIsFabrikChosen(true)
     }
   },[value])
-
-  useEffect(()=>{
-    if(isFabrikChosen){
-      setRegion((prevState: any)=>{
-        const newState = prevState.map( (item: any) => {
-          return (
-            {...item, "-selected": true}
-          ) 
-        })
-        
-        return newState
-      })
-    }
-  },[isFabrikChosen])
-
-    useEffect(()=>{
-    if(isFabrikChosen){
-      setHold((prevState: any)=>{
-        const newState = prevState.map( (item: any) => {
-          return (
-            {...item, "-selected": true}
-          ) 
-        })
-        
-        return newState
-      })
-    }
-  },[isFabrikChosen])
 
   return (
     <FormGroup row>

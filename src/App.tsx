@@ -37,6 +37,7 @@ import { sortSelectedFabriks } from './helpers/sortSelectedFabriks';
 import { getProjectDetails } from '../src/editEventHelpers/getProjectDetails';
 import { selectionProjectDetails } from '../src/editEventHelpers/selectionProjectDetails';
 import { getAllCustomers } from '../src/editEventHelpers/getAllCustomers';
+import { lagInDays } from '../src/helpers/lagInDays';
 
 // Moment
 import moment from 'moment';
@@ -191,7 +192,8 @@ const App: FunctionComponent = () => {
     // }, []);
 
     const beforeEventEditShow = (event: any) => {
-        console.log("event.eventRecord.data", event.eventRecord.data)
+
+        //console.log("event.eventRecord.data", event.eventRecord.data)
 
         setEditBrik( (prevState: any) =>{
             const newState = {
@@ -224,21 +226,26 @@ const App: FunctionComponent = () => {
         })
 
         // Current id
-        const regionId  = event.eventRecord.data.regionId;
-        const leaderId  = event.eventRecord.data.leaderId;
-        const factoryId = event.eventRecord.data.factoryId;
+        const regionId       = event.eventRecord.data.regionId;
+        const leaderId       = event.eventRecord.data.leaderId;
+        const factoryId      = event.eventRecord.data.factoryId;
+        const projectNo: any = event.eventRecord.data.projectNo;
+        const name2          = event.eventRecord.data.name2;
 
         // Get fields
-        const region       = event.editor.widgetMap.region;
-        const project      = event.editor.widgetMap.project;
-        const arbejdsplads = event.editor.widgetMap.arbejdsplads;
-        const varighed     = event.editor.widgetMap.varighed;
-        const weekendWork  = event.editor.widgetMap.weekendWork;
-        const jobType      = event.editor.widgetMap.jobType;
-        const team         = event.editor.widgetMap.team;
-        const leader       = event.editor.widgetMap.leader;
-        const factory      = event.editor.widgetMap.factory;
-        const kundeNavn    = event.editor.widgetMap.kundeNavn;
+        const region         = event.editor.widgetMap.region;
+        const project        = event.editor.widgetMap.project;
+        const arbejdsplads   = event.editor.widgetMap.arbejdsplads;
+        const varighed       = event.editor.widgetMap.varighed;
+        const weekendWork    = event.editor.widgetMap.weekendWork;
+        const jobType        = event.editor.widgetMap.jobType;
+        const team           = event.editor.widgetMap.team;
+        const leader         = event.editor.widgetMap.leader;
+        const factory        = event.editor.widgetMap.factory;
+        const kundeNavn      = event.editor.widgetMap.kundeNavn;
+        const kalkuleBesk    = event.editor.widgetMap.kalkuleBesk;
+        const startDateField = event.editor.widgetMap.startDateField;
+        const endDateField   = event.editor.widgetMap.endDateField;
 
         if("root" in data){
             // Region
@@ -255,39 +262,68 @@ const App: FunctionComponent = () => {
                 }
             }
 
-            // Project 
-            const projectNo: any = event.eventRecord.data.projectNo
+            // Kunde Navn
+            getAllCustomers(kundeNavn)
 
+            // Project
             if(regionId){
                 selectionProjectDetails(regionId, project)
             }
 
             if(projectNo !== 'null'){
-                getProjectDetails(projectNo, project, arbejdsplads)
+                getProjectDetails(projectNo, project, arbejdsplads, kundeNavn)
                 region.disabled = true
                 kundeNavn.disabled = true
             } else {
+                project.value = ''
                 region.disabled = false
                 kundeNavn.disabled = false
             }
 
             project.onSelect = (event: any) => {
                 if(event.record&&event.record.data.parentIndex){
-                    console.log(event.record.data)
-                    arbejdsplads.value = event.record.data.text.split('-')[1].trim()
+                    const selectProject = event.record.data.text.split('-')
+                    arbejdsplads.value = selectProject[1].trim()
+                    getProjectDetails(selectProject[0].trim(), project, arbejdsplads, kundeNavn)
                 }
+
                 region.disabled = true
                 kundeNavn.disabled = true
             }
 
             project.onClear = () => {
                 arbejdsplads.value = ''
+                kundeNavn.value = ''
                 region.disabled = false
                 kundeNavn.disabled = false
             }
 
-            // Kunde Navn
-            //getAllCustomers(kundeNavn)
+            // Start date handler
+            startDateField.onChange = (event: any) => {
+                // Start date cannot be higher than the end date
+                if(endDateField.value.getTime() < event.value.getTime()){
+                    endDateField.value = event.value
+                    varighed.value = lagInDays(event.value, event.value, weekendWork.value)
+                } else {
+                    varighed.value = lagInDays(event.value, endDateField.value, weekendWork.value)
+                }
+            }
+
+            // End date handler
+            endDateField.onChange = (event: any) => {
+                // End date cannot be less than the start
+                if(event.value.getTime() <= startDateField.value.getTime()){
+                    startDateField.value = event.value
+                    varighed.value = lagInDays(event.value, event.value, weekendWork.value)
+                } else {
+                    varighed.value = lagInDays(startDateField.value, event.value, weekendWork.value)
+                }
+            }
+
+    
+
+            // Kalkule Besk
+            kalkuleBesk.value = name2
 
             // Varighed
             varighed.value = event.eventRecord.data.duration
@@ -297,21 +333,21 @@ const App: FunctionComponent = () => {
 
             // Job Type
             jobType.items = data.root.jobTypes.jobType.map( item => item.name)
-            jobType.placeholder = event.eventRecord.data.jobType
+            jobType.value = event.eventRecord.data.jobType
 
             // Hold
             team.items = data.root.teams.team.map( item => item.name)
-            team.placeholder = event.eventRecord.data.teamId
+            team.value = event.eventRecord.data.teamId
 
             // Enterprise leder
             const currentLeader = data.root.leaders.leader.find( item => item.id === leaderId)
             leader.items = data.root.leaders.leader.map( item => item.name)
-            leader.placeholder = currentLeader?.name
+            leader.value = currentLeader?.name
 
             // Fabrik
             const currentFactory = data.root.factories.factory.find( item => item.id === factoryId)
             factory.items = data.root.factories.factory.map( item => item.name)
-            factory.placeholder = currentFactory?.name
+            factory.value = currentFactory?.name
         }
     };
 

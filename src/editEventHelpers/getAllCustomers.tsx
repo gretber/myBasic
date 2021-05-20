@@ -12,7 +12,7 @@ export const getAllCustomers = async (kundeNavn: any) => {
   });
 
   const customers = await response.json();
-  kundeNavn.disabled = false
   kundeNavn.items = customers.root.customers.customer.map( (item: any) => item.name )
+  kundeNavn.disabled = true
 }
 

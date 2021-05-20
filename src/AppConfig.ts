@@ -95,7 +95,7 @@ const schedulerConfig: any = {
                 project: {
                     weight : 2,
                     type   : 'combo',
-                    name   : 'project',
+                    name   : 'projec',
                     label  : 'Project',
                     items: [],
                     placeholder: '',
@@ -152,7 +152,7 @@ const schedulerConfig: any = {
                     type   : 'numberField',
                     name   : 'varighed',
                     label  : 'Varighed',
-                    min    : 0,
+                    min    : 1,
                     style  : {
                         maxWidth   : "40%",
                         marginLeft : "12px"

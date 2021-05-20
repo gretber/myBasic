@@ -1,4 +1,4 @@
-export const getProjectDetails = async (projectNo: any, project: any, arbejdsplads: any ) => {
+export const getProjectDetails = async (projectNo: any, project: any, arbejdsplads: any, kundeNavn: any ) => {
     const projectDetails = process.env.REACT_APP_GET_PROJECT_DETAILS;
 
     const encoded = window.btoa('lei-lmk:AAABBB')
@@ -19,6 +19,7 @@ export const getProjectDetails = async (projectNo: any, project: any, arbejdspla
     if(editingProject){
         project.value = `${editingProject.projectNo} - ${editingProject.name}`
         arbejdsplads.value = `${editingProject.name}`
+        kundeNavn.value = editingProject.customerName
     } 
             
 };

@@ -1,4 +1,4 @@
-export const getProjectDetails = async (projectNo: any, project: any, arbejdsplads: any, kundeNavn: any ) => {
+export const getProjectDetails = async (projectNo: any, project: any, arbejdsplads: any, kundeNavn: any, factory: any, data: any ) => {
     const projectDetails = process.env.REACT_APP_GET_PROJECT_DETAILS;
 
     const encoded = window.btoa('lei-lmk:AAABBB')
@@ -20,6 +20,8 @@ export const getProjectDetails = async (projectNo: any, project: any, arbejdspla
         project.value = `${editingProject.projectNo} - ${editingProject.name}`
         arbejdsplads.value = `${editingProject.name}`
         kundeNavn.value = editingProject.customerName
+        const curentFactory = data.root.factories.factory.find( (item: any) => item.id === editingProject.factoryId)
+        factory.value = curentFactory.name
     } 
             
 };

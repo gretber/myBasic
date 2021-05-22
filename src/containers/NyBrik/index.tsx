@@ -144,8 +144,8 @@ export const NyBrik = () => {
   }
 
   const [ newBrik, setNewBrik ] = useState<Project>(initialBrik)
-
-  // console.log("newBrik", newBrik)
+  
+  //console.log("newBrik", newBrik)
   
   // Clean request data
   const bodyNewBrik = { ...newBrik }

@@ -34,7 +34,7 @@ export const lagInDays = (startDate: any, endDate: any, isWorkWeekends: boolean)
   const endDateMoment = moment(endDate)
 
   const { totalDays, workingDays } = calculateBusinessDays(startDateMoment, endDateMoment)
-
-  return isWorkWeekends?totalDays:workingDays
+  const res = isWorkWeekends?totalDays:workingDays
+  return res?res:1
 
 }

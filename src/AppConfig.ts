@@ -179,7 +179,7 @@ const schedulerConfig: any = {
                     items  : ['Budgetteret', 'Planlagt', 'Udført Sag', 'Slettet'],
                     placeholder : '',
                     style : {
-                        maxWidth : "42.5%"
+                        maxWidth : "50%"
                     },
                 },
 
@@ -190,7 +190,7 @@ const schedulerConfig: any = {
                     label  : 'Clip',
                     color  : 'b-orange',
                     style  : {
-                        maxWidth   : "50%",
+                        maxWidth   : "40%",
                     },
                 },
 
@@ -199,7 +199,7 @@ const schedulerConfig: any = {
                     type   : 'combo',
                     name   : 'job-type',
                     label  : 'Job Type',
-                    items: [],
+                    items: ["Fræs", "Striber", "Opretning"],
                     placeholder: '',
                 },
 
@@ -229,6 +229,15 @@ const schedulerConfig: any = {
                     items: [],
                     placeholder: '',
                 },
+                fabrikVare: {
+                    weight : 17,
+                    type   : 'combo',
+                    name   : 'fabrik-vare',
+                    label  : 'Fabrik Vare',
+                    items: [],
+                    placeholder: '',
+                },
+
 
                 nameField: null,
                 endTimeField: null,

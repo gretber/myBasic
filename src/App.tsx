@@ -34,10 +34,16 @@ import { formatDate } from './helpers/formatDate';
 import { swap } from './helpers/swapElArr';
 import { sortSelectedRegions } from './helpers/sortSelectedRegions';
 import { sortSelectedFabriks } from './helpers/sortSelectedFabriks';
-import { getProjectDetails } from '../src/editEventHelpers/getProjectDetails';
-import { selectionProjectDetails } from '../src/editEventHelpers/selectionProjectDetails';
-import { getAllCustomers } from '../src/editEventHelpers/getAllCustomers';
 import { lagInDays } from '../src/helpers/lagInDays';
+import { addDays } from '../src/helpers/addDays';
+import { subDays } from '../src/helpers/subDays';
+
+// API
+import { getAllCustomers } from './editEventAPI/getAllCustomers';
+import { getProjectDetails } from './editEventAPI/getProjectDetails';
+import { selectionProjectDetails } from './editEventAPI/selectionProjectDetails';
+import { getFabrikVare } from './editEventAPI/getFabrikVare';
+import { updateProject } from './onSaveAPI/updateProject';
 
 // Moment
 import moment from 'moment';
@@ -79,7 +85,6 @@ const App: FunctionComponent = () => {
     // Init state
     const [events, setEvents] = useState<Array<Project> | []>([]);
     const [resources, setResources] = useState<Array<SelectionValue> | []>([]);
-    const [selectedEvent, setSelectedEvent] = useState<EventModel | null>(null);
     const [config, setConfig] = useState({...schedulerConfig});
 
     // Edit brik states
@@ -193,7 +198,7 @@ const App: FunctionComponent = () => {
 
     const beforeEventEditShow = (event: any) => {
 
-        //console.log("event.eventRecord.data", event.eventRecord.data)
+        console.log("event.eventRecord.data", event.eventRecord.data)
 
         setEditBrik( (prevState: any) =>{
             const newState = {
@@ -226,11 +231,14 @@ const App: FunctionComponent = () => {
         })
 
         // Current id
-        const regionId       = event.eventRecord.data.regionId;
-        const leaderId       = event.eventRecord.data.leaderId;
-        const factoryId      = event.eventRecord.data.factoryId;
-        const projectNo: any = event.eventRecord.data.projectNo;
-        const name2          = event.eventRecord.data.name2;
+        const regionId        = event.eventRecord.data.regionId;
+        const leaderId        = event.eventRecord.data.leaderId;
+        const factoryId       = event.eventRecord.data.factoryId;
+        const projectNo: any  = event.eventRecord.data.projectNo;
+        const name2           = event.eventRecord.data.name2;
+        const state           = event.eventRecord.data.state;
+        const factoryItemName = event.eventRecord.data.factoryItemName;
+
 
         // Get fields
         const region         = event.editor.widgetMap.region;
@@ -240,12 +248,16 @@ const App: FunctionComponent = () => {
         const weekendWork    = event.editor.widgetMap.weekendWork;
         const jobType        = event.editor.widgetMap.jobType;
         const team           = event.editor.widgetMap.team;
+        const status         = event.editor.widgetMap.status;
+        const clip           = event.editor.widgetMap.clip;
         const leader         = event.editor.widgetMap.leader;
         const factory        = event.editor.widgetMap.factory;
+        const fabrikVare     = event.editor.widgetMap.fabrikVare;
         const kundeNavn      = event.editor.widgetMap.kundeNavn;
         const kalkuleBesk    = event.editor.widgetMap.kalkuleBesk;
         const startDateField = event.editor.widgetMap.startDateField;
         const endDateField   = event.editor.widgetMap.endDateField;
+
 
         if("root" in data){
             // Region
@@ -265,13 +277,25 @@ const App: FunctionComponent = () => {
             // Kunde Navn
             getAllCustomers(kundeNavn)
 
+            // Fabrik
+            const currentFactory = data.root.factories.factory.find( item => item.id === factoryId)
+            factory.items = data.root.factories.factory.map( item => item.name)
+            factory.value = currentFactory?.name
+            factory.onChange = (event: any) => {
+                const currentFactory = data.root.factories.factory.find( item => item.name === event.value)
+                getFabrikVare(currentFactory?.id, fabrikVare, '')
+            }
+
+            // Fabrik vare
+            getFabrikVare(factoryId, fabrikVare, factoryItemName)
+
             // Project
             if(regionId){
                 selectionProjectDetails(regionId, project)
             }
 
             if(projectNo !== 'null'){
-                getProjectDetails(projectNo, project, arbejdsplads, kundeNavn)
+                getProjectDetails(projectNo, project, arbejdsplads, kundeNavn, factory, data)
                 region.disabled = true
                 kundeNavn.disabled = true
             } else {
@@ -281,10 +305,10 @@ const App: FunctionComponent = () => {
             }
 
             project.onSelect = (event: any) => {
-                if(event.record&&event.record.data.parentIndex){
+                if(event.record && event.record.data.parentIndex){
                     const selectProject = event.record.data.text.split('-')
                     arbejdsplads.value = selectProject[1].trim()
-                    getProjectDetails(selectProject[0].trim(), project, arbejdsplads, kundeNavn)
+                    getProjectDetails(selectProject[0].trim(), project, arbejdsplads, kundeNavn, factory, data)
                 }
 
                 region.disabled = true
@@ -298,42 +322,98 @@ const App: FunctionComponent = () => {
                 kundeNavn.disabled = false
             }
 
+            // Weekend arbejde
+            weekendWork.checked = event.eventRecord.data.weekendWork
+            // weekendWork.onChange = (event: any) => {
+            //     //varighed.value = lagInDays(startDateField.value, endDateField.value, weekendWork.value)
+            // }
+
             // Start date handler
             startDateField.onChange = (event: any) => {
                 // Start date cannot be higher than the end date
                 if(endDateField.value.getTime() < event.value.getTime()){
                     endDateField.value = event.value
-                    varighed.value = lagInDays(event.value, event.value, weekendWork.value)
+                    varighed.value = lagInDays(event.value, event.value, true)
                 } else {
-                    varighed.value = lagInDays(event.value, endDateField.value, weekendWork.value)
+                    varighed.value = lagInDays(startDateField.value, endDateField.value, true)
                 }
             }
 
             // End date handler
             endDateField.onChange = (event: any) => {
                 // End date cannot be less than the start
-                if(event.value.getTime() <= startDateField.value.getTime()){
+                if(event.value.getTime() < startDateField.value.getTime()){
                     startDateField.value = event.value
-                    varighed.value = lagInDays(event.value, event.value, weekendWork.value)
+                    varighed.value = lagInDays(event.value, event.value, true)
                 } else {
-                    varighed.value = lagInDays(startDateField.value, event.value, weekendWork.value)
+                    varighed.value = lagInDays(startDateField.value, endDateField.value, true)
                 }
             }
-
-    
 
             // Kalkule Besk
             kalkuleBesk.value = name2
 
             // Varighed
-            varighed.value = event.eventRecord.data.duration
+            varighed.value = lagInDays(startDateField.value, endDateField.value, true)
 
-            // Weekend arbejde
-            weekendWork.checked = event.eventRecord.data.weekendWork
+            varighed.onChange = (event: any) => {
+                if(event.value-1 == event.oldValue){
+                    endDateField.value = addDays(endDateField.value, 1)
+                } else if(event.value+1 == event.oldValue) {
+                    endDateField.value = subDays(endDateField.value, 1)
+                }
+            }
+
+            // State
+            let type =''
+            console.log("state", state)
+            switch (state) {
+                case "1":
+                    type = 'Budgetteret'
+                    break
+                case "2":
+                    type = 'Planlagt'
+                    break
+                case "3":
+                    type = 'Udført Sag'
+                    break
+                case "4":
+                    type = 'Slettet'
+                    break
+                default: type = ''
+            }
+
+            status.value = type
+
+            // Clip
+            if(event.eventRecord.data.state == '0'){
+                clip.value = false
+            } else if(event.eventRecord.data.state == '1'){
+                clip.value = true
+            }
+            
 
             // Job Type
             jobType.items = data.root.jobTypes.jobType.map( item => item.name)
-            jobType.value = event.eventRecord.data.jobType
+            console.log("event.eventRecord.data", event.eventRecord.data)
+            if(event.eventRecord.data.jobType !== "null"){
+                let jType = ''
+                switch(event.eventRecord.data.jobType){
+                    case "1":
+                        jType = "Fræs"
+                        break
+                    case "2":
+                        jType = "Striber"
+                        break
+                    case "3":
+                        jType = "Opretning"
+                        break
+                    default: jType = ''
+                }
+                jobType.value = jType
+            } else {
+                jobType.value = ''
+            }
 
             // Hold
             team.items = data.root.teams.team.map( item => item.name)
@@ -344,10 +424,6 @@ const App: FunctionComponent = () => {
             leader.items = data.root.leaders.leader.map( item => item.name)
             leader.value = currentLeader?.name
 
-            // Fabrik
-            const currentFactory = data.root.factories.factory.find( item => item.id === factoryId)
-            factory.items = data.root.factories.factory.map( item => item.name)
-            factory.value = currentFactory?.name
         }
     };
 
@@ -356,8 +432,49 @@ const App: FunctionComponent = () => {
     }
 
     const handlerOnBeforeSave = (event: any) => {
-        console.log("On save event", event)
-        console.log("On save", editBrik)
+        if("root" in data){
+            // Region
+            const currentRegion = data.root.districs.district.find( (item: any) => item.name === event.values.region)
+            // Leader
+            const currentLeader = data.root.leaders.leader.find( (item: any) => item.name === event.values.leader)
+            // Project
+            let projectNumber = 'null'
+            if(event.values.projec&&event.values.projec.length>0&&event.values.projec !== 'null'){
+                console.log("event.values", event.values)
+                projectNumber = event.values.projec.split("-")[0].trim()
+            }
+
+            console.log("projectNomber", projectNumber)
+            console.log("On save event", event)
+            const body = {
+                id: editBrik.id,
+                regionId: currentRegion?.id,
+                leaderId: currentLeader?.id,
+                projectNo: projectNumber,
+                factoryItemName: "",
+                factoryItemId: null,
+                customerId: null,
+                customerName: null,
+                state: "2",
+                status: "",
+                name: "",
+                name2: "",
+                startDate: "",
+                endDate: "",
+                duration: 0,
+                weekendWork: false,
+                jobType: null,
+                teamId: "",
+                factoryId: "",
+                tons: 0.0,
+                area: 0.0,
+                color: "",
+                details: ""
+            }
+            //updateProject(body)
+            console.log("On save", editBrik)
+
+        }
     }
 
     const handlerOnEventResize = (event: any ) => {

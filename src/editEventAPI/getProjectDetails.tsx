@@ -1,4 +1,4 @@
-export const getProjectDetails = async (projectNo: any, project: any, arbejdsplads: any, kundeNavn: any, factory: any, data: any ) => {
+export const getProjectDetails = async (projectNo: any, project: any, arbejdsplads: any, kundeNavn: any, factory: any, data: any, setEditBrik: any ) => {
     const projectDetails = process.env.REACT_APP_GET_PROJECT_DETAILS;
 
     const encoded = window.btoa('lei-lmk:AAABBB')
@@ -22,5 +22,14 @@ export const getProjectDetails = async (projectNo: any, project: any, arbejdspla
         kundeNavn.value = editingProject.customerName
         const curentFactory = data.root.factories.factory.find( (item: any) => item.id === editingProject.factoryId)
         factory.value = curentFactory.name
+        setEditBrik((prevState: any) => {
+            const newState = {...prevState}
+            return {
+                ...newState,
+                customerId: editingProject.customerId,
+                customerName: editingProject.customerName,
+                projectNo: editingProject.projectNo
+            }
+        })
     } 
 };

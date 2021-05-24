@@ -14,7 +14,16 @@ const schedulerConfig: any = {
     // timeRangesFeature: {
     //     narrowThreshold: 10
     // },
-
+    assignments: {
+        rows: [
+            {
+                Id         : "JJO",
+                TaskId     : 11,
+                ResourceId : 1,
+                Units      : 100
+            },
+        ],
+    },
     columns: [
         {
             type: 'resourceInfo',

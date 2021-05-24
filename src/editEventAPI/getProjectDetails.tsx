@@ -23,5 +23,4 @@ export const getProjectDetails = async (projectNo: any, project: any, arbejdspla
         const curentFactory = data.root.factories.factory.find( (item: any) => item.id === editingProject.factoryId)
         factory.value = curentFactory.name
     } 
-            
 };

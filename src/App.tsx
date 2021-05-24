@@ -230,7 +230,7 @@ const App: FunctionComponent = () => {
             return newState
         })
 
-        // Current id
+        // Current data
         const regionId        = event.eventRecord.data.regionId;
         const leaderId        = event.eventRecord.data.leaderId;
         const factoryId       = event.eventRecord.data.factoryId;
@@ -263,7 +263,9 @@ const App: FunctionComponent = () => {
             // Region
             const currentRegion = data.root.districs.district.find( item => item.id === regionId)
             region.items = data.root.districs.district.map( item => item.name)
-
+            region.onChange = (event: any) => {
+                console.log("On Region Change", event)
+            }
             region.value = currentRegion?.name
 
             // On regeon select

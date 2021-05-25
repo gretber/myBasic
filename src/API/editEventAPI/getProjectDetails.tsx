@@ -28,7 +28,8 @@ export const getProjectDetails = async (projectNo: any, project: any, arbejdspla
                 ...newState,
                 customerId: editingProject.customerId,
                 customerName: editingProject.customerName,
-                projectNo: editingProject.projectNo
+                projectNo: editingProject.projectNo,
+                name: editingProject.name,
             }
         })
     } 

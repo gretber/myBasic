@@ -1,19 +1,35 @@
 // Types
-import { Project } from '../bus/briks/dataTypes';
+import { Project } from '../../bus/briks/dataTypes';
 
 // Store
-import { store } from '../@init';
+import { store } from '../../@init';
 
 // Actions
-import { togglerCreatorAction } from '../bus/client';
+import { togglerCreatorAction } from '../../bus/client';
+
+// API
+import { fetchData } from '../../bus/briks/api/fetchData'
 
 export const updateProject = async (body: Project) => {
+
   const id = body.id
+
+  const prepareBody = {
+    root: {
+      projects: {
+        project: [
+          body
+        ]
+      }
+    }
+  }
+
   const updateProjectURL = process.env.REACT_APP_UPDATE_PROJECT;
 
-  store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
+  store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));  
   try {
     const encoded = window.btoa('lei-lmk:AAABBB')
+
     const response = await fetch(`${updateProjectURL}${id}`, {
     method:  'POST',
         credentials: 'include',
@@ -22,12 +38,14 @@ export const updateProject = async (body: Project) => {
             'Authorization': `Basic ${encoded}`,
         },
 
-        body: JSON.stringify(body),
+        body: JSON.stringify(prepareBody),
     });
 
     if (response.status !== 200) {
       throw new Error('Todo create failed');
     }
+
+    fetchData()
 
   } catch (error) {
     console.log(error);

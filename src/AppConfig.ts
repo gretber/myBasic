@@ -77,7 +77,10 @@ const schedulerConfig: any = {
                 title: 'Edit Brik',
                 bbar : {
                     items : {
-                        deleteButton : null,
+                        deleteButton : {
+                            weight : 1,
+                            color: 'b-orange',
+                        },
 
                         saveButton: {
                             weight : 2,
@@ -90,6 +93,7 @@ const schedulerConfig: any = {
                     }
                 }
             },
+
             items : {
                 // Merged with provided config of the resource field
                 region: {
@@ -134,10 +138,7 @@ const schedulerConfig: any = {
                     placeholder: '',
                 },
 
-                resourceField : {
-                    weight : 6,
-                    label : 'Team'
-                },
+                resourceField : null,
 
                 startDateField: {
                     weight : 7,
@@ -238,6 +239,7 @@ const schedulerConfig: any = {
                     items: [],
                     placeholder: '',
                 },
+
                 fabrikVare: {
                     weight : 17,
                     type   : 'combo',
@@ -247,6 +249,29 @@ const schedulerConfig: any = {
                     placeholder: '',
                 },
 
+                area: {
+                    weight : 18,
+                    type   : 'numberField',
+                    name   : 'area',
+                    label  : 'Area',
+                    min    : 0,
+                    style  : {
+                        maxWidth   : "40%",
+                        marginLeft : "24px"
+                    },
+                },
+
+                tons: {
+                    weight : 19,
+                    type   : 'numberField',
+                    name   : 'tons',
+                    label  : 'Tons',
+                    min    : 0,
+                    style  : {
+                        maxWidth   : "40%",
+                        marginRight : "24px"
+                    },
+                },
 
                 nameField: null,
                 endTimeField: null,

@@ -39,11 +39,14 @@ import { addDays } from '../src/helpers/addDays';
 import { subDays } from '../src/helpers/subDays';
 
 // API
-import { getAllCustomers } from './editEventAPI/getAllCustomers';
-import { getProjectDetails } from './editEventAPI/getProjectDetails';
-import { selectionProjectDetails } from './editEventAPI/selectionProjectDetails';
-import { getFabrikVare } from './editEventAPI/getFabrikVare';
-import { updateProject } from './onSaveAPI/updateProject';
+import { getAllCustomers } from './API/editEventAPI/getAllCustomers';
+import { getProjectDetails } from './API/editEventAPI/getProjectDetails';
+import { selectionProjectDetails } from './API/editEventAPI/selectionProjectDetails';
+import { getFabrikVare } from './API/editEventAPI/getFabrikVare';
+import { updateProject } from './API/onSaveAPI/updateProject';
+import { deleteProject } from './API/onDeleteAPI/deleteProject';
+import { dropProject } from './API/onDropAPI/dropProject';
+import { onResizeProject } from './API/onResize/onResizeProject';
 
 // Moment
 import moment from 'moment';
@@ -69,6 +72,7 @@ const App: FunctionComponent = () => {
     startDate: "",
     endDate: "",
     duration: 0,
+    calculatedDuration: 0,
     weekendWork: false,
     jobType: null,
     teamId: "",
@@ -190,73 +194,56 @@ const App: FunctionComponent = () => {
 
     }, [data, loading])
 
-    // event selection change handler
-    // const onEventSelectionChange = useCallback(({ selected }: { selected: EventModel[] }) => {
-    //     console.log(selected[0])
-    //     setSelectedEvent(selected.length ? selected[0] : null);
-    // }, []);
-
     const beforeEventEditShow = (event: any) => {
-
-        console.log("event.eventRecord.data", event.eventRecord.data)
 
         setEditBrik( (prevState: any) =>{
             const newState = {
                 ...prevState,
-                id:              event.eventRecord.data.id,
-                regionId:        event.eventRecord.data.regionId,
-                leaderId:        event.eventRecord.data.leaderId,
-                projectNo:       event.eventRecord.data.projectNo,
-                factoryItemName: event.eventRecord.data.factoryItemName,
-                factoryItemId:   event.eventRecord.data.factoryItemId,
-                customerId:      event.eventRecord.data.customerId,
-                customerName:    event.eventRecord.data.customerName,
-                state:           event.eventRecord.data.state,
-                status:          event.eventRecord.data.status,
-                name:            event.eventRecord.data.name,
-                name2:           event.eventRecord.data.name,
-                startDate:       moment(event.eventRecord.data.startDate).format("DD/MM/YYYY"),
-                endDate:         moment(event.eventRecord.data.endDate).format("DD/MM/YYYY"),
-                duration:        event.eventRecord.data.duration,
-                weekendWork:     event.eventRecord.data.weekendWork,
-                jobType:         event.eventRecord.data.jobType,
-                teamId:          event.eventRecord.data.teamId,
-                factoryId:       event.eventRecord.data.factoryId,
-                tons:            event.eventRecord.data.tons,
-                area:            event.eventRecord.data.area,
-                color:           event.eventRecord.data.color,
-                details:         event.eventRecord.data.details,
+                id:                 event.eventRecord.data.id,
+                regionId:           event.eventRecord.data.regionId,
+                leaderId:           event.eventRecord.data.leaderId,
+                projectNo:          event.eventRecord.data.projectNo,
+                factoryItemName:    event.eventRecord.data.factoryItemName,
+                factoryItemId:      event.eventRecord.data.factoryItemId,
+                customerId:         event.eventRecord.data.customerId,
+                customerName:       event.eventRecord.data.customerName,
+                state:              event.eventRecord.data.state,
+                status:             event.eventRecord.data.status,
+                name:               event.eventRecord.data.name,
+                name2:              event.eventRecord.data.name2,
+                startDate:          moment(event.eventRecord.data.startDate).format("DD/MM/YYYY"),
+                endDate:            moment(event.eventRecord.data.endDate).format("DD/MM/YYYY"),
+                duration:           event.eventRecord.data.duration,
+                calculatedDuration: event.eventRecord.data.duration,
+                weekendWork:        event.eventRecord.data.weekendWork,
+                jobType:            event.eventRecord.data.jobType,
+                teamId:             event.eventRecord.data.teamId,
+                factoryId:          event.eventRecord.data.factoryId,
+                tons:               event.eventRecord.data.tons,
+                area:               event.eventRecord.data.area,
+                color:              event.eventRecord.data.color,
+                details:            event.eventRecord.data.details,
             }
             return newState
         })
 
         // Current data
-        const regionId        = event.eventRecord.data.regionId;
-        const leaderId        = event.eventRecord.data.leaderId;
-        const factoryId       = event.eventRecord.data.factoryId;
-        const projectNo: any  = event.eventRecord.data.projectNo;
-        const name2           = event.eventRecord.data.name2;
-        const state           = event.eventRecord.data.state;
-        const factoryItemName = event.eventRecord.data.factoryItemName;
-
+        const {
+            regionId,leaderId, factoryId,
+            projectNo, name2, state, factoryItemName,
+            endDate
+        } = event.eventRecord.data;
 
         // Get fields
-        const region         = event.editor.widgetMap.region;
-        const project        = event.editor.widgetMap.project;
-        const arbejdsplads   = event.editor.widgetMap.arbejdsplads;
-        const varighed       = event.editor.widgetMap.varighed;
-        const weekendWork    = event.editor.widgetMap.weekendWork;
-        const jobType        = event.editor.widgetMap.jobType;
-        const team           = event.editor.widgetMap.team;
-        const status         = event.editor.widgetMap.status;
-        const clip           = event.editor.widgetMap.clip;
-        const leader         = event.editor.widgetMap.leader;
-        const factory        = event.editor.widgetMap.factory;
-        const fabrikVare     = event.editor.widgetMap.fabrikVare;
-        const kundeNavn      = event.editor.widgetMap.kundeNavn;
-        const kalkuleBesk    = event.editor.widgetMap.kalkuleBesk;
-        const startDateField = event.editor.widgetMap.startDateField;
-        const endDateField   = event.editor.widgetMap.endDateField;
+        const { 
+            region, project, arbejdsplads,
+            varighed, weekendWork, jobType,
+            team, status, clip, leader, factory,
+            fabrikVare, kundeNavn, kalkuleBesk,
+            startDateField, endDateField, area,
+            tons
+        } = event.editor.widgetMap;
+
 
 
         if("root" in data){
@@ -294,6 +281,12 @@ const App: FunctionComponent = () => {
             factory.value = currentFactory?.name
             factory.onChange = (event: any) => {
                 const currentFactory = data.root.factories.factory.find( item => item.name === event.value)
+                if(event){
+                    setEditBrik((prevState: any) => {
+                        const newState = {...prevState}
+                        return { ...newState, factoryId: currentFactory?.id }
+                    })                    
+                }
                 getFabrikVare(currentFactory?.id, fabrikVare, '', setEditBrik)
             }
 
@@ -302,6 +295,17 @@ const App: FunctionComponent = () => {
             fabrikVare.onSelect = (event: any) => {
                 if(event.record) {
                     getFabrikVare(currentFactory?.id, fabrikVare, event.record.data.text, setEditBrik)
+                }
+            }
+
+            // Kalkule Besk
+            kalkuleBesk.value = name2
+            kalkuleBesk.onChange = (event: any) => {
+                if(event){
+                    setEditBrik((prevState: any) => {
+                        const newState = {...prevState}
+                        return { ...newState, name2: event.value }
+                    })                    
                 }
             }
 
@@ -340,9 +344,14 @@ const App: FunctionComponent = () => {
 
             // Weekend arbejde
             weekendWork.checked = event.eventRecord.data.weekendWork
-            // weekendWork.onChange = (event: any) => {
-            //     //varighed.value = lagInDays(startDateField.value, endDateField.value, weekendWork.value)
-            // }
+            weekendWork.onChange = (event: any) => {
+                if(event){
+                    setEditBrik((prevState: any) => {
+                        const newState = {...prevState}
+                        return { ...newState, weekendWork: event.value }
+                    })                    
+                }
+            }
 
             // Start date handler
             startDateField.onChange = (event: any) => {
@@ -362,6 +371,7 @@ const App: FunctionComponent = () => {
             }
 
             // End date handler
+            endDateField.value = subDays(endDate, 1)
             endDateField.onChange = (event: any) => {
                 if(event){
                     setEditBrik((prevState: any) => {
@@ -377,9 +387,6 @@ const App: FunctionComponent = () => {
                     varighed.value = lagInDays(startDateField.value, endDateField.value, true)
                 }
             }
-
-            // Kalkule Besk
-            kalkuleBesk.value = name2
 
             // Varighed
             varighed.value = lagInDays(startDateField.value, endDateField.value, true)
@@ -468,7 +475,6 @@ const App: FunctionComponent = () => {
                 }
             }
         
-
             // Job Type
             jobType.items = data.root.jobTypes.jobType.map( item => item.name)
 
@@ -491,9 +497,60 @@ const App: FunctionComponent = () => {
                 jobType.value = ''
             }
 
+            jobType.onSelect = (event: any) => {
+                if(event.record){
+                    let jType = ''
+                    switch(event.record.data.text){
+                        case "Fræs":
+                            jType = "1"
+                            break
+                        case "Striber":
+                            jType = "2"
+                            break
+                        case "Opretning":
+                            jType = "3"
+                            break
+                        default: jType = ''
+                    }
+                    setEditBrik((prevState: any) => {
+                        const newState = {...prevState}
+                        return { ...newState, jobType: jType }
+                    })
+                }
+            }
+
             // Hold
             team.items = data.root.teams.team.map( item => item.name)
             team.value = event.eventRecord.data.teamId
+            team.onSelect = (event: any) => {
+                if(event.record){
+                    setEditBrik((prevState: any) => {
+                        const currentTeam = data.root.teams.team.find( item => item.name == event.record.data.text)
+                        const newState = {...prevState}
+                        return { ...newState, teamId: currentTeam?.id }
+                    })                    
+                }
+            }
+
+            // Area
+            area.onChange = (event: any) => {
+                 if(event && event.value){
+                    setEditBrik((prevState: any) => {
+                        const newState = { ...prevState }
+                        return {...newState, area: event.value}
+                    })
+                }
+            }
+
+            // Tons
+            tons.onChange = (event: any) => {
+                 if(event && event.value){
+                    setEditBrik((prevState: any) => {
+                        const newState = { ...prevState }
+                        return {...newState, tons: event.value}
+                    })
+                }
+            }
 
             // Enterprise leder
             const currentLeader = data.root.leaders.leader.find( item => item.id === leaderId)
@@ -511,58 +568,46 @@ const App: FunctionComponent = () => {
         }
     };
 
+    // Drop event handler
     const handlerOnAfterEventDrop = (event: any) => {
-        console.log("On after event drop", event)
+        event.context.async = true
+        if(event.eventRecords.length>0){
+            const data = event.eventRecords[0].data
+            dropProject(data)
+        }
     }
 
+    // Before save handler
     const handlerOnBeforeSave = (event: any) => {
-        if("root" in data){
-            // Region
-            const currentRegion = data.root.districs.district.find( (item: any) => item.name === event.values.region)
-            // Leader
-            const currentLeader = data.root.leaders.leader.find( (item: any) => item.name === event.values.leader)
-            // Project
-            let projectNumber = 'null'
-            if(event.values.projec&&event.values.projec.length>0&&event.values.projec !== 'null'){
+        event.context.async = true
+        const body = { ...editBrik }
+        updateProject(body)
+    }
 
-                projectNumber = event.values.projec.split("-")[0].trim()
-            }
+    // Resize event handler
+    const handlerOnEventResizeEnd = (event: any) => {
 
-            console.log("On save event", event)
-            const body = {
-                id: editBrik.id,
-                regionId: currentRegion?.id,
-                leaderId: currentLeader?.id,
-                projectNo: projectNumber,
-                factoryItemName: "",
-                factoryItemId: null,
-                customerId: null,
-                customerName: null,
-                state: "2",
-                status: "",
-                name: "",
-                name2: "",
-                startDate: "",
-                endDate: "",
-                duration: 0,
-                weekendWork: false,
-                jobType: null,
-                teamId: "",
-                factoryId: "",
-                tons: 0.0,
-                area: 0.0,
-                color: "",
-                details: ""
-            }
-            //updateProject(body)
-            console.log("On save", editBrik)
+        if(event.eventRecord){
+            const data = { ...event.eventRecord.originalData }
+            delete data.resourceId
+            delete data.eventColor
+
+            const startDate = moment(event.eventRecord.data.startDate).format("DD/MM/YYYY")
+            const endDate = moment(subDays(event.eventRecord.data.endDate, 1)).format("DD/MM/YYYY")
+            const duration = lagInDays(event.eventRecord.data.startDate,event.eventRecord.data.endDate, true)-1
+
+            onResizeProject({...data, startDate, endDate, duration})
 
         }
     }
 
-    const handlerOnEventResize = (event: any ) => {
-        console.log("Resize", event)
-        console.log("event.eventRecord", event.resourceRecord)
+    // Delete event handler
+    const handlerOnAfterEventDelete = (event: any) => {
+        event.context.async = true
+        if(event.eventRecords.length>0){
+            const id = event.eventRecords[0].data.id
+            deleteProject(id)
+        }
     }
 
     if(loading){
@@ -586,9 +631,10 @@ const App: FunctionComponent = () => {
                 events={events}
                 resources={resources}
                 barMargin={3}
-                onBeforeEventResizeFinalize={handlerOnEventResize}
+                onEventResizeEnd={handlerOnEventResizeEnd}
                 onBeforeEventSave={handlerOnBeforeSave}
                 onAfterEventDrop={handlerOnAfterEventDrop}
+                onBeforeEventDelete={handlerOnAfterEventDelete}
                 //onEventSelectionChange={onEventSelectionChange}
                 onBeforeEventEditShow={beforeEventEditShow}
             />

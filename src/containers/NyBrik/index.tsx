@@ -132,6 +132,7 @@ export const NyBrik = () => {
     startDate: "",
     endDate: "",
     duration: 0,
+    calculatedDuration: 0,
     weekendWork: false,
     jobType: null,
     teamId: "",

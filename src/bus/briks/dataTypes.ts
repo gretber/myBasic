@@ -25,8 +25,8 @@ export type Project = {
             status: string,
             name: string,
             name2: string | null,
-            startDate: string,
-            endDate: string,
+            startDate: any,
+            endDate: any,
             duration?: number,
             weekendWork: boolean,
             jobType: string | null,
@@ -38,7 +38,8 @@ export type Project = {
             details: string,
             resourceId?: string,
             eventColor?: string,
-            durationDays?: number
+            durationDays?: number,
+            calculatedDuration: number,
 }
 
 export type Projects = {

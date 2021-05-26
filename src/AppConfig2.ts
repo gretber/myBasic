@@ -5,13 +5,27 @@
 
 const schedulerConfig2: any = {
 
-    // appendTo          : 'container',
-    // flex              : '1 1 50%',
-    // partner: "schedulerConfig",
+    features: {
+        eventResize: {
+            disabled: true,
+        },
 
-    // timeRangesFeature: {
-    //     narrowThreshold: 10
-    // },
+        eventEdit : {
+            disabled: true,
+        },
+
+        eventMenu: {
+            disabled: true,
+        },
+
+        eventDrag : {
+            disabled: true,
+        },
+
+        eventDragSelect: false,
+        eventDragCreate: false,
+    },
+
     assignments: {
         rows: [
             {
@@ -26,26 +40,11 @@ const schedulerConfig2: any = {
         {
             type: 'resourceInfo',
             text: 'Fabrik',
-            showEventCount: true,
+            showEventCount: false,
             showImage: false,
             width: 230,
         },
     ],
-
-    resources : [
-        { id : 11, name : 'Angelo' },
-    ],
-
-    events : [
-        {
-            id           : 11,
-            resourceId   : 11,
-            name         : 'Implement Feature X',
-            startDate    : new Date(2020, 12, 20),
-            duration     : 2,
-            durationUnit : 'h'
-        },
-    ]
 
 };
 

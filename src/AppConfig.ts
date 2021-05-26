@@ -6,8 +6,9 @@
 const schedulerConfig: any = {
     resourceImagePath: './',
     minHeight: '20em',
-    startDate: new Date(2020, 12, 0),
-    endDate: new Date(2021, 3, 0),
+    startDate: new Date(2020, 11, 31),
+    endDate: new Date(2021, 0, 31),
+    autoAdjustTimeAxis: false,
 
     viewPreset: 'weekAndDayLetter',
 
@@ -32,40 +33,7 @@ const schedulerConfig: any = {
             showImage: false,
             width: 230,
         },
-        // {
-        //     text: 'Type',
-        //     field: 'role',
-        //     width: 130
-        // }
     ],
-
-    // Filter by resource
-
-    // resourceStore: {
-    //     filters: [
-    //         function(item: any) {
-    //             const team = item.data.resourceId
-    //             const events = item.$project.initialConfig.eventsData
-    //             const arr = events.filter( (item: any) =>  item.resourceId === team)
-    //             if(arr.length>0){
-    //                 return item
-    //             }
-    //         }
-    //     ],
-
-    // },
-
-    // Filter by events
-
-    // eventStore: {
-    //     filters: [
-    //         function(item: any) {
-    //             console.log(item)
-    //             return item
-    //         }
-    //     ],
-    // },
-
 
     //*********** Custome edit event ***********//
     features : {
@@ -77,19 +45,26 @@ const schedulerConfig: any = {
                 title: 'Edit Brik',
                 bbar : {
                     items : {
+                        
+                        cancelButton: {
+                            weight : 1
+                        },
+
                         deleteButton : {
-                            weight : 1,
-                            color: 'b-orange',
+                            weight : 2,
+                            color: 'b-red',
+                        },
+
+                        copyButton : {
+                            weight : 3,
+                            color: 'b-amber',
+                            text: "copy"
                         },
 
                         saveButton: {
-                            weight : 2,
-                            color: 'b-orange',
+                            weight : 4,
+                            color: 'b-green',
                         },
-
-                        cancelButton: {
-                            weight : 1
-                        }
                     }
                 }
             },

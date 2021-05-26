@@ -27,7 +27,7 @@ export const deleteProject = async (id: string) => {
 
   const updateProjectURL = process.env.REACT_APP_UPDATE_PROJECT;
 
-  store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));  
+  //store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));  
   try {
     const encoded = window.btoa('lei-lmk:AAABBB')
 
@@ -46,12 +46,12 @@ export const deleteProject = async (id: string) => {
       throw new Error('Todo create failed');
     }
 
-    fetchData()
+    //fetchData()
 
   } catch (error) {
     console.log(error);
   } finally {
-    store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
+    //store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
   }
 
 }

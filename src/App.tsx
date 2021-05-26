@@ -18,6 +18,7 @@ import { EventModel } from '@bryntum/scheduler/scheduler.umd.js';
 
 // Config
 import { schedulerConfig } from './AppConfig';
+import { schedulerConfig2 } from './AppConfig2';
 import './App.scss';
 
 // Components
@@ -84,12 +85,18 @@ const App: FunctionComponent = () => {
   }
 
     // Ref
-    const schedulerRef = useRef<typeof BryntumScheduler | null>(null);
+    const schedulerRef1 = useRef<typeof BryntumScheduler | null>(null);
+    const schedulerRef2 = useRef<typeof BryntumScheduler | null>(null);
 
     // Init state
-    const [events, setEvents] = useState<Array<Project> | []>([]);
-    const [resources, setResources] = useState<Array<SelectionValue> | []>([]);
+    const [topEvents, setTopEvents] = useState<Array<Project> | []>([]);
+    const [topResources, setTopResources] = useState<Array<SelectionValue> | []>([]);
+
+    const [bottomEvents, setBottomEvents] = useState<Array<Project> | []>([]);
+    const [bottomResources, setBottomResources] = useState<Array<SelectionValue> | []>([]);
+
     const [config, setConfig] = useState({...schedulerConfig});
+    const [config2, setConfig2] = useState({...schedulerConfig2});
 
     // Edit brik states
     const [editBrik, setEditBrik] = useState(initialBrik)
@@ -107,8 +114,8 @@ const App: FunctionComponent = () => {
                 const startDate = moment(data.root.view.startDate, "DD/MM/YYYY").toDate()
                 const endDate = moment(data.root.view.endDate, "DD/MM/YYYY").toDate()
 
-                // newState.startDate = startDate
-                // newState.endDate = endDate
+                newState.startDate = startDate
+                newState.endDate = endDate
 
                 return newState
             })
@@ -145,8 +152,27 @@ const App: FunctionComponent = () => {
                 const selectionRegion = data.root.selections.selection[1].values.value
                 const sortedRegions = sortSelectedRegions(transformedProjects, selectionRegion)
 
-                setEvents(sortedRegions);
-                setResources(copySelectionTeams);
+
+
+
+
+
+                const haveTonsProjects = sortedRegions.filter( (item: any) => item.tons > 0 )
+
+                haveTonsProjects.map((item: any) =>{
+                    item["resourceId"] = item["factoryId"];
+                })
+
+                console.log("transformHaveTonsProjects", haveTonsProjects)
+                setBottomResources(haveTonsProjects);
+
+
+
+
+
+                //console.log("copySelectionTeams", copySelectionTeams)
+                setTopEvents(sortedRegions);
+                setTopResources(copySelectionTeams);
 
             } else {
 
@@ -187,8 +213,8 @@ const App: FunctionComponent = () => {
                     }
                 })
 
-                setEvents(events);
-                setResources(sortTeams);
+                setTopEvents(events);
+                setTopResources(sortTeams);
             }
         }
 
@@ -371,7 +397,7 @@ const App: FunctionComponent = () => {
             }
 
             // End date handler
-            endDateField.value = subDays(endDate, 1)
+            endDateField.value = endDate
             endDateField.onChange = (event: any) => {
                 if(event){
                     setEditBrik((prevState: any) => {
@@ -582,6 +608,7 @@ const App: FunctionComponent = () => {
         event.context.async = true
         const body = { ...editBrik }
         updateProject(body)
+        event.context.finalize()
     }
 
     // Resize event handler
@@ -621,15 +648,16 @@ const App: FunctionComponent = () => {
         )
     }
 
+    console.log("events={topEvents}", topEvents)
+
     return (
         <Fragment>
             <NavigationPanel />
             <BryntumScheduler
-                ref={schedulerRef}
-                name="123"
+                ref={schedulerRef1}
                 {...config}
-                events={events}
-                resources={resources}
+                events={topEvents}
+                resources={topResources}
                 barMargin={3}
                 onEventResizeEnd={handlerOnEventResizeEnd}
                 onBeforeEventSave={handlerOnBeforeSave}
@@ -638,6 +666,11 @@ const App: FunctionComponent = () => {
                 //onEventSelectionChange={onEventSelectionChange}
                 onBeforeEventEditShow={beforeEventEditShow}
             />
+            {schedulerRef1.current&&<BryntumScheduler
+                                            ref={schedulerRef2} 
+                                            resources={bottomResources}
+                                            {...config2}
+                                            partner={schedulerRef1.current.schedulerInstance} />}
         </Fragment>
     );
 };

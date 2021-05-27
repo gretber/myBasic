@@ -35,9 +35,10 @@ import { formatDate } from './helpers/formatDate';
 import { swap } from './helpers/swapElArr';
 import { sortSelectedRegions } from './helpers/sortSelectedRegions';
 import { sortSelectedFabriks } from './helpers/sortSelectedFabriks';
-import { lagInDays } from '../src/helpers/lagInDays';
-import { addDays } from '../src/helpers/addDays';
-import { subDays } from '../src/helpers/subDays';
+import { lagInDays } from './helpers/lagInDays';
+import { addDays } from './helpers/addDays';
+import { subDays } from './helpers/subDays';
+import { transformFactoriesEvents } from './helpers/transformFactoriesEvents';
 
 // API
 import { getAllCustomers } from './API/editEventAPI/getAllCustomers';
@@ -92,8 +93,8 @@ const App: FunctionComponent = () => {
     const [topEvents, setTopEvents] = useState<Array<Project> | []>([]);
     const [topResources, setTopResources] = useState<Array<SelectionValue> | []>([]);
 
-    const [bottomEvents, setBottomEvents] = useState<Array<Project> | []>([]);
-    const [bottomResources, setBottomResources] = useState<Array<SelectionValue> | []>([]);
+    const [bottomEvents, setBottomEvents] = useState<any>([]);
+    const [bottomResources, setBottomResources] = useState<any>([]);
 
     const [config, setConfig] = useState({...schedulerConfig});
     const [config2, setConfig2] = useState({...schedulerConfig2});
@@ -144,7 +145,6 @@ const App: FunctionComponent = () => {
                 // Transform teams ( add resourceId, id fields )
                 const copySelectionTeams = [...selectionTeams]
                 copySelectionTeams.map( (item: any) =>  {
-                    item["resourceId"] = item["-id"]
                     item["id"] = item["-id"]
                 })
 
@@ -157,20 +157,24 @@ const App: FunctionComponent = () => {
 
 
 
-                const haveTonsProjects = sortedRegions.filter( (item: any) => item.tons > 0 )
+                const factories =  data.root.factories.factory
+                const resourseFactoryId = sortedRegions.map((a: any) => ({...a}));
 
-                haveTonsProjects.map((item: any) =>{
+                resourseFactoryId.map((item: any)=> {
                     item["resourceId"] = item["factoryId"];
+                    item["eventColor"] = "#000"
                 })
 
-                console.log("transformHaveTonsProjects", haveTonsProjects)
-                setBottomResources(haveTonsProjects);
+                console.log(resourseFactoryId)
+
+                const test = transformFactoriesEvents(resourseFactoryId)
+                console.log("test", test)
+                console.log("resourseFactoryId", resourseFactoryId)
+                setBottomResources(factories);
+                setBottomEvents(test);
 
 
 
-
-
-                //console.log("copySelectionTeams", copySelectionTeams)
                 setTopEvents(sortedRegions);
                 setTopResources(copySelectionTeams);
 
@@ -637,6 +641,11 @@ const App: FunctionComponent = () => {
         }
     }
 
+    // On Copy click
+    const handlerOnCopy = () => {
+        console.log("ygdf")
+    }
+
     if(loading){
         return (
             <Fragment>
@@ -648,8 +657,6 @@ const App: FunctionComponent = () => {
         )
     }
 
-    console.log("events={topEvents}", topEvents)
-
     return (
         <Fragment>
             <NavigationPanel />
@@ -659,6 +666,7 @@ const App: FunctionComponent = () => {
                 events={topEvents}
                 resources={topResources}
                 barMargin={3}
+                onCopy={handlerOnCopy}
                 onEventResizeEnd={handlerOnEventResizeEnd}
                 onBeforeEventSave={handlerOnBeforeSave}
                 onAfterEventDrop={handlerOnAfterEventDrop}
@@ -669,6 +677,7 @@ const App: FunctionComponent = () => {
             {schedulerRef1.current&&<BryntumScheduler
                                             ref={schedulerRef2} 
                                             resources={bottomResources}
+                                            events={bottomEvents}
                                             {...config2}
                                             partner={schedulerRef1.current.schedulerInstance} />}
         </Fragment>

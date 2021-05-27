@@ -10,11 +10,24 @@ const schedulerConfig: any = {
     endDate: new Date(2021, 0, 31),
     autoAdjustTimeAxis: false,
 
-    viewPreset: 'weekAndDayLetter',
+    viewPreset: 'weekAndDay',
 
-    // timeRangesFeature: {
-    //     narrowThreshold: 10
-    // },
+    timeRangesFeature: {
+        narrowThreshold: 10
+    },
+
+    timeRanges: {
+        rows:
+        [
+            {
+                name: "test",
+                startDate: new Date(2020, 11, 31),
+                endDate: new Date(2020, 11, 31),
+                cls: "striped"
+            }
+        ]
+    },
+
     assignments: {
         rows: [
             {
@@ -37,6 +50,11 @@ const schedulerConfig: any = {
 
     //*********** Custome edit event ***********//
     features : {
+        timeRanges : {
+                showCurrentTimeLine : true,
+                showHeaderElements  : true,
+                enableResizing      : true
+            },
         eventEdit  : {
             editorConfig : {
                  style  : {
@@ -58,7 +76,7 @@ const schedulerConfig: any = {
                         copyButton : {
                             weight : 3,
                             color: 'b-amber',
-                            text: "copy"
+                            text: "copy",
                         },
 
                         saveButton: {

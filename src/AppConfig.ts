@@ -50,6 +50,7 @@ const schedulerConfig: any = {
 
     //*********** Custome edit event ***********//
     features : {
+        eventDragCreate: false,
         timeRanges : {
                 showCurrentTimeLine : true,
                 showHeaderElements  : true,
@@ -77,11 +78,20 @@ const schedulerConfig: any = {
                             weight : 3,
                             color: 'b-amber',
                             text: "copy",
+                            listeners : {
+                                beforeShow : ({ source : tip }:any) => {
+                                    tip.html = new Promise(resolve => {
+                                        setTimeout(() => resolve('Async content!'), 2000);
+                                    });
+                                    // AjaxHelper.get('someurl').then(response => tip.html = 'Done!');
+                                }
+                            }
                         },
 
                         saveButton: {
                             weight : 4,
                             color: 'b-green',
+                            onClick: (event: any)=>{console.log(event)}
                         },
                     }
                 }

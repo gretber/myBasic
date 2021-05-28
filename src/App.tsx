@@ -9,7 +9,8 @@ import React, {
     useEffect,
     useState,
     useRef,
-    useCallback
+    useCallback,
+    createFactory
 } from 'react'
 import {
     BryntumScheduler,
@@ -55,6 +56,7 @@ import moment from 'moment';
 
 // Types
 import { Team, Project, SelectionValue } from './bus/briks/dataTypes';
+import { is } from 'date-fns/locale';
 
 const App: FunctionComponent = () => {
 
@@ -157,6 +159,7 @@ const App: FunctionComponent = () => {
 
 
 
+
                 const factories =  data.root.factories.factory
                 const resourseFactoryId = sortedRegions.map((a: any) => ({...a}));
 
@@ -165,14 +168,28 @@ const App: FunctionComponent = () => {
                     item["eventColor"] = "#000"
                 })
 
-                console.log(resourseFactoryId)
+                // console.log("resourseFactoryId", resourseFactoryId)
 
-                const test = transformFactoriesEvents(resourseFactoryId)
-                console.log("test", test)
+                const transformFactories = transformFactoriesEvents(resourseFactoryId)
+
+                // console.log("transformFactories", transformFactories)
+                // console.log("factories", factories)
+
                 console.log("resourseFactoryId", resourseFactoryId)
-                setBottomResources(factories);
-                setBottomEvents(test);
 
+                const dropEmptyTons = transformFactories.filter( (item: any) => item.tons !== 0 )
+
+                const activeFactories: any = []
+                factories.forEach( forEachItem => {
+                    const resultItem = transformFactories.find( (findItem: any) => forEachItem.id === findItem.resourceId)
+                    if (resultItem) {
+                        activeFactories.push(forEachItem)
+                    }
+                })
+
+
+                setBottomResources(activeFactories);
+                setBottomEvents(dropEmptyTons);
 
 
                 setTopEvents(sortedRegions);
@@ -401,6 +418,7 @@ const App: FunctionComponent = () => {
             }
 
             // End date handler
+            console.log("endDate", endDate)
             endDateField.value = endDate
             endDateField.onChange = (event: any) => {
                 if(event){
@@ -409,6 +427,7 @@ const App: FunctionComponent = () => {
                         return {...newState, endDate: moment(event.value).format("DD/MM/YYYY")}
                     })                    
                 }
+
                 // End date cannot be less than the start
                 if(event.value.getTime() < startDateField.value.getTime()){
                     startDateField.value = event.value
@@ -611,6 +630,7 @@ const App: FunctionComponent = () => {
     const handlerOnBeforeSave = (event: any) => {
         event.context.async = true
         const body = { ...editBrik }
+        console.log("event save", event)
         updateProject(body)
         event.context.finalize()
     }
@@ -661,8 +681,8 @@ const App: FunctionComponent = () => {
         <Fragment>
             <NavigationPanel />
             <BryntumScheduler
-                ref={schedulerRef1}
                 {...config}
+                ref={schedulerRef1}
                 events={topEvents}
                 resources={topResources}
                 barMargin={3}

@@ -16,7 +16,7 @@ import moment from 'moment';
 // Helpers
 import { subDays } from '../../helpers/subDays';
 
-export const dropProject = async (data: Project) => {
+export const dropProject = async (data: any) => {
 
   const body = {
     id:                 data.id,

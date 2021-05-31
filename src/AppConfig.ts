@@ -58,9 +58,8 @@ const schedulerConfig: any = {
                 
                 const displayDate = momentDate.locale('da').format('DD, dd');
                 return displayDate;
-                }
+            }
                 
-            
         }
 
         ],
@@ -110,7 +109,7 @@ const schedulerConfig: any = {
                 bbar : {
                     items : {
 
-                            cancelButton: {
+                        cancelButton: {
                             weight : 1
                         },
 
@@ -124,15 +123,7 @@ const schedulerConfig: any = {
                             color: 'b-amber',
                             text: "copy",
                             name: 'copy',
-                            onClick: (e:any) => {console.log(e)},
-                           listeners : {
-                                beforeShow : ({ source : tip }:any) => {
-                                    tip.html = new Promise(resolve => {
-                                        setTimeout(() => resolve('Async content!'), 2000);
-                                    });
-                                    // AjaxHelper.get('someurl').then(response => tip.html = 'Done!');
-                                }
-                            }
+                            onClick: (e: any) => console.log("on click", e)
                         },
 
                         saveButton: {

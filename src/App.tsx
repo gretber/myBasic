@@ -22,8 +22,11 @@ import { schedulerConfig } from './AppConfig';
 import { schedulerConfig2 } from './AppConfig2';
 import './App.scss';
 
-// Components
+// Containers
 import { NavigationPanel } from './containers/NavigationPanel';
+
+// Components
+// import Popup from './components/popup/popup';
 
 // Material
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -57,6 +60,7 @@ import moment from 'moment';
 // Types
 import { Team, Project, SelectionValue } from './bus/briks/dataTypes';
 import { is } from 'date-fns/locale';
+import { features } from 'process';
 
 const App: FunctionComponent = () => {
 
@@ -89,9 +93,10 @@ const App: FunctionComponent = () => {
 
     // Ref
     const schedulerRef1 = useRef<typeof BryntumScheduler | null>(null);
-  const schedulerRef2 = useRef<typeof BryntumScheduler | null>(null);
+    const schedulerRef2 = useRef<typeof BryntumScheduler | null>(null);
 
     // Init state
+
     const [topEvents, setTopEvents] = useState<Array<Project> | []>([]);
     const [topResources, setTopResources] = useState<Array<SelectionValue> | []>([]);
 
@@ -109,7 +114,7 @@ const App: FunctionComponent = () => {
     const [offLineEndDate, saveOffLineEndDate] = useState(new Date());
     // Get data
     const { data, loading } = useDataQuery()
-  
+
     useEffect(()=> {
 
         if("root" in data){
@@ -926,9 +931,7 @@ const App: FunctionComponent = () => {
         <Fragment>
             <NavigationPanel offLineEndDate={offLineEndDate} saveOffLineEndDate = {saveOffLineEndDate}  period={period} schedulerConfig = {config} setConfig={setConfig}/>
             <BryntumScheduler
-                //  {...Object.assign({}, config, features) }
                 {...config}
-                 
                 ref={schedulerRef1}
                 events={topEvents}
                 resources={topResources}
@@ -938,7 +941,7 @@ const App: FunctionComponent = () => {
                 onBeforeEventSave={handlerOnBeforeSave}
                 onAfterEventDrop={handlerOnAfterEventDrop}
                 onBeforeEventDelete={handlerOnAfterEventDelete}
-                //onEventSelectionChange={onEventSelectionChange}
+                // onEventSelectionChange={handlerOnEventSelectionChange}
                 onBeforeEventEditShow={beforeEventEditShow}
             />
             {schedulerRef1.current&&<BryntumScheduler

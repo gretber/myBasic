@@ -113,7 +113,15 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
-      return {...prevState, duration: varighed}
+      return {...prevState, duration: lagInDays(startDate, endDate, true)}
+    })
+  },[varighed])
+
+  // State for calculatedDuration
+  
+  useEffect(()=>{
+    setNewBrik((prevState: any)=> {
+      return {...prevState, calculatedDuration: varighed}
     })
   },[varighed])
 

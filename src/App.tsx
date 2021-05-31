@@ -89,7 +89,7 @@ const App: FunctionComponent = () => {
 
     // Ref
     const schedulerRef1 = useRef<typeof BryntumScheduler | null>(null);
-    const schedulerRef2 = useRef<typeof BryntumScheduler | null>(null);
+  const schedulerRef2 = useRef<typeof BryntumScheduler | null>(null);
 
     // Init state
     const [topEvents, setTopEvents] = useState<Array<Project> | []>([]);
@@ -100,13 +100,16 @@ const App: FunctionComponent = () => {
 
     const [config, setConfig] = useState({...schedulerConfig});
     const [config2, setConfig2] = useState({...schedulerConfig2});
+    const [period, setPeriod] = useState('');
 
     // Edit brik states
     const [editBrik, setEditBrik] = useState(initialBrik)
 
+    // Displayed Date in header
+    const [offLineEndDate, saveOffLineEndDate] = useState(new Date());
     // Get data
     const { data, loading } = useDataQuery()
-
+  
     useEffect(()=> {
 
         if("root" in data){
@@ -119,10 +122,27 @@ const App: FunctionComponent = () => {
 
                 newState.startDate = startDate
                 newState.endDate = endDate
-
+                
                 return newState
             })
 
+            saveOffLineEndDate(config.endDate);
+            if(data.root.view.timeframe === 'week')
+            {
+                setPeriod('Uge')
+            }
+            else if(data.root.view.timeframe === '2weeks')
+            {
+                setPeriod('To uges')
+            }
+            else if(data.root.view.timeframe === 'month')
+            {
+                setPeriod('Måned');
+            }
+            else {
+                setPeriod('24 uger');
+            }
+            setPeriod(data.root.view.timeframe)
             // Transform data
             const transformedProjects = data.root.projects.project.map((item) => {
                 item["resourceId"] = item["teamId"];
@@ -154,7 +174,7 @@ const App: FunctionComponent = () => {
                 const selectionRegion = data.root.selections.selection[1].values.value
                 const sortedRegions = sortSelectedRegions(transformedProjects, selectionRegion)
 
-
+                
 
 
 
@@ -239,7 +259,7 @@ const App: FunctionComponent = () => {
 
     const beforeEventEditShow = (event: any) => {
 
-        setEditBrik( (prevState: any) =>{
+               setEditBrik( (prevState: any) =>{
             const newState = {
                 ...prevState,
                 id:                 event.eventRecord.data.id,
@@ -293,7 +313,7 @@ const App: FunctionComponent = () => {
             // Region
             const currentRegion = data.root.districs.district.find( item => item.id === regionId)
             region.items = data.root.districs.district.map( item => item.name)
-            region.onChange = (event: any) => {
+             region.onChange = (event: any) => {
                 const currentRegion = data.root.districs.district.find( (item: any) => item.name === event.value)
                 setEditBrik((prevState: any) => {
                     const newState = { ...prevState }
@@ -311,7 +331,7 @@ const App: FunctionComponent = () => {
             }
 
             // Kunde Navn
-            kundeNavn.onSelect = (event: any) => {
+             kundeNavn.onSelect = (event: any) => {
                 if(event.record){
                     getAllCustomers(kundeNavn, event.record.data.text, setEditBrik)
                 }
@@ -324,7 +344,7 @@ const App: FunctionComponent = () => {
             factory.value = currentFactory?.name
             factory.onChange = (event: any) => {
                 const currentFactory = data.root.factories.factory.find( item => item.name === event.value)
-                if(event){
+                 if(event){
                     setEditBrik((prevState: any) => {
                         const newState = {...prevState}
                         return { ...newState, factoryId: currentFactory?.id }
@@ -358,7 +378,7 @@ const App: FunctionComponent = () => {
             }
 
             if(projectNo !== 'null'){
-                getProjectDetails(projectNo, project, arbejdsplads, kundeNavn, factory, data, setEditBrik)
+                 getProjectDetails(projectNo, project, arbejdsplads, kundeNavn, factory, data, setEditBrik)
                 region.disabled = true
                 kundeNavn.disabled = true
             } else {
@@ -371,7 +391,7 @@ const App: FunctionComponent = () => {
                 if(event.record && event.record.data.parentIndex){
                     const selectProject = event.record.data.text.split('-')
                     arbejdsplads.value = selectProject[1].trim()
-                    getProjectDetails(selectProject[0].trim(), project, arbejdsplads, kundeNavn, factory, data, setEditBrik)
+                  getProjectDetails(selectProject[0].trim(), project, arbejdsplads, kundeNavn, factory, data, setEditBrik)
                 }
 
                 region.disabled = true
@@ -387,7 +407,7 @@ const App: FunctionComponent = () => {
 
             // Weekend arbejde
             weekendWork.checked = event.eventRecord.data.weekendWork
-            weekendWork.onChange = (event: any) => {
+           weekendWork.onChange = (event: any) => {
                 if(event){
                     setEditBrik((prevState: any) => {
                         const newState = {...prevState}
@@ -398,7 +418,7 @@ const App: FunctionComponent = () => {
 
             // Start date handler
             startDateField.onChange = (event: any) => {
-                if(event){
+                  if(event){
                     setEditBrik((prevState: any) => {
                         const newState = {...prevState}
                         return {...newState, startDate: moment(event.value).format("DD/MM/YYYY")}
@@ -415,7 +435,7 @@ const App: FunctionComponent = () => {
 
             // End date handler
 
-            endDateField.value = endDate
+             endDateField.value = endDate
             endDateField.onChange = (event: any) => {
                 if(event){
                     setEditBrik((prevState: any) => {
@@ -433,9 +453,9 @@ const App: FunctionComponent = () => {
                 }
             }
 
-            // Varighed
+                // Varighed
             varighed.value = lagInDays(startDateField.value, endDateField.value, true)
-            setEditBrik((prevState: any) => {
+             setEditBrik((prevState: any) => {
                     const newState = {...prevState}
                     return {...newState, duration: varighed.value}
             })
@@ -446,7 +466,7 @@ const App: FunctionComponent = () => {
                 } else if(event.value+1 == event.oldValue) {
                     endDateField.value = subDays(endDateField.value, 1)
                 }
-                setEditBrik((prevState: any) => {
+                 setEditBrik((prevState: any) => {
                     const newState = {...prevState}
                     return {...newState, duration: event.value}
                 })
@@ -454,7 +474,7 @@ const App: FunctionComponent = () => {
 
             // State
             let type =''
-        
+          
             switch (state) {
                 case "1":
                     type = 'Budgetteret'
@@ -504,7 +524,7 @@ const App: FunctionComponent = () => {
                 clip.value = true
             }
 
-            clip.onChange = (event: any)=>{
+             clip.onChange = (event: any)=>{
                 if(event){
                     if(event.checked){
                         setEditBrik((prevState: any) => {
@@ -519,10 +539,10 @@ const App: FunctionComponent = () => {
                     }
                 }
             }
-        
+
             // Job Type
             jobType.items = data.root.jobTypes.jobType.map( item => item.name)
-
+           
             if(event.eventRecord.data.jobType !== "null"){
                 let jType = ''
                 switch(event.eventRecord.data.jobType){
@@ -542,7 +562,7 @@ const App: FunctionComponent = () => {
                 jobType.value = ''
             }
 
-            jobType.onSelect = (event: any) => {
+ jobType.onSelect = (event: any) => {
                 if(event.record){
                     let jType = ''
                     switch(event.record.data.text){
@@ -567,7 +587,7 @@ const App: FunctionComponent = () => {
             // Hold
             team.items = data.root.teams.team.map( item => item.name)
             team.value = event.eventRecord.data.teamId
-            team.onSelect = (event: any) => {
+             team.onSelect = (event: any) => {
                 if(event.record){
                     setEditBrik((prevState: any) => {
                         const currentTeam = data.root.teams.team.find( item => item.name == event.record.data.text)
@@ -620,9 +640,9 @@ const App: FunctionComponent = () => {
             const data = event.eventRecords[0].data
             dropProject(data)
         }
-    }
+        }
 
-    // Before save handler
+         // Before save handler
     const handlerOnBeforeSave = (event: any) => {
         event.context.async = true
         const body = { ...editBrik }
@@ -631,7 +651,7 @@ const App: FunctionComponent = () => {
         event.context.finalize()
     }
 
-    // Resize event handler
+       // Resize event handler
     const handlerOnEventResizeEnd = (event: any) => {
 
         if(event.eventRecord){
@@ -648,7 +668,7 @@ const App: FunctionComponent = () => {
         }
     }
 
-    // Delete event handler
+ // Delete event handler
     const handlerOnAfterEventDelete = (event: any) => {
         event.context.async = true
         if(event.eventRecords.length>0){
@@ -660,12 +680,12 @@ const App: FunctionComponent = () => {
     // On Copy click
     const handlerOnCopy = () => {
         console.log("ygdf")
-    }
+      }
 
     if(loading){
         return (
             <Fragment>
-                {(Object.keys(data).length !== 0) && <NavigationPanel />}
+                {(Object.keys(data).length !== 0) && <NavigationPanel offLineEndDate={offLineEndDate} saveOffLineEndDate = {saveOffLineEndDate} period = {period} schedulerConfig = {config} setConfig={setConfig}/>}
                 <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "500px", marginBottom: "500px"}}>
                     <CircularProgress color="primary" />
                 </div>
@@ -675,9 +695,9 @@ const App: FunctionComponent = () => {
 
     return (
         <Fragment>
-            <NavigationPanel />
+            <NavigationPanel offLineEndDate={offLineEndDate} saveOffLineEndDate = {saveOffLineEndDate}  period={period} schedulerConfig = {config} setConfig={setConfig}/>
             <BryntumScheduler
-                {...config}
+                 {...config}
                 ref={schedulerRef1}
                 events={topEvents}
                 resources={topResources}
@@ -695,8 +715,8 @@ const App: FunctionComponent = () => {
                                             resources={bottomResources}
                                             events={bottomEvents}
                                             {...config2}
-                                            partner={schedulerRef1.current.schedulerInstance} />}
-        </Fragment>
+                                            partner={schedulerRef1.current.schedulerInstance} />}  
+                                                  </Fragment>
     );
 };
 

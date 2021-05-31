@@ -12,7 +12,7 @@ import { middlewares } from './middlewares';
 export const rootReducer = combineReducers({
     data,
     togglers,
-});
+   });
 
 export type AppState = ReturnType<typeof rootReducer>;
 

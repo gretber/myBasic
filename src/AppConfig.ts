@@ -1,44 +1,67 @@
 
 /**
+ * 
  * Application configuration
  */
+ 
+// Date
+import moment from 'moment';
+
+// Config
 
 const schedulerConfig: any = {
     resourceImagePath: './',
     minHeight: '20em',
-    startDate: new Date(2020, 11, 31),
+   startDate: new Date(2020, 11, 31),
     endDate: new Date(2021, 0, 31),
-    autoAdjustTimeAxis: false,
 
-    viewPreset: 'weekAndDay',
+    weekStartDay: 1,
+    viewPreset: {
+        
+        base    : 'dayAndWeek',
+        id      : 'myDayAndWeekPreset',
+        
+        headers : [
+        {
+            unit      : "week",
+            increment : 1,
+            renderer  : (startDate:Date, endDate:Date, headerConfig:any, cellIdx:number) => {
+                
+                const momentDate = moment(endDate);
+                moment.updateLocale('da', {
+                    months :['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
+                    weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag']
+                });
 
-    timeRangesFeature: {
-        narrowThreshold: 10
-    },
+                const displayDate = `${momentDate.locale('da').format('YYYY, MMMM')}  (uge ${momentDate.week()})`;
 
-    timeRanges: {
-        rows:
-        [
-            {
-                name: "test",
-                startDate: new Date(2020, 11, 31),
-                endDate: new Date(2020, 11, 31),
-                cls: "striped"
+              
+               
+               return displayDate
+                
             }
-        ]
-    },
+        },
+        {
+            unit      : "day",
+            increment : 1,
+            renderer  : (startDate:Date, endDate:Date, headerConfig:any, cellIdx:number) => {
+                
+                const momentDate = moment(startDate);
+                 moment.updateLocale('da', {
+                    weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'],
+                    weekdaysMin: ['Ma.', 'Ti.', 'On.', 'To.', 'Fr.', 'Lø.', 'Søn.']
+                });
+                
+                const displayDate = momentDate.locale('da').format('DD, dd');
+                return displayDate;
+                }
+                
+            
+        }
 
-    assignments: {
-        rows: [
-            {
-                Id         : "JJO",
-                TaskId     : 11,
-                ResourceId : 1,
-                Units      : 100
-            },
         ],
-    },
-    columns: [
+  },
+      columns: [
         {
             type: 'resourceInfo',
             text: 'Team',
@@ -47,25 +70,27 @@ const schedulerConfig: any = {
             width: 230,
         },
     ],
-
+      
     //*********** Custome edit event ***********//
-    features : {
+        features : {
         eventDragCreate: false,
+        nonWorkingTime : true,
+        autoAdjustTimeAxis: false,
         timeRanges : {
                 showCurrentTimeLine : true,
                 showHeaderElements  : true,
-                enableResizing      : true
+                enableResizing      : false
             },
         eventEdit  : {
             editorConfig : {
-                 style  : {
+                    style  : {
                     width: "500px"
                 },
                 title: 'Edit Brik',
                 bbar : {
                     items : {
-                        
-                        cancelButton: {
+
+                            cancelButton: {
                             weight : 1
                         },
 
@@ -78,7 +103,8 @@ const schedulerConfig: any = {
                             weight : 3,
                             color: 'b-amber',
                             text: "copy",
-                            listeners : {
+                            name: 'copy',
+                           listeners : {
                                 beforeShow : ({ source : tip }:any) => {
                                     tip.html = new Promise(resolve => {
                                         setTimeout(() => resolve('Async content!'), 2000);
@@ -96,7 +122,7 @@ const schedulerConfig: any = {
                     }
                 }
             },
-
+        
             items : {
                 // Merged with provided config of the resource field
                 region: {

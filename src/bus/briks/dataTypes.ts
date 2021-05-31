@@ -7,7 +7,7 @@ export type User = {
 export type View = {
             startDate: string,
             endDate: string,
-            timeframe: "year" | "month" | "day",
+            timeframe: "year" | "month" | "2weeks"| "week",
             view: "team",
             project: string | "null"
 }
@@ -25,8 +25,8 @@ export type Project = {
             status: string,
             name: string,
             name2: string | null,
-            startDate: any,
-            endDate: any,
+            startDate: string,
+            endDate: string,
             duration?: number,
             weekendWork: boolean,
             jobType: string | null,
@@ -38,7 +38,7 @@ export type Project = {
             details: string,
             resourceId?: string,
             eventColor?: string,
-            durationDays?: number,
+            durationDays?: number
             calculatedDuration: number,
 }
 

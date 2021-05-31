@@ -26,8 +26,11 @@ export const createBrik: CreateBrikType = async (newBrik) => {
 
   const createBrikUrl = process.env.REACT_APP_CREATE_PROJECT;
   store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
+  
+    const login = localStorage.getItem('schedulerUserLogin');
+    const password = localStorage.getItem('schedulerUserPassword')
   try {
-    const encoded = window.btoa('lei-lmk:AAABBB')
+     const encoded = window.btoa(`${login}:${password}`);
 
     const response = await fetch(`${createBrikUrl}`, {
           method:  'POST',

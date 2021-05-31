@@ -12,8 +12,10 @@ import { Data } from '../types';
 const InitBriksUrl = process.env.REACT_APP_INIT_BRIK_URL;
 
 export const fetchData: FetchData = async () => {
+    const login = localStorage.getItem('schedulerUserLogin');
+    const password = localStorage.getItem('schedulerUserPassword')
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
-    const encoded = window.btoa('lei-lmk:AAABBB')
+    const encoded = window.btoa(`${login}:${password}`)
     try {
         const response = await fetch(`${InitBriksUrl}`, {
             method:  'GET',

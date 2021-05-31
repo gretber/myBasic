@@ -40,11 +40,14 @@ export const updateSelection: UpdateSelection = async (body) => {
   const updateSelectionUrl = process.env.REACT_APP_UPDATE_SELECTION;
 
   store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
+  
+    const login = localStorage.getItem('schedulerUserLogin');
+    const password = localStorage.getItem('schedulerUserPassword')
 
   try {
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
-    const encoded = window.btoa('lei-lmk:AAABBB')
-
+    const encoded = window.btoa(`${login}:${password}`)
+    
     const response = await fetch(`${updateSelectionUrl}`, {
         method:  'POST',
         credentials: 'include',

@@ -168,14 +168,10 @@ const App: FunctionComponent = () => {
                     item["eventColor"] = "#000"
                 })
 
-                // console.log("resourseFactoryId", resourseFactoryId)
+
 
                 const transformFactories = transformFactoriesEvents(resourseFactoryId)
 
-                // console.log("transformFactories", transformFactories)
-                // console.log("factories", factories)
-
-                console.log("resourseFactoryId", resourseFactoryId)
 
                 const dropEmptyTons = transformFactories.filter( (item: any) => item.tons !== 0 )
 
@@ -418,7 +414,7 @@ const App: FunctionComponent = () => {
             }
 
             // End date handler
-            console.log("endDate", endDate)
+
             endDateField.value = endDate
             endDateField.onChange = (event: any) => {
                 if(event){

@@ -6,6 +6,7 @@ import { store } from '../../@init';
 
 // Actions
 import { togglerCreatorAction } from '../../bus/client';
+import {updateProjectAction} from '../../bus/briks/actions';
 
 // API
 import { fetchData } from '../../bus/briks/api/fetchData'
@@ -44,6 +45,7 @@ export const onResizeProject = async (body: Project) => {
       throw new Error('Todo create failed');
     }
 
+    store.dispatch(updateProjectAction(body));
     //fetchData()
 
   } catch (error) {

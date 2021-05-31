@@ -47,6 +47,32 @@ export type UpdateSelectionActionType = {
 
 export type UpdateSelectionContract = (payload: UpdateSelectionPayload) => UpdateSelectionActionType
 
+
+
+// --------------------------------Delete project-----------------------
+
+
+export const DELETE_PROJECT = 'DELETE_PROJECT';
+type DeleteProjectActionType = {
+    type: typeof DELETE_PROJECT,
+    payload: string,   
+}
+
+export type DeleteProjectContract = (payload:string) => DeleteProjectActionType
+
+
+// --------------------------------Update project-----------------------
+
+export const UPDATE_PROJECT = 'UPDATE_PROJECT';
+type UpdateProjectActionType = {
+    type: typeof UPDATE_PROJECT,
+    payload: Project
+}
+
+export type UpdateProjectContract = (payload: Project) => UpdateProjectActionType
+
+
+
 // // ----------------------------- Delete -----------------------------
 // export const DELETE_TODO = 'DELETE_TODO';
 // export type DeleteTodoActionType = {
@@ -59,6 +85,8 @@ export type TodosActionTypes =
     | SetDataActionType
     | SetNuBrikActionType
     | UpdateSelectionActionType
+    | DeleteProjectActionType
+    | UpdateProjectActionType
     // | UpdateTodoActionType
     // | DeleteTodoActionType
 

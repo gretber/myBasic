@@ -6,12 +6,13 @@ import { store } from '../../@init';
 
 // Actions
 import { togglerCreatorAction } from '../../bus/client';
+import {deleteProjectAction} from '../../bus/briks/actions';
 
 // API
 import { fetchData } from '../../bus/briks/api/fetchData'
 
 export const deleteProject = async (id: string) => {
-
+console.log('delete project api');
   const body = {
     root: {
       projects: {
@@ -41,11 +42,11 @@ export const deleteProject = async (id: string) => {
 
         body: JSON.stringify(body),
     });
-
+    
     if (response.status !== 200) {
       throw new Error('Todo create failed');
     }
-
+    store.dispatch(deleteProjectAction(id));
     //fetchData()
 
   } catch (error) {

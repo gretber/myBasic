@@ -16,6 +16,15 @@ export const updateSelectionAction: types.UpdateSelectionContract = (payload) =>
     payload,
 });
 
+export const deleteProjectAction: types.DeleteProjectContract = (payload) => ({
+    type: types.DELETE_PROJECT,
+    payload,
+})
+
+export const updateProjectAction: types.UpdateProjectContract = (payload) => ({
+    type: types.UPDATE_PROJECT,
+    payload,
+});
 // export const deleteTodoAction: types.DeleteTodoContract = (payload) => ({
 //     type: types.DELETE_TODO,
 //     payload,

@@ -45,10 +45,19 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     arrowButtons: {
       borderRadius: '50%',
+      cursor: 'pointer',
       '&:hover': {
         boxShadow:'4px 4px 15px 0px rgba(34, 60, 80, 0.5);',
       },
+      '&.false': {
+        cursor: 'default',
+        color: '#ad5700',
+        '&:hover': {
+        boxShadow:'none',
+      },
+      }
     },
+    
   })
 );
 
@@ -60,8 +69,7 @@ export const PeriodPicker = ({config, setConfig, period, offLineEndDate, saveOff
   const classes = useStyles();
   
   const [periode, setPeriode] = React.useState(period);
-  
-  
+  const [isPeriodeChoosed, setPeriodeIsChoosed] = React.useState(false)
    const  startDate = moment(config.startDate);
    const endDate = moment(offLineEndDate);
      moment.updateLocale('da', {
@@ -76,7 +84,7 @@ export const PeriodPicker = ({config, setConfig, period, offLineEndDate, saveOff
    
     // Select Handler
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-   
+    setPeriodeIsChoosed(true);
     if(event.target.value !==  periode)
     {
       const newState = Object.assign({}, config);
@@ -206,7 +214,7 @@ export const PeriodPicker = ({config, setConfig, period, offLineEndDate, saveOff
         break;
       }
       }
-      default: console.log('default');
+      
     }
     newState.startDate = newState.startDate.toDate();
  
@@ -244,10 +252,10 @@ export const PeriodPicker = ({config, setConfig, period, offLineEndDate, saveOff
     <div className={classes.root}>
       <div className={classes.displayedPeriod}>{displayedStartDate} - {displayedEndDate}</div>
       <div>
-          <ArrowLeftOutlinedIcon className={classes.arrowButtons}  onClick={(e) => {e.stopPropagation(); changeTimeLineByPeriod('Left')}}/>
-          <ArrowBackIosOutlinedIcon className={classes.arrowButtons} onClick={(e) => {e.stopPropagation(); changeTimeLineByMonth('Left')}}/>
-          <ArrowForwardIosOutlinedIcon className={classes.arrowButtons} onClick={(e) => {e.stopPropagation(); changeTimeLineByMonth('Right')}}/>
-          <ArrowRightOutlinedIcon className={classes.arrowButtons} onClick={(e) => {e.stopPropagation(); changeTimeLineByPeriod('Right')}}/>
+          <ArrowLeftOutlinedIcon className={`${classes.arrowButtons} ${isPeriodeChoosed}`}  onClick={(e) => {e.stopPropagation(); changeTimeLineByPeriod('Left')}}/>
+          <ArrowBackIosOutlinedIcon className={`${classes.arrowButtons}`} onClick={(e) => {e.stopPropagation(); changeTimeLineByMonth('Left')}}/>
+          <ArrowForwardIosOutlinedIcon className={`${classes.arrowButtons}`} onClick={(e) => {e.stopPropagation(); changeTimeLineByMonth('Right')}}/>
+          <ArrowRightOutlinedIcon className={`${classes.arrowButtons} ${isPeriodeChoosed}`} onClick={(e) => {e.stopPropagation(); changeTimeLineByPeriod('Right')}}/>
       </div>
       <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel id="periode">Periode</InputLabel>

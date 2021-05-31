@@ -4,8 +4,24 @@
  */
 
 const schedulerConfig2: any = {
-
+      weekStartDay: 1,
+      
     features: {
+        nonWorkingTime : true,
+        autoAdjustTimeAxis: false,
+        timeRanges : {
+                showCurrentTimeLine : true,
+                showHeaderElements  : true,
+                enableResizing      : false
+            },
+         eventTooltip : {
+            align : 'l-r', 
+            template : ({eventRecord}:any) => {
+            return `<div  class="b-sch-event-tooltip eventToolTip">
+                    <span>${eventRecord.data.tons} tons</span>
+                    </div>`;
+            },
+        },    
         eventResize: {
             disabled: true,
         },

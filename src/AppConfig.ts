@@ -12,7 +12,7 @@ import moment from 'moment';
 const schedulerConfig: any = {
     resourceImagePath: './',
     minHeight: '20em',
-   startDate: new Date(2020, 11, 31),
+    startDate: new Date(2020, 11, 31),
     endDate: new Date(2021, 0, 31),
 
     weekStartDay: 1,
@@ -20,6 +20,10 @@ const schedulerConfig: any = {
         
         base    : 'dayAndWeek',
         id      : 'myDayAndWeekPreset',
+        timeResolution : {              
+        unit      : 'day',       
+        increment : 1,
+    },
         
         headers : [
         {
@@ -70,7 +74,11 @@ const schedulerConfig: any = {
             width: 230,
         },
     ],
-      
+      listeners: {
+                // catchAll: (e:any) => {console.log(e);}
+                eventClick: (e:any) => {console.log(e);}
+            },
+            
     //*********** Custome edit event ***********//
         features : {
         eventDragCreate: false,
@@ -81,7 +89,19 @@ const schedulerConfig: any = {
                 showHeaderElements  : true,
                 enableResizing      : false
             },
+        eventTooltip : {
+            align : 'l-r', 
+            template : ({eventRecord}:any) => {
+            return `<div  class="b-sch-event-tooltip eventToolTip">
+                    <span>${eventRecord.data.name}</span>
+                    <span>${eventRecord.data.tons} tons</span>
+                    </div>`;
+            },
+        },
+        
+           
         eventEdit  : {
+           
             editorConfig : {
                     style  : {
                     width: "500px"
@@ -104,6 +124,7 @@ const schedulerConfig: any = {
                             color: 'b-amber',
                             text: "copy",
                             name: 'copy',
+                            onClick: (e:any) => {console.log(e)},
                            listeners : {
                                 beforeShow : ({ source : tip }:any) => {
                                     tip.html = new Promise(resolve => {

@@ -23,6 +23,14 @@
     }
 }
 
+.eventToolTip {
+display: flex;
+flex-direction: column;
+justify-content: space-around;
+align-items: flex-start;
+
+}
+
 .b-theme-stockholm {
     .selected-event {
         text-transform: uppercase;

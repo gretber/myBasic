@@ -7,6 +7,9 @@ import { store } from '../../@init';
 // Actions
 import {updateProjectAction} from '../../bus/briks/actions';
 
+// API
+import { fetchData } from '../../bus/briks/api/fetchData'
+
 export const updateProject = async (body: Project) => {
 
   const id = body.id
@@ -42,7 +45,7 @@ export const updateProject = async (body: Project) => {
       throw new Error('Todo create failed');
     }
     store.dispatch(updateProjectAction(body));
-    //fetchData()
+    fetchData()
 
   } catch (error) {
     console.log(error);

@@ -104,14 +104,14 @@ console.log(eventRecordData);
                 kalkuleBesk: {
                     weight : 4,
                     type   : 'text',
-                    name   : 'kalkule-besk',
+                    name   : 'kalkuleBesk',
                     label  : 'Kalkule Besk'
                 },
 
                 kundeNavn: {
                     weight : 5,
                     type   : 'combo',
-                    name   : 'kunde-navn',
+                    name   : 'kundeNavn',
                     label  : 'Kunde Navn',
                     items: [],
                     placeholder: '',
@@ -151,7 +151,7 @@ console.log(eventRecordData);
                 weekendWork: {
                     weight : 10,
                     type   : 'slideToggle',
-                    name   : 'weekend-arbejde',
+                    name   : 'weekendWork',
                     label  : 'Weekend Arbejde',
                     color  : 'b-orange',
                     style  : {
@@ -186,7 +186,7 @@ console.log(eventRecordData);
                 jobType: {
                     weight : 13,
                     type   : 'combo',
-                    name   : 'job-type',
+                    name   : 'jobType',
                     label  : 'Job Type',
                     items: ["Fræs", "Striber", "Opretning"],
                     placeholder: '',
@@ -222,7 +222,7 @@ console.log(eventRecordData);
                 fabrikVare: {
                     weight : 17,
                     type   : 'combo',
-                    name   : 'fabrik-vare',
+                    name   : 'factoryItemName',
                     label  : 'Fabrik Vare',
                     items: [],
                     placeholder: '',

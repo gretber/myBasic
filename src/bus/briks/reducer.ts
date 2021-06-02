@@ -41,7 +41,6 @@ export const dataReducer: Reducer<types.Data, types.TodosActionTypes> = (state =
 
                     if(p.id === action.payload.id)
                      {
-                        console.log("REDUCER action.payload", action.payload)
                         return action.payload;
                      }
                      else return p;

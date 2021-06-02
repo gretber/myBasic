@@ -432,6 +432,7 @@ const App: FunctionComponent = () => {
                 if(event){
                     setEditBrik((prevState: any) => {
                         const newState = {...prevState}
+
                         return { ...newState, weekendWork: event.value }
                     })                    
                 }
@@ -671,42 +672,86 @@ const App: FunctionComponent = () => {
         }
 
      // Before save handler
-    const handlerOnBeforeSave = 
+    const handlerOnBeforeSave = useCallback(
+        
         (event: any) => {
         event.context.async = true
-        const body = {
-            id:                 event.eventRecord.data.id,
-            regionId:           event.eventRecord.data.regionId,
-            leaderId:           event.eventRecord.data.leaderId,
-            projectNo:          event.eventRecord.data.projectNo,
-            factoryItemName:    event.eventRecord.data.factoryItemName,
-            factoryItemId:      event.eventRecord.data.factoryItemId,
-            customerId:         event.eventRecord.data.customerId,
-            customerName:       event.eventRecord.data.customerName,
-            state:              event.eventRecord.data.state,
-            status:             event.eventRecord.data.status,
-            name:               event.eventRecord.data.name,
-            name2:              event.eventRecord.data.name2,
-            startDate:          moment(event.eventRecord.data.startDate).format("DD/MM/YYYY"),
-            endDate:            moment(subDays(event.eventRecord.data.endDate, 1)).format("DD/MM/YYYY"),
-            duration:           event.eventRecord.data.duration,
-            calculatedDuration: event.eventRecord.data.calculatedDuration,
-            weekendWork:        event.eventRecord.data.weekendWork,
-            jobType:            event.eventRecord.data.jobType,
-            teamId:             event.eventRecord.data.teamId,
-            factoryId:          event.eventRecord.data.factoryId,
-            tons:               event.eventRecord.data.tons,
-            area:               event.eventRecord.data.area,
-            color:              event.eventRecord.data.color,
-            details:            event.eventRecord.data.details,
+        let jType = ''
+        switch(event.values.jobType){
+            case "Fræs":
+                jType = "1"
+                break
+            case "Striber":
+                jType = "2"
+                break
+            case "Opretning":
+                jType = "3"
+                break
+            default: jType = ''
         }
-        console.log("body save", body)
+
+        console.log(jType)
+
+            let currentLeader: any = {}
+            let currentFactory: any = {}
+            let currentRegion: any = {}
+            let projectNo = ''
+
+            if("root" in data){
+                currentLeader = data.root.leaders.leader.find( item => item.name === event.values.leader)
+                currentFactory = data.root.factories.factory.find( item => item.name === event.values.factory)
+                currentRegion = data.root.districs.district.find( item => item.name === event.values.region)
+            }
+
+            if(event.values.projec){
+                projectNo = event.values.projec.split(" ")[0]
+            } else {
+                projectNo = ""
+            }
+            
+            console.log("projectNo", projectNo)
+            console.log("projectNo", currentLeader)
+            console.log("projectNo", currentFactory)
+            console.log("projectNo", currentRegion)
+         
+            const body = {
+                id:                 event.eventRecord.data.id,
+                regionId:           currentRegion?.id,
+                leaderId:           currentLeader?.id,
+                projectNo:          projectNo,
+                factoryItemName:    event.values.factoryItemName,
+                factoryItemId:      event.eventRecord.data.factoryItemId,
+                customerId:         event.eventRecord.data.customerId,
+                customerName:       event.values.kundeNavn,
+                state:              event.eventRecord.data.state,
+                status:             event.values.clip,
+                name:               event.values.arbejdsplads,
+                name2:              event.values.kalkuleBesk,
+                startDate:          moment(event.values.startDate).format("DD/MM/YYYY"),
+                endDate:            moment(event.values.endDate).format("DD/MM/YYYY"),
+                duration:           lagInDays(event.values.startDate, event.values.endDate, true),
+                calculatedDuration: event.eventRecord.data.calculatedDuration,
+                weekendWork:        event.values.weekendWork,
+                jobType:            jType,
+                teamId:             event.eventRecord.data.teamId,
+                factoryId:          currentFactory.id,
+                tons:               event.eventRecord.data.tons,
+                area:               event.values.area,
+                color:              event.eventRecord.data.color,
+                details:            event.eventRecord.data.details,
+            }
+            console.log("body save", body)
         
-        // event.eventRecord.setData("duration", 5)
-        // event.values.duration = 5
-        console.log("event save", event)
+            // event.eventRecord.setData("duration", 5)
+            // event.values.duration = 5
+            console.log("event save", event)
+           
+        
         updateProject(body)
         event.context.finalize()
+    },[])
+
+    const handlerOnAfterSave = (event: any) => {
     }
 
 
@@ -796,6 +841,7 @@ const App: FunctionComponent = () => {
                 onCopy={handlerOnCopy}
                 onEventResizeEnd={handlerOnEventResizeEnd}
                 onBeforeEventSave={handlerOnBeforeSave}
+                onAfterEventSave={handlerOnAfterSave}
                 onAfterEventDrop={handlerOnAfterEventDrop}
                 onBeforeEventDelete={handlerOnAfterEventDelete}
                 onBeforeEventEditShow={beforeEventEditShow}

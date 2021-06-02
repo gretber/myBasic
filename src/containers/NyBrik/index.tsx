@@ -178,7 +178,7 @@ export const NyBrik = () => {
         </Button>
         <Button
           onMouseDown={onSave}
-          onClick={toggleDrawer("left", false)}
+          onMouseUp={toggleDrawer("left", false)}
           color="primary"
         >
           <SaveRoundedIcon />

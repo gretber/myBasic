@@ -26,8 +26,6 @@ export const dataReducer: Reducer<types.Data, types.TodosActionTypes> = (state =
         {
             if('root' in state)
             { 
-                console.log('filtered state');
-                console.log({ ...state, root: {...state.root, projects: { project: [...state.root.projects.project.filter((project)=>{return project.id !== action.payload})] }}});
                 return { ...state, root: {...state.root, projects: { project: [...state.root.projects.project.filter((project)=>{return project.id !== action.payload})] }}};
             }
             else

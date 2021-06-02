@@ -8,79 +8,12 @@
 import moment from 'moment';
 
 // Config
+export let eventRecordData:any = {};
+console.log(eventRecordData);
 
-const schedulerConfig: any = {
-    resourceImagePath: './',
-    minHeight: '20em',
-    startDate: new Date(2020, 11, 31),
-    endDate: new Date(2021, 0, 31),
 
-    weekStartDay: 1,
-    viewPreset: {
-        
-        base    : 'dayAndWeek',
-        id      : 'myDayAndWeekPreset',
-        timeResolution : {              
-        unit      : 'day',       
-        increment : 1,
-    },
-        
-        headers : [
-        {
-            unit      : "week",
-            increment : 1,
-            renderer  : (startDate:Date, endDate:Date, headerConfig:any, cellIdx:number) => {
-                
-                const momentDate = moment(endDate);
-                moment.updateLocale('da', {
-                    months :['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
-                    weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag']
-                });
 
-                const displayDate = `${momentDate.locale('da').format('YYYY, MMMM')}  (uge ${momentDate.week()})`;
-
-              
-               
-               return displayDate
-                
-            }
-        },
-        {
-            unit      : "day",
-            increment : 1,
-            renderer  : (startDate:Date, endDate:Date, headerConfig:any, cellIdx:number) => {
-                
-                const momentDate = moment(startDate);
-                 moment.updateLocale('da', {
-                    weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'],
-                    weekdaysMin: ['Ma.', 'Ti.', 'On.', 'To.', 'Fr.', 'Lø.', 'Søn.']
-                });
-                
-                const displayDate = momentDate.locale('da').format('DD, dd');
-                return displayDate;
-                }
-                
-            
-        }
-
-        ],
-  },
-      columns: [
-        {
-            type: 'resourceInfo',
-            text: 'Team',
-            showEventCount: true,
-            showImage: false,
-            width: 230,
-        },
-    ],
-      listeners: {
-                // catchAll: (e:any) => {console.log(e);}
-                eventClick: (e:any) => {console.log(e);}
-            },
-            
-    //*********** Custome edit event ***********//
-        features : {
+export  const features = {
         eventDragCreate: false,
         nonWorkingTime : true,
         autoAdjustTimeAxis: false,
@@ -98,53 +31,46 @@ const schedulerConfig: any = {
                     </div>`;
             },
         },
-        
-           
-        eventEdit  : {
-           
-            editorConfig : {
-                    style  : {
-                    width: "500px"
-                },
-                title: 'Edit Brik',
-                bbar : {
-                    items : {
+                     eventEdit: {
+                         editorConfig: {
+                                bbar: {
+                                    items: {
+                                        cancelButton: {
+                                        weight : 1
+                                    },
 
-                            cancelButton: {
-                            weight : 1
-                        },
+                            deleteButton : {
+                                weight : 2,
+                                color: 'b-red',
+                            },
 
-                        deleteButton : {
-                            weight : 2,
-                            color: 'b-red',
-                        },
-
-                        copyButton : {
-                            weight : 3,
-                            color: 'b-amber',
-                            text: "copy",
-                            name: 'copy',
-                            onClick: (e:any) => {console.log(e)},
-                           listeners : {
-                                beforeShow : ({ source : tip }:any) => {
-                                    tip.html = new Promise(resolve => {
-                                        setTimeout(() => resolve('Async content!'), 2000);
-                                    });
-                                    // AjaxHelper.get('someurl').then(response => tip.html = 'Done!');
+                            copyButton : {
+                                weight : 3,
+                                color: 'b-amber',
+                                text: "copy",
+                                name: 'copy',
+                                onClick: () => {},
+                            listeners : {
+                                    beforeShow : ({ source : tip }:any) => {
+                                        tip.html = new Promise(resolve => {
+                                            setTimeout(() => resolve('Async content!'), 2000);
+                                        });
+                                        // AjaxHelper.get('someurl').then(response => tip.html = 'Done!');
+                                    }
                                 }
-                            }
-                        },
+                            },
 
-                        saveButton: {
-                            weight : 4,
-                            color: 'b-green',
-                            onClick: (event: any)=>{console.log(event)}
-                        },
-                    }
-                }
-            },
-        
-            items : {
+                            saveButton: {
+                                weight : 4,
+                                color: 'b-green',
+                                onClick: (event: any)=>{console.log(event)}
+                            },
+                                        
+                                    }
+
+                                    
+                                },
+                                items : {
                 // Merged with provided config of the resource field
                 region: {
                     weight : 1,
@@ -327,8 +253,90 @@ const schedulerConfig: any = {
                 endTimeField: null,
 
             }
-        }
+                             
+                         }
+                     }
+                 }
+                 ;
+const schedulerConfig: any = {
+    resourceImagePath: './',
+    minHeight: '20em',
+    startDate: new Date(2020, 11, 31),
+    endDate: new Date(2021, 0, 31),
+
+    weekStartDay: 1,
+    viewPreset: {
+        
+        base    : 'dayAndWeek',
+        id      : 'myDayAndWeekPreset',
+        timeResolution : {              
+        unit      : 'day',       
+        increment : 1,
     },
+        
+        headers : [
+        {
+            unit      : "week",
+            increment : 1,
+            renderer  : (startDate:Date, endDate:Date, headerConfig:any, cellIdx:number) => {
+                
+                const momentDate = moment(endDate);
+                moment.updateLocale('da', {
+                    months :['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
+                    weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag']
+                });
+
+                const displayDate = `${momentDate.locale('da').format('YYYY, MMMM')}  (uge ${momentDate.week()})`;
+
+              
+               
+               return displayDate
+                
+            }
+        },
+        {
+            unit      : "day",
+            increment : 1,
+            renderer  : (startDate:Date, endDate:Date, headerConfig:any, cellIdx:number) => {
+                
+                const momentDate = moment(startDate);
+                 moment.updateLocale('da', {
+                    weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'],
+                    weekdaysMin: ['Ma.', 'Ti.', 'On.', 'To.', 'Fr.', 'Lø.', 'Søn.']
+                });
+                
+                const displayDate = momentDate.locale('da').format('DD, dd');
+                return displayDate;
+                }
+                
+            
+        }
+
+        ],
+  },
+      columns: [
+        {
+            type: 'resourceInfo',
+            text: 'Team',
+            showEventCount: true,
+            showImage: false,
+            width: 230,
+        },
+    ],
+      listeners: {
+                // catchAll: (e:any) => {console.log(e);}
+                eventClick: (e:any) => {console.log(e);},
+                eventContextMenu: (e: any) => {
+                eventRecordData = e.eventRecord.data;
+               },
+                
+                eventDblClick: (e: any) => {
+                    eventRecordData = e.eventRecord.data;
+                }
+            },
+
+    //*********** Custome edit event ***********//
+        features
 
     // listeners : {
     //     beforeEventEditShow({ editor, eventRecord }: any) {

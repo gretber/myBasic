@@ -40,8 +40,6 @@ export const transformFactoriesEvents = (events: any) => {
     let daysAmount = Math.abs(moment(startDate).diff(endDate, "days"))+1;
     let avgTotal = Math.round(el.tons / (daysAmount - weekends));
 
-    console.log("el.tons 300",el.tons, "(daysAmount - weekends)", (daysAmount - weekends), "weekends", weekends )
-
     for (let i = 0; i < daysAmount; i++) {
       let _startDate = moment(startDate).add(i, "days").format("YYYY-MM-DD");
 
@@ -53,7 +51,7 @@ export const transformFactoriesEvents = (events: any) => {
           tons: avgTotal,
           duration: 1,
           name: `${avgTotal} tons`,
-          eventColor: "#000",
+          eventColor: "#aaa",
           weekendWork: el.weekendWork,
         })
       );
@@ -106,7 +104,7 @@ export const transformFactoriesEvents = (events: any) => {
 
   letAssign();
 
-  console.log("modified", modifiedDB);
+
   return modifiedDB
 }
 

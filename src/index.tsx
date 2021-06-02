@@ -19,12 +19,15 @@ import { theme } from './@init'
 import { Provider as ReduxProvider } from 'react-redux'
 import { store as reduxStore } from './@init/redux'
 
+
+
+
 ReactDOM.render(
     <ReduxProvider store={reduxStore}>
         <ThemeProvider theme={theme}>
             <Router>
                 <Switch>
-                    <Route path="/" exact>
+                    <Route  path="/" exact>
                         <AuthorizationPage />
                     </Route>
                     <Route path='/sheduler'>

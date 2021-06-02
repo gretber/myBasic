@@ -208,13 +208,14 @@ const App: FunctionComponent = () => {
                     }
                 })
 
-
+                // console.log("FABRIK EVENTS", dropEmptyTons)
                 setBottomResources(activeFactories);
                 setBottomEvents(dropEmptyTons);
 
 
-                setTopEvents(sortedRegions);
+                // console.log("MAIN EVENTS", sortedRegions)
                 setTopResources(copySelectionTeams);
+                setTopEvents(sortedRegions);
 
             } else {
 
@@ -264,7 +265,9 @@ const App: FunctionComponent = () => {
 
     const beforeEventEditShow = (event: any) => {
 
-               setEditBrik( (prevState: any) =>{
+        //console.log("beforeEventEditShow", event)
+
+            setEditBrik( (prevState: any) => {
             const newState = {
                 ...prevState,
                 id:                 event.eventRecord.data.id,
@@ -282,7 +285,7 @@ const App: FunctionComponent = () => {
                 startDate:          moment(event.eventRecord.data.startDate).format("DD/MM/YYYY"),
                 endDate:            moment(event.eventRecord.data.endDate).format("DD/MM/YYYY"),
                 duration:           event.eventRecord.data.duration,
-                calculatedDuration: event.eventRecord.data.duration,
+                calculatedDuration: event.eventRecord.data.calculatedDuration,
                 weekendWork:        event.eventRecord.data.weekendWork,
                 jobType:            event.eventRecord.data.jobType,
                 teamId:             event.eventRecord.data.teamId,
@@ -299,7 +302,7 @@ const App: FunctionComponent = () => {
         const {
             regionId,leaderId, factoryId,
             projectNo, name2, state, factoryItemName,
-            endDate
+            endDate, duration
         } = event.eventRecord.data;
 
         // Get fields
@@ -408,11 +411,22 @@ const App: FunctionComponent = () => {
                 kundeNavn.value = ''
                 region.disabled = false
                 kundeNavn.disabled = false
+
+                setEditBrik((prevState: any) => {
+                    const newState = {...prevState}
+                    return {
+                        ...newState,
+                        customerId: "",
+                        customerName: "",
+                        projectNo: "",
+                        name: "",
+                    }
+                })
             }
 
             // Weekend arbejde
             weekendWork.checked = event.eventRecord.data.weekendWork
-           weekendWork.onChange = (event: any) => {
+            weekendWork.onChange = (event: any) => {
                 if(event){
                     setEditBrik((prevState: any) => {
                         const newState = {...prevState}
@@ -423,12 +437,13 @@ const App: FunctionComponent = () => {
 
             // Start date handler
             startDateField.onChange = (event: any) => {
-                  if(event){
+                if(event){
                     setEditBrik((prevState: any) => {
                         const newState = {...prevState}
                         return {...newState, startDate: moment(event.value).format("DD/MM/YYYY")}
                     })                    
                 }
+
                 // Start date cannot be higher than the end date
                 if(endDateField.value.getTime() < event.value.getTime()){
                     endDateField.value = event.value
@@ -438,9 +453,12 @@ const App: FunctionComponent = () => {
                 }
             }
 
-            // End date handler
+            //End date handler
+            // console.log("endDate", subDays(endDateField.value, 1))
+            // console.log("duration", duration)
 
-             endDateField.value = endDate
+
+            endDateField.value = subDays(endDateField.value, 1)
             endDateField.onChange = (event: any) => {
                 if(event){
                     setEditBrik((prevState: any) => {
@@ -458,9 +476,12 @@ const App: FunctionComponent = () => {
                 }
             }
 
-                // Varighed
-            varighed.value = lagInDays(startDateField.value, endDateField.value, true)
-             setEditBrik((prevState: any) => {
+            // Varighed
+            // varighed.value = lagInDays(startDateField.value, endDateField.value, true)
+            varighed.value = duration
+
+
+            setEditBrik((prevState: any) => {
                     const newState = {...prevState}
                     return {...newState, duration: varighed.value}
             })
@@ -567,7 +588,7 @@ const App: FunctionComponent = () => {
                 jobType.value = ''
             }
 
- jobType.onSelect = (event: any) => {
+            jobType.onSelect = (event: any) => {
                 if(event.record){
                     let jType = ''
                     switch(event.record.data.text){
@@ -647,14 +668,45 @@ const App: FunctionComponent = () => {
         }
         }
 
-         // Before save handler
-    const handlerOnBeforeSave = (event: any) => {
+     // Before save handler
+    const handlerOnBeforeSave = 
+        (event: any) => {
         event.context.async = true
-        const body = { ...editBrik }
-        console.log("event save", body)
+        const body = {
+            id:                 event.eventRecord.data.id,
+            regionId:           event.eventRecord.data.regionId,
+            leaderId:           event.eventRecord.data.leaderId,
+            projectNo:          event.eventRecord.data.projectNo,
+            factoryItemName:    event.eventRecord.data.factoryItemName,
+            factoryItemId:      event.eventRecord.data.factoryItemId,
+            customerId:         event.eventRecord.data.customerId,
+            customerName:       event.eventRecord.data.customerName,
+            state:              event.eventRecord.data.state,
+            status:             event.eventRecord.data.status,
+            name:               event.eventRecord.data.name,
+            name2:              event.eventRecord.data.name2,
+            startDate:          moment(event.eventRecord.data.startDate).format("DD/MM/YYYY"),
+            endDate:            moment(subDays(event.eventRecord.data.endDate, 1)).format("DD/MM/YYYY"),
+            duration:           event.eventRecord.data.duration,
+            calculatedDuration: event.eventRecord.data.calculatedDuration,
+            weekendWork:        event.eventRecord.data.weekendWork,
+            jobType:            event.eventRecord.data.jobType,
+            teamId:             event.eventRecord.data.teamId,
+            factoryId:          event.eventRecord.data.factoryId,
+            tons:               event.eventRecord.data.tons,
+            area:               event.eventRecord.data.area,
+            color:              event.eventRecord.data.color,
+            details:            event.eventRecord.data.details,
+        }
+        console.log("body save", body)
+        
+        // event.eventRecord.setData("duration", 5)
+        // event.values.duration = 5
+        console.log("event save", event)
         updateProject(body)
         event.context.finalize()
     }
+
 
        // Resize event handler
     const handlerOnEventResizeEnd = (event: any) => {
@@ -673,7 +725,7 @@ const App: FunctionComponent = () => {
         }
     }
 
- // Delete event handler
+    // Delete event handler
     const handlerOnAfterEventDelete = (event: any) => {
         event.context.async = true
         if(event.eventRecords.length>0){
@@ -698,234 +750,6 @@ const App: FunctionComponent = () => {
             </Fragment>
         )
     }
-    
-    // const features = {features: {
-    //                  eventEdit: {
-    //                      editorConfig: {
-    //                             bbar: {
-    //                                 items: {
-    //                                     cancelButton: {
-    //                                     weight : 1
-    //                                 },
-
-    //                         deleteButton : {
-    //                             weight : 2,
-    //                             color: 'b-red',
-    //                         },
-
-    //                         copyButton : {
-    //                             weight : 3,
-    //                             color: 'b-amber',
-    //                             text: "copy",
-    //                             name: 'copy',
-    //                             onClick: (e:any) => {handlerOnCopy()},
-    //                         listeners : {
-    //                                 beforeShow : ({ source : tip }:any) => {
-    //                                     tip.html = new Promise(resolve => {
-    //                                         setTimeout(() => resolve('Async content!'), 2000);
-    //                                     });
-    //                                     // AjaxHelper.get('someurl').then(response => tip.html = 'Done!');
-    //                                 }
-    //                             }
-    //                         },
-
-    //                         saveButton: {
-    //                             weight : 4,
-    //                             color: 'b-green',
-    //                             onClick: (event: any)=>{console.log(event)}
-    //                         },
-                                        
-    //                                 }
-
-                                    
-    //                             },
-    //                             items : {
-    //             // Merged with provided config of the resource field
-    //             region: {
-    //                 weight : 1,
-    //                 type   : 'combo',
-    //                 name   : 'region',
-    //                 label  : 'Region',
-    //                 items: [],
-    //                 placeholder: '',
-    //             },
-
-    //             project: {
-    //                 weight : 2,
-    //                 type   : 'combo',
-    //                 name   : 'projec',
-    //                 label  : 'Project',
-    //                 items: [],
-    //                 placeholder: '',
-    //                 clearable: true,
-    //             },
-
-    //             arbejdsplads: {
-    //                 weight : 3,
-    //                 type   : 'text',
-    //                 name  : 'arbejdsplads',
-    //                 label  : 'Arbejdsplads',
-    //             },
-
-    //             kalkuleBesk: {
-    //                 weight : 4,
-    //                 type   : 'text',
-    //                 name   : 'kalkule-besk',
-    //                 label  : 'Kalkule Besk'
-    //             },
-
-    //             kundeNavn: {
-    //                 weight : 5,
-    //                 type   : 'combo',
-    //                 name   : 'kunde-navn',
-    //                 label  : 'Kunde Navn',
-    //                 items: [],
-    //                 placeholder: '',
-    //             },
-
-    //             resourceField : null,
-
-    //             startDateField: {
-    //                 weight : 7,
-    //                 label: 'Start date',
-    //                 style  : {
-    //                     maxWidth: "50%"
-    //                 },
-    //             },
-    //             startTimeField: null,
-
-    //             endDateField: {
-    //                 weight : 8,
-    //                 label: 'End date',
-    //                 style  : {
-    //                     maxWidth: "50%"
-    //                 },
-    //             },
-
-    //             varighed: {
-    //                 weight : 9,
-    //                 type   : 'numberField',
-    //                 name   : 'varighed',
-    //                 label  : 'Varighed',
-    //                 min    : 1,
-    //                 style  : {
-    //                     maxWidth   : "40%",
-    //                     marginLeft : "12px"
-    //                 },
-    //             },
-
-    //             weekendWork: {
-    //                 weight : 10,
-    //                 type   : 'slideToggle',
-    //                 name   : 'weekend-arbejde',
-    //                 label  : 'Weekend Arbejde',
-    //                 color  : 'b-orange',
-    //                 style  : {
-    //                     maxWidth   : "50%",
-    //                     marginLeft : "16px"
-    //                 },
-    //             },
-
-    //             status: {
-    //                 weight : 11,
-    //                 type   : 'combo',
-    //                 name   : 'status',
-    //                 label  : 'Status',
-    //                 items  : ['Budgetteret', 'Planlagt', 'Udført Sag', 'Slettet'],
-    //                 placeholder : '',
-    //                 style : {
-    //                     maxWidth : "50%"
-    //                 },
-    //             },
-
-    //             clip: {
-    //                 weight : 12,
-    //                 type   : 'slideToggle',
-    //                 name   : 'clip',
-    //                 label  : 'Clip',
-    //                 color  : 'b-orange',
-    //                 style  : {
-    //                     maxWidth   : "40%",
-    //                 },
-    //             },
-
-    //             jobType: {
-    //                 weight : 13,
-    //                 type   : 'combo',
-    //                 name   : 'job-type',
-    //                 label  : 'Job Type',
-    //                 items: ["Fræs", "Striber", "Opretning"],
-    //                 placeholder: '',
-    //             },
-
-    //             team: {
-    //                 weight : 14,
-    //                 type   : 'combo',
-    //                 name   : 'team',
-    //                 label  : 'Hold',
-    //                 items: [],
-    //                 placeholder: '',
-    //             },
-
-    //             leader: {
-    //                 weight : 15,
-    //                 type   : 'combo',
-    //                 name   : 'leader',
-    //                 label  : 'Enterprise leder',
-    //                 items: [],
-    //                 placeholder: '',
-    //             },
-
-    //             factory: {
-    //                 weight : 16,
-    //                 type   : 'combo',
-    //                 name   : 'factory',
-    //                 label  : 'Fabrik',
-    //                 items: [],
-    //                 placeholder: '',
-    //             },
-
-    //             fabrikVare: {
-    //                 weight : 17,
-    //                 type   : 'combo',
-    //                 name   : 'fabrik-vare',
-    //                 label  : 'Fabrik Vare',
-    //                 items: [],
-    //                 placeholder: '',
-    //             },
-
-    //             area: {
-    //                 weight : 18,
-    //                 type   : 'numberField',
-    //                 name   : 'area',
-    //                 label  : 'Area',
-    //                 min    : 0,
-    //                 style  : {
-    //                     maxWidth   : "40%",
-    //                     marginLeft : "24px"
-    //                 },
-    //             },
-
-    //             tons: {
-    //                 weight : 19,
-    //                 type   : 'numberField',
-    //                 name   : 'tons',
-    //                 label  : 'Tons',
-    //                 min    : 0,
-    //                 style  : {
-    //                     maxWidth   : "40%",
-    //                     marginRight : "24px"
-    //                 },
-    //             },
-
-    //             nameField: null,
-    //             endTimeField: null,
-
-    //         }
-                             
-    //                      }
-    //                  }
-    //              }}
                  
     return (
         <Fragment>
@@ -941,8 +765,14 @@ const App: FunctionComponent = () => {
                 onBeforeEventSave={handlerOnBeforeSave}
                 onAfterEventDrop={handlerOnAfterEventDrop}
                 onBeforeEventDelete={handlerOnAfterEventDelete}
-                // onEventSelectionChange={handlerOnEventSelectionChange}
                 onBeforeEventEditShow={beforeEventEditShow}
+            //     listeners={{
+            //     beforeEventEdit: (source: any) => {
+            //         source.eventRecord.resourceId = source.resourceRecord.id;
+            //         showEditor(source.eventRecord);
+            //         return false;
+            //     }
+            // }}
             />
             {schedulerRef1.current&&<BryntumScheduler
                                             ref={schedulerRef2} 

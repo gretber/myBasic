@@ -5,11 +5,7 @@ import { Project } from '../../bus/briks/dataTypes';
 import { store } from '../../@init';
 
 // Actions
-import { togglerCreatorAction } from '../../bus/client';
 import {updateProjectAction} from '../../bus/briks/actions';
-
-// API
-import { fetchData } from '../../bus/briks/api/fetchData'
 
 export const updateProject = async (body: Project) => {
 

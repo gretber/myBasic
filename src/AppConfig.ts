@@ -75,7 +75,7 @@ const schedulerConfig: any = {
     ],
       listeners: {
                 // catchAll: (e:any) => {console.log(e);}
-                eventClick: (e:any) => {console.log(e);}
+                // eventClick: (e:any) => {console.log(e);}
             },
             
     //*********** Custome edit event ***********//
@@ -89,7 +89,7 @@ const schedulerConfig: any = {
                 enableResizing      : false
             },
         eventTooltip : {
-            align : 'l-r', 
+            // align : 'l-t',
             template : ({eventRecord}:any) => {
             return `<div  class="b-sch-event-tooltip eventToolTip">
                     <span>${eventRecord.data.name}</span>
@@ -129,7 +129,8 @@ const schedulerConfig: any = {
                         saveButton: {
                             weight : 4,
                             color: 'b-green',
-                            onClick: (event: any)=>{console.log(event)}
+                            onClick: (event: any) => console.log("event from CONFIG", event)
+                            // onClick: (event: any)=>{console.log(event)}
                         },
                     }
                 }

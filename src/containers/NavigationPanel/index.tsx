@@ -3,7 +3,8 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
-import { useHistory } from "react-router-dom";
+// 
+
 
 // Icons
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -19,7 +20,7 @@ import { Selection } from "../../components/Selection";
 
 
 // Hooks
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,29 +43,29 @@ export const NavigationPanel = ({schedulerConfig, setConfig, period, offLineEndD
   const classes = useStyles();
 
   // Router history
-    let history = useHistory();
+    // let history = useHistory();
 
  
 
   // Login Check
-  useEffect(() => {
+  // useEffect(() => {
   
-    if(localStorage.getItem('schedulerUserLogin') === null)
-        {
-            if(localStorage.getItem('schedulerUserPassword') === null)
-            {
-              history.push('/');
-            }
-        }
-  });
+  //   if(localStorage.getItem('schedulerUserLogin') === null)
+  //       {
+  //           if(localStorage.getItem('schedulerUserPassword') === null)
+  //           {
+  //             history.push('/');
+  //           }
+  //       }
+  // });
 
   // Event Handlers
   const exitButtonClickHandler = () => {
   
-    localStorage.removeItem('schedulerUserLogin');
-    localStorage.removeItem('schedulerUserPassword');
-    localStorage.removeItem('schedulerUserType');
-    history.push('/');
+    // localStorage.removeItem('schedulerUserLogin');
+    // localStorage.removeItem('schedulerUserPassword');
+    // localStorage.removeItem('schedulerUserType');
+    // history.push('/');
 
   }
 

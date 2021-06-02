@@ -825,7 +825,7 @@ const App: FunctionComponent = () => {
         )
     }
     
-    configFeatures.eventEdit.editorConfig.bbar.items.copyButton.onClick = () => {handlerOnCopy();}
+     configFeatures.eventMenu.items.copyEvent.onItem = () => {handlerOnCopy();}
    
     return (
         <Fragment>

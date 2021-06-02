@@ -1,13 +1,13 @@
 // Core
 import ReactDOM from 'react-dom'
 import App from './App'
-import {AuthorizationPage} from './pages/AuthPage';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
+// import {AuthorizationPage} from './pages/AuthPage';
+// import {
+//   BrowserRouter as Router,
+//   Switch,
+//   Route,
   
-} from "react-router-dom";
+// } from "react-router-dom";
 
 // Material theme
 import { ThemeProvider } from "@material-ui/core/styles"
@@ -25,16 +25,16 @@ import { store as reduxStore } from './@init/redux'
 ReactDOM.render(
     <ReduxProvider store={reduxStore}>
         <ThemeProvider theme={theme}>
-            <Router>
+            {/* <Router>
                 <Switch>
                     <Route  path="/" exact>
                         <AuthorizationPage />
                     </Route>
-                    <Route path='/sheduler'>
+                    <Route path='/sheduler'> */}
                         <App />
-                    </Route>
+                    {/* </Route>
                 </Switch>
-            </Router>
+            </Router> */}
         </ThemeProvider>
     </ReduxProvider>,
     document.getElementById('root')

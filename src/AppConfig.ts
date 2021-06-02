@@ -13,7 +13,7 @@ console.log(eventRecordData);
 
 
 
-export  const features = {
+  const features = {
         eventDragCreate: false,
         nonWorkingTime : true,
         autoAdjustTimeAxis: false,
@@ -23,7 +23,7 @@ export  const features = {
                 enableResizing      : false
             },
         eventTooltip : {
-            align : 'l-r', 
+            // align : 'l-t',
             template : ({eventRecord}:any) => {
             return `<div  class="b-sch-event-tooltip eventToolTip">
                     <span>${eventRecord.data.name}</span>
@@ -258,6 +258,9 @@ export  const features = {
                      }
                  }
                  ;
+
+export const configFeatures = {...features};
+
 const schedulerConfig: any = {
     resourceImagePath: './',
     minHeight: '20em',

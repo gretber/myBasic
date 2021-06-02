@@ -15,7 +15,7 @@ const schedulerConfig2: any = {
                 enableResizing      : false
             },
          eventTooltip : {
-            align : 'l-r', 
+            // align : 'l-t', 
             template : ({eventRecord}:any) => {
             return `<div  class="b-sch-event-tooltip eventToolTip">
                     <span>${eventRecord.data.tons} tons</span>

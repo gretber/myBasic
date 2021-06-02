@@ -104,7 +104,6 @@ export const transformFactoriesEvents = (events: any) => {
 
   letAssign();
 
-
   return modifiedDB
 }
 

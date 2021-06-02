@@ -7,7 +7,7 @@
     "url": "https://bryntum.com",
     "email": "info@bryntum.com"
   },
-  "homepage": "./",
+  "homepage": ".",
   "scripts": {
     "start": "cross-env NODE_OPTIONS='--max-old-space-size=8192' node scripts/start.js",
     "build": "cross-env NODE_OPTIONS='--max-old-space-size=8192' node scripts/build.js",
@@ -17,13 +17,11 @@
   },
   "postinstall": {
     "node_modules/@bryntum/demo-resources/images/users": "copy public/users",
-    "node_modules/@bryntum/demo-resources/images/favicon.png": "copy public/favicon.png",
-    "node_modules/@bryntum/scheduler/*.css": "copy public/themes/",
-    "node_modules/@bryntum/scheduler/fonts": "copy public/themes/fonts"
+    "node_modules/@bryntum/demo-resources/images/favicon.png": "copy public/favicon.png"
   },
   "dependencies": {
     "@babel/core": "7.12.3",
-    "@bryntum/demo-resources": "1.0.1",
+    "@bryntum/demo-resources": "^1.0.1",
     "@bryntum/scheduler": "npm:@bryntum/scheduler-trial@4.1.0",
     "@bryntum/scheduler-react": "4.1.0",
     "@date-io/date-fns": "1.3.13",

@@ -38,8 +38,10 @@ export const dataReducer: Reducer<types.Data, types.TodosActionTypes> = (state =
             if('root' in state)
             {
                 return { ...state, root: {...state.root, projects: { project: [...state.root.projects.project.map((p)=>{
+
                     if(p.id === action.payload.id)
                      {
+                        console.log("REDUCER action.payload", action.payload)
                         return action.payload;
                      }
                      else return p;

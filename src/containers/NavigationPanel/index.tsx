@@ -76,7 +76,7 @@ export const NavigationPanel = ({schedulerConfig, setConfig, period, offLineEndD
           <Selection />
           <div className={classes.gap} />
          
-          <JobType />
+          {/* <JobType /> */}
           <PeriodPicker offLineEndDate={offLineEndDate} saveOffLineEndDate = {saveOffLineEndDate} period ={period} config={schedulerConfig} setConfig={setConfig}/>
           <Button disabled>
             <FullscreenIcon />

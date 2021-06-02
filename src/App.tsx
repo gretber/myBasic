@@ -172,7 +172,9 @@ const App: FunctionComponent = () => {
                 const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
                 
                 // Transform teams ( add resourceId, id fields )
-                const copySelectionTeams = [...selectionTeams]
+                const copySelectionTeams = selectionTeams.map( (item: any) => {
+                    return { ...item }
+                })
                 copySelectionTeams.map( (item: any) =>  {
                     item["id"] = item["-id"]
                 })
@@ -180,11 +182,6 @@ const App: FunctionComponent = () => {
                 // Sort Regions
                 const selectionRegion = data.root.selections.selection[1].values.value
                 const sortedRegions = sortSelectedRegions(transformedProjects, selectionRegion)
-
-                
-
-
-
 
 
                 const factories =  data.root.factories.factory
@@ -210,12 +207,12 @@ const App: FunctionComponent = () => {
                     }
                 })
 
-                console.log("FABRIK EVENTS", dropEmptyTons)
+                //console.log("FABRIK EVENTS", dropEmptyTons)
                 setBottomResources(activeFactories);
                 setBottomEvents(dropEmptyTons);
 
 
-                console.log("MAIN EVENTS", sortedRegions)
+                //console.log("MAIN EVENTS", sortedRegions)
                 setTopResources(copySelectionTeams);
                 setTopEvents(sortedRegions);
 
@@ -225,11 +222,18 @@ const App: FunctionComponent = () => {
                 const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
                 
                 // Transform teams
-                const copySelectionTeams = [...selectionTeams]
+                
+                const copySelectionTeams = selectionTeams.map( (item: any) => {
+                    return { ...item }
+                })
+
+                
                 copySelectionTeams.map( (item: any) =>  {
                     item["resourceId"] = item["-id"]
                     item["id"] = item["-id"]
                 })
+
+
                 // Sort Regions
                 const selectionRegion = data.root.selections.selection[1].values.value
                 const sortedRegions = sortSelectedRegions(sortedFabriks, selectionRegion)

@@ -279,6 +279,7 @@ console.log(eventRecordData);
 export const configFeatures = {...features};
 
 const schedulerConfig: any = {
+
     resourceImagePath: './',
     minHeight: '20em',
     startDate: new Date(2020, 11, 31),

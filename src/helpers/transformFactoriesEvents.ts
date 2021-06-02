@@ -39,7 +39,7 @@ export const transformFactoriesEvents = (events: any) => {
     let weekends = !el.weekendWork ? calculateWeekend(startDate, endDate) : 0;
     let daysAmount = Math.abs(moment(startDate).diff(endDate, "days"))+1;
     let avgTotal = Math.round(el.tons / (daysAmount - weekends));
-
+    
     for (let i = 0; i < daysAmount; i++) {
       let _startDate = moment(startDate).add(i, "days").format("YYYY-MM-DD");
 
@@ -95,8 +95,8 @@ export const transformFactoriesEvents = (events: any) => {
     modifiedDB.map((el: any) => {
       sorted.forEach((elem: any) => {
         if (el.startDate === elem.startDate) {
-          el.tons = el.tons + elem.tons;
-          el.name = `${el.tons + elem.tons} tons`
+          el.tons = el.tons + elem.tons
+          el.name = `${el.tons} tons`
         }
       });
     });

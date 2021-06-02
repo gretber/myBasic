@@ -8,6 +8,9 @@ import { setNuBrikAction } from '../actions';
 // Types
 import { CreateBrikType } from './types';
 
+// API
+import { fetchData } from './fetchData';
+
 export const copyBrik: CreateBrikType = async (newBrik) => {
 
   // Clean request data
@@ -25,7 +28,7 @@ export const copyBrik: CreateBrikType = async (newBrik) => {
   console.log('body');
   console.log(body);
   const createBrikUrl = process.env.REACT_APP_CREATE_PROJECT;
-  store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
+  // store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
   
     const login = localStorage.getItem('schedulerUserLogin');
     const password = localStorage.getItem('schedulerUserPassword')
@@ -50,11 +53,12 @@ export const copyBrik: CreateBrikType = async (newBrik) => {
       const data = await response.json();
       console.log('data');
       console.log(data);
-      store.dispatch(setNuBrikAction(newBrik));
+      // store.dispatch(setNuBrikAction(newBrik));
+      fetchData()
 
   } catch (error) {
       console.log(error);
   } finally {
-      store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
+      // store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
   }
 };

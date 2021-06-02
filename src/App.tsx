@@ -210,12 +210,12 @@ const App: FunctionComponent = () => {
                     }
                 })
 
-                // console.log("FABRIK EVENTS", dropEmptyTons)
+                console.log("FABRIK EVENTS", dropEmptyTons)
                 setBottomResources(activeFactories);
                 setBottomEvents(dropEmptyTons);
 
 
-                // console.log("MAIN EVENTS", sortedRegions)
+                console.log("MAIN EVENTS", sortedRegions)
                 setTopResources(copySelectionTeams);
                 setTopEvents(sortedRegions);
 

@@ -31,13 +31,16 @@ console.log(eventRecordData);
                     </div>`;
             },
         },
-                     eventEdit: {
-                         editorConfig: {
-                                bbar: {
-                                    items: {
-                                        cancelButton: {
-                                        weight : 1
-                                    },
+            eventEdit: {
+                editorConfig: {
+                    style: {
+                        width: "500px"
+                    },
+                            bbar: {
+                                items: {
+                                    cancelButton: {
+                                    weight : 1
+                                },
 
                             deleteButton : {
                                 weight : 2,
@@ -330,11 +333,11 @@ const schedulerConfig: any = {
                 // catchAll: (e:any) => {console.log(e);}
                 eventClick: (e:any) => {console.log(e);},
                 eventContextMenu: (e: any) => {
-                eventRecordData = e.eventRecord.data;
+                eventRecordData = e.eventRecord.originalData;
                },
                 
                 eventDblClick: (e: any) => {
-                    eventRecordData = e.eventRecord.data;
+                    eventRecordData = e.eventRecord.originalData;
                 }
             },
 

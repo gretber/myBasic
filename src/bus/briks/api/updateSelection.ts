@@ -19,9 +19,10 @@ export const updateSelection: UpdateSelection = async (body) => {
   // Clear team data
   const clearTeam: any = []
   team.map( (item: any) =>{
-    const obj = { ["-id"]: item["-id"], ["-selected"]: item["-selected"], ["name"]: item["name"] }
+    const obj = { "-id": item["-id"], "-selected": item["-selected"], "name": item["name"] }
     clearTeam.push(obj)
   })
+
 
   // Create clear body
   const clearBody = {
@@ -36,9 +37,20 @@ export const updateSelection: UpdateSelection = async (body) => {
     }
   }
 
+  const syncBody = {
+        selection: [
+          {type: "team", values: { value: clearTeam }},
+          {type: "region", values: { value: region }},
+          {type: "factory", values: { value: factory }}
+        ]
+      };
+
 
   const updateSelectionUrl = process.env.REACT_APP_UPDATE_SELECTION;
-
+  
+  if(localStorage.getItem('schedulerUserType') === 'edit' )
+  {
+    
   store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
   
     const login = localStorage.getItem('schedulerUserLogin');
@@ -46,7 +58,7 @@ export const updateSelection: UpdateSelection = async (body) => {
 
   try {
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
-    const encoded = window.btoa(`${login}:${password}`)
+    const encoded = window.btoa(`${'lei-lmk'}:${'AAABBB'}`)
     
     const response = await fetch(`${updateSelectionUrl}`, {
         method:  'POST',
@@ -70,4 +82,6 @@ export const updateSelection: UpdateSelection = async (body) => {
   } finally {
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
   }
+  }
+  else {store.dispatch(updateSelectionAction(body));}
 };

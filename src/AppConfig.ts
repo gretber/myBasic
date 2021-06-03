@@ -9,7 +9,7 @@ import moment from 'moment';
 
 // Config
 export let eventRecordData:any = {};
-console.log(eventRecordData);
+// console.log(eventRecordData);
 
 
 
@@ -45,7 +45,7 @@ console.log(eventRecordData);
 
         },
             eventEdit: {
-                disabled: true
+                // disabled: true
             //     editorConfig: {
             //         style: {
             //             width: "500px"
@@ -339,9 +339,9 @@ const schedulerConfig: any = {
         {
             type: 'resourceInfo',
             text: 'Team',
-            showEventCount: true,
+            showEventCount: false,
             showImage: false,
-            width: 230,
+            width: 230,    
         },
     ],
       listeners: {

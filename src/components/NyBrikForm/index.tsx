@@ -24,7 +24,31 @@ import { Ejendomme } from "../../elements/NyBrikForm/Ejendomme";
 import { lagInDays } from '../../helpers/lagInDays';
 import { convertDate } from '../../helpers/convertDate';
 
+// type formFields = 'regionId' | 'projectName';
+
 export const NyBrikForm = ({ setNewBrik }: any) => {
+
+  // const [ formState, setFormState ] = useState({
+  //   regionId: null,
+  //   projectName: null
+  // });
+
+  // const setFormStateByField = (field: formFields, fieldValue: any) => {
+  //   if (!field in formState) {
+  //     throw Error('There is no ' + field + ' in formState');
+  //   }
+  //   setFormState({
+  //     ...formState,
+  //     [field]: fieldValue
+  //   });
+  // }
+
+  // useEffect(() => {
+  //   setNewBrik((prevState: any) => ({
+  //     ...prevState,
+  //     ...formState
+  //   }))
+  // }, [ formState ]);
 
   // State for region
   const [ regionId, setRegionId ] = useState('');

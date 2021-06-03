@@ -56,7 +56,7 @@ export type Teams = {
   team: Array<Team>
 }
 
-type Factory = {
+export type Factory = {
   id: string,
   name: string
 }
@@ -92,7 +92,7 @@ export type JobTypes = {
   jobType: Array<JobType>
 }
 
-type SelectionType = "team" | "region" | "factory"
+export type SelectionType = "team" | "region" | "factory"
 
 export type SelectionValue = {
                   '-selected': boolean,

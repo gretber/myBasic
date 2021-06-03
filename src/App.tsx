@@ -60,11 +60,11 @@ import {copyBrik} from './bus/briks/api/copyBrik';
 import moment from 'moment';
 
 // Types
-import { Team, Project, SelectionValue } from './bus/briks/dataTypes';
-import { is } from 'date-fns/locale';
-import { features } from 'process';
+import { Factory, Project, SelectionValue, SelectionType } from './bus/briks/dataTypes';
 
-const App: FunctionComponent = () => {
+import Popup from './elements/popup/Popup';
+
+export const App: FunctionComponent = () => {
 
     const initialBrik = {
     id: null,
@@ -109,13 +109,38 @@ const App: FunctionComponent = () => {
     const [config2, setConfig2] = useState({...schedulerConfig2});
     const [period, setPeriod] = useState('');
 
+
+
+
+const [popupShown, showPopup] = useState(false);
+    const [eventRecord, setEventRecord] = useState(null);
+    const [eventStore, setEventStore] = useState(null);
+    const [resourceStore, setResourceStore] = useState(null);
+
+    useEffect(() => {
+        const { eventStore, resourceStore } = schedulerRef1.current.instance;
+        setEventStore(eventStore);
+        setResourceStore(resourceStore);
+    }, []);
+
+    const showEditor = useCallback(eventRecord => {
+        setEventRecord(eventRecord);
+        showPopup(true);
+    }, []);
+
+    const hideEditor = useCallback(() => {
+        setEventRecord(null);
+        showPopup(false);
+    }, []);
+
     // Edit brik states
     const [editBrik, setEditBrik] = useState(initialBrik)
 
     // Displayed Date in header
     const [offLineEndDate, saveOffLineEndDate] = useState(new Date());
     // Get data
-    const { data, loading } = useDataQuery()
+    const { data, loading } = useDataQuery();
+    // console.log('\n\n', {data}, '\n\n');
 
     useEffect(()=> {
 
@@ -150,6 +175,7 @@ const App: FunctionComponent = () => {
                 setPeriod('24 uger');
             }
             setPeriod(data.root.view.timeframe)
+            
             // Transform data
             const transformedProjects = data.root.projects.project.map((item) => {
                 item["resourceId"] = item["teamId"];
@@ -164,18 +190,19 @@ const App: FunctionComponent = () => {
             // Sort Fabrik
             const selectionFabriks = data.root.selections.selection[2].values.value
             const sortedFabriks = sortSelectedFabriks(transformedProjects, selectionFabriks)
-            const selectedFabriksCount = selectionFabriks.filter( (item: any) => item["-selected"] === true )
+            const selectedFabriksCount = selectionFabriks.filter( item => item["-selected"] === true )
+            // console.log({selectedFabriksCount});
 
             if(selectedFabriksCount.length === 0){
-
+                // console.log('selectedFabriksCount.length === 0');
                 // Sort by selected Teams
-                const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
+                const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: SelectionValue) => item['-selected'] === true )
                 
                 // Transform teams ( add resourceId, id fields )
-                const copySelectionTeams = selectionTeams.map( (item: any) => {
+                const copySelectionTeams = selectionTeams.map( item => {
                     return { ...item }
                 })
-                copySelectionTeams.map( (item: any) =>  {
+                copySelectionTeams.map( item =>  {
                     item["id"] = item["-id"]
                 })
 
@@ -183,20 +210,18 @@ const App: FunctionComponent = () => {
                 const selectionRegion = data.root.selections.selection[1].values.value
                 const sortedRegions = sortSelectedRegions(transformedProjects, selectionRegion)
 
+                const factories = data.root.factories.factory.map( (item: Factory) => {
+                    return {...item} 
+                })
 
-                const factories =  data.root.factories.factory
                 const resourseFactoryId = sortedRegions.map((a: any) => ({...a}));
+                // console.log("resourseFactoryId", resourseFactoryId)
 
                 resourseFactoryId.map((item: any)=> {
                     item["resourceId"] = item["factoryId"];
-                    item["eventColor"] = "#000"
                 })
 
-
-
-                const transformFactories = transformFactoriesEvents(resourseFactoryId)
-
-
+                const transformFactories = transformFactoriesEvents(resourseFactoryId);
                 const dropEmptyTons = transformFactories.filter( (item: any) => item.tons !== 0 )
 
                 const activeFactories: any = []
@@ -207,7 +232,8 @@ const App: FunctionComponent = () => {
                     }
                 })
 
-                //console.log("FABRIK EVENTS", dropEmptyTons)
+                // console.log("setBottomResources", activeFactories)
+                // console.log("setBottomEvents", dropEmptyTons)
                 setBottomResources(activeFactories);
                 setBottomEvents(dropEmptyTons);
 
@@ -215,25 +241,50 @@ const App: FunctionComponent = () => {
                 //console.log("MAIN EVENTS", sortedRegions)
                 setTopResources(copySelectionTeams);
                 setTopEvents(sortedRegions);
+                // console.log('copySelectionTeams', copySelectionTeams);
+                // console.log({copySelectionTeams, sortedRegions});
+
 
             } else {
+                // console.log('selectedFabriksCount.length !== 0');
+                // type ISelectionType = 'team' | 'region' | 'factory';
+
+                // const getEntitiesSelectionByType= (data: any, type: ISelectionType) => {
+                //     return data.root.selections.selection
+                //         .find((selection: {type: SelectionType, values: any}) => selection.type === type)
+                //         ?.values
+                //         ?.value
+                //         ?.filter((entity: any) => entity['-selected'] === true)
+                //         ?.map((selectedEntity: any) => selectedEntity['-id']);
+                // }
+
+
+                // const selectedFactoriesIds = getEntitiesSelectionByType(data, 'factory');
+                // // const selectedProjects = data.root.projects.project.filter((project: Project) => selectedFactoriesIds?.includes(project.factoryId)) as <Array<Project> | []>;
+                // // const selectedTeams = data.root.teams.team.filter((team) => selectedProjects.find((project) => project.teamId === team.id)) as <Array<SelectionValue> | []>;
+
+
+                // const selectedProjects = data.root.projects.project.filter((project: Project) => selectedFactoriesIds?.includes(project.factoryId));
+                // const selectedTeams = data.root.teams.team.filter((team) => selectedProjects.find((project) => project.teamId === team.id));
+
+                // // @ts-ignore
+                // setTopEvents(selectedProjects);
+                // // @ts-ignore
+                // setTopResources(selectedTeams);
+                // console.log({resources: selectedTeams, events: selectedProjects});
+
+
+
 
                 // Sorted Teams
                 const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
                 
                 // Transform teams
-                
-                const copySelectionTeams = selectionTeams.map( (item: any) => {
-                    return { ...item }
-                })
-
-                
+                const copySelectionTeams = [...selectionTeams]
                 copySelectionTeams.map( (item: any) =>  {
                     item["resourceId"] = item["-id"]
                     item["id"] = item["-id"]
                 })
-
-
                 // Sort Regions
                 const selectionRegion = data.root.selections.selection[1].values.value
                 const sortedRegions = sortSelectedRegions(sortedFabriks, selectionRegion)
@@ -264,6 +315,7 @@ const App: FunctionComponent = () => {
 
                 setTopEvents(events);
                 setTopResources(sortTeams);
+                console.log({events, sortTeams})
             }
         }
 
@@ -830,6 +882,17 @@ const App: FunctionComponent = () => {
     }
     
      configFeatures.eventMenu.items.copyEvent.onItem = () => {handlerOnCopy();}
+
+    //  console.log({topEvents, bottomEvents});
+
+
+
+
+
+
+
+
+
    
     return (
         <Fragment>
@@ -837,7 +900,13 @@ const App: FunctionComponent = () => {
             <BryntumScheduler
                  {...Object.assign({}, config, configFeatures) }
                 // {...config}
-                 
+                listeners={{
+                beforeEventEdit: (source: any) => {
+                    source.eventRecord.resourceId = source.resourceRecord.id;
+                    showEditor(source.eventRecord);
+                    return false;
+                    }
+                }}
                 ref={schedulerRef1}
                 events={topEvents}
                 resources={topResources}
@@ -856,7 +925,17 @@ const App: FunctionComponent = () => {
             //         return false;
             //     }
             // }}
-            />
+            /><div>
+                {popupShown ? (
+                    <Popup
+                        text="Popup text"
+                        closePopup={hideEditor}
+                        eventRecord={eventRecord}
+                        eventStore={eventStore}
+                        resourceStore={resourceStore}
+                    ></Popup>
+                ) : null}
+            </div>
             {schedulerRef1.current&&<BryntumScheduler
                                             ref={schedulerRef2} 
                                             resources={bottomResources}

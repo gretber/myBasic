@@ -25,6 +25,11 @@ const schedulerConfig2: any = {
                 showHeaderElements  : false,
                 enableResizing      : false
             },
+            scheduleMenu : {
+            items : {
+                addEvent : false
+            },
+        },
          eventTooltip : {
             // align : 'l-t', 
             template : ({eventRecord}:any) => {

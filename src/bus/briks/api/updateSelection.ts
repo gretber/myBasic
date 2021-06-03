@@ -48,8 +48,7 @@ export const updateSelection: UpdateSelection = async (body) => {
 
   const updateSelectionUrl = process.env.REACT_APP_UPDATE_SELECTION;
   
-  if(localStorage.getItem('schedulerUserType') === 'edit' )
-  {
+ 
     
   store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
   
@@ -82,6 +81,5 @@ export const updateSelection: UpdateSelection = async (body) => {
   } finally {
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
   }
-  }
-  else {store.dispatch(updateSelectionAction(body));}
+  
 };

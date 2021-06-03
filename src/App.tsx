@@ -151,31 +151,36 @@ const [popupShown, showPopup] = useState(false);
                 const newState = { ...prevState }
                 const startDate = moment(data.root.view.startDate, "DD/MM/YYYY").toDate()
                 const endDate = moment(data.root.view.endDate, "DD/MM/YYYY").toDate()
-
+                
                 newState.startDate = startDate
                 newState.endDate = endDate
-                
+                saveOffLineEndDate(config.endDate);
+
+                if(data.root.view.timeframe === 'week')
+                {
+                    setPeriod('Uge')
+                    newState.viewPreset = 'myDayAndWeekPreset';
+                }
+                else if(data.root.view.timeframe === '2weeks')
+                {
+                    setPeriod('To uges')
+                    newState.viewPreset = 'myDayAndWeekPreset';
+                }
+                else if(data.root.view.timeframe === 'month')
+                {
+                    setPeriod('Måned');
+                    newState.viewPreset = 'myDayAndMonthPreset';
+                }
+                else {
+                    setPeriod('24 uger');
+                    newState.viewPreset = 'my24WeeksPreset';
+                }
+                setPeriod(data.root.view.timeframe)
+
                 return newState
             })
 
-            saveOffLineEndDate(config.endDate);
-            if(data.root.view.timeframe === 'week')
-            {
-                setPeriod('Uge')
-            }
-            else if(data.root.view.timeframe === '2weeks')
-            {
-                setPeriod('To uges')
-            }
-            else if(data.root.view.timeframe === 'month')
-            {
-                setPeriod('Måned');
-            }
-            else {
-                setPeriod('24 uger');
-            }
-            setPeriod(data.root.view.timeframe)
-            
+           
             // Transform data
             const transformedProjects = data.root.projects.project.map((item) => {
                 item["resourceId"] = item["teamId"];
@@ -880,20 +885,12 @@ const [popupShown, showPopup] = useState(false);
             </Fragment>
         )
     }
-    
+     
      configFeatures.eventMenu.items.copyEvent.onItem = () => {handlerOnCopy();}
 
     //  console.log({topEvents, bottomEvents});
 
 
-
-
-
-
-
-
-
-   
     return (
         <Fragment>
             <NavigationPanel offLineEndDate={offLineEndDate} saveOffLineEndDate = {saveOffLineEndDate}  period={period} schedulerConfig = {config} setConfig={setConfig}/>

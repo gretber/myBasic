@@ -3,7 +3,7 @@ import { store } from '../../../@init';
 
 // Actions
 import { togglerCreatorAction } from '../../client';
-import { updateSelectionAction } from '../actions';
+import { sortProjectsAction, updateSelectionAction } from '../actions';
 import { fetchData } from './fetchData';
 
 // Types
@@ -49,8 +49,9 @@ export const updateSelection: UpdateSelection = async (body) => {
   const updateSelectionUrl = process.env.REACT_APP_UPDATE_SELECTION;
   
  
-    
-  store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
+    if( localStorage.getItem('schedulerUserType') === 'edit')
+    {
+    store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
   
     const login = localStorage.getItem('schedulerUserLogin');
     const password = localStorage.getItem('schedulerUserPassword')
@@ -81,5 +82,10 @@ export const updateSelection: UpdateSelection = async (body) => {
   } finally {
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
   }
-  
+  }
+  else 
+  {
+  store.dispatch(updateSelectionAction(body));
+  store.dispatch(sortProjectsAction());
+  }
 };

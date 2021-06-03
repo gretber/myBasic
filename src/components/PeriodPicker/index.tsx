@@ -15,6 +15,7 @@ import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutli
 // API 
 import { updateTimeLine } from '../../bus/briks/api/updateTimeLine';
 import { Button } from "@material-ui/core";
+import { fetchData } from "../../bus/briks/api";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -93,7 +94,8 @@ export const PeriodPicker = ({config, setConfig, period, offLineEndDate, saveOff
       let savedEndDate = moment(offLineEndDate);
         if(event.target.value === 'Uge')
         {
-          
+          newState.viewPreset = 'myDayAndWeekPreset';
+          newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(1, 'weeks').toDate();
           savedEndDate = moment(newEndDate);
@@ -104,6 +106,8 @@ export const PeriodPicker = ({config, setConfig, period, offLineEndDate, saveOff
 
         else if(event.target.value === 'To uger')
         {
+          newState.viewPreset = 'myDayAndWeekPreset';
+          newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(2, 'weeks').toDate();
           savedEndDate = moment(newEndDate);
@@ -113,7 +117,8 @@ export const PeriodPicker = ({config, setConfig, period, offLineEndDate, saveOff
 
        else if(event.target.value === 'Måned')
         {
-
+          newState.viewPreset ='myDayAndMonthPreset';
+          newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(1, 'months').toDate();
           savedEndDate =  moment(newEndDate);
@@ -123,12 +128,14 @@ export const PeriodPicker = ({config, setConfig, period, offLineEndDate, saveOff
 
         else if(event.target.value === event.target.value as string)
         {
-         
+          newState.viewPreset ='my24WeeksPreset';
+          newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(24, 'weeks').toDate();
           savedEndDate =  moment(newEndDate);
           updateTimeLine(newState.startDate, newState.endDate, event.target.value as string);
           setConfig(newState);
+          fetchData();
         }
         saveOffLineEndDate(savedEndDate.toDate()) ;
     }

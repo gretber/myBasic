@@ -3,17 +3,33 @@
  * Application configuration
  */
 
+
+
+// View presets 
+
+
+
+// -------- Config
+
 const schedulerConfig2: any = {
       weekStartDay: 1,
-      
+        rowHeight: 50,
+       showHeaderElemens: false,
+     
     features: {
         nonWorkingTime : true,
         autoAdjustTimeAxis: false,
+        showHeaderElemens: false,
         timeRanges : {
                 showCurrentTimeLine : true,
-                showHeaderElements  : true,
+                showHeaderElements  : false,
                 enableResizing      : false
             },
+            scheduleMenu : {
+            items : {
+                addEvent : false
+            },
+        },
          eventTooltip : {
             // align : 'l-t', 
             template : ({eventRecord}:any) => {
@@ -22,6 +38,9 @@ const schedulerConfig2: any = {
                     </div>`;
             },
         },    
+         timeAxisHeaderMenu: {
+            disabled: true,
+        },
         eventResize: {
             disabled: true,
         },

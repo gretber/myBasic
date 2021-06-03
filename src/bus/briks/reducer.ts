@@ -5,7 +5,7 @@ import * as types from './types';
 
 const initialState: types.Data = {};
 
-export const dataReducer: Reducer<types.Data, types.TodosActionTypes> = (state = initialState, action) => {
+export const dataReducer: Reducer<types.Data, types.ProjectActionTypes> = (state = initialState, action) => {
     switch (action.type) {
         case types.SET_DATA:
             return action.payload;
@@ -51,7 +51,18 @@ export const dataReducer: Reducer<types.Data, types.TodosActionTypes> = (state =
                 return state;
             }
         }
-            
+        
+        case types.SORT_PROJECTS: 
+        {
+                if('root' in state)
+                {   
+                        const sortedProjects = [ ...state.root.projects.project.sort(() => Math.random() - 0.5)]
+                    console.log(sortedProjects);
+                    
+                    return { ...state, root: {...state.root, projects: { project: [ ...state.root.projects.project.sort(() => Math.random() - 0.5)]}}};
+                }
+                else return state;
+        }
             
 
         // case types.SET_TODO:

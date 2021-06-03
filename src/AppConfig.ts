@@ -14,22 +14,39 @@ console.log(eventRecordData);
 
 
   const features = {
+
         eventDragCreate: false,
-        nonWorkingTime : true,
+        nonWorkingTime : {
+        highlightWeekends: true,
+        nonWorkingDays: 
+                    {
+                        0: false,
+                        1: false,
+                        6: true
+                    },
+        },
+        showHeaderElements: false,
         autoAdjustTimeAxis: false,
         timeRanges : {
+                
                 showCurrentTimeLine : true,
-                showHeaderElements  : true,
-                enableResizing      : false
+                showHeaderElements  : false,
+                enableResizing      : true,
+               
+                
+
             },
         eventTooltip : {
             // align : 'l-t',
             template : ({eventRecord}:any) => {
             return `<div  class="b-sch-event-tooltip eventToolTip">
-                    <span>${eventRecord.data.name}</span>
-                    <span>${eventRecord.data.tons} tons</span>
+                    <span>${eventRecord.data.details}</span>
+                  
                     </div>`;
             },
+        },
+        timeAxisHeaderMenu: {
+            disabled: true,
         },
         eventMenu: {
              items: {
@@ -43,6 +60,11 @@ console.log(eventRecordData);
                }
             
 
+        },
+         scheduleMenu : {
+            items : {
+                addEvent : false
+            },
         },
             eventEdit: {
                 disabled: true
@@ -278,15 +300,8 @@ console.log(eventRecordData);
 
 export const configFeatures = {...features};
 
-const schedulerConfig: any = {
-
-    resourceImagePath: './',
-    minHeight: '20em',
-    startDate: new Date(2020, 11, 31),
-    endDate: new Date(2021, 0, 31),
-
-    weekStartDay: 1,
-    viewPreset: {
+// View presets 
+const myDayAndWeekPreset = {
         
         base    : 'dayAndWeek',
         id      : 'myDayAndWeekPreset',
@@ -301,15 +316,19 @@ const schedulerConfig: any = {
             increment : 1,
             renderer  : (startDate:Date, endDate:Date, headerConfig:any, cellIdx:number) => {
                 
-                const momentDate = moment(endDate);
+                const momentStartDate = moment(startDate);
+                const momentEndDate = moment(endDate);
                 moment.updateLocale('da', {
                     months :['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
-                    weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag']
+                    weekdays: ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag' ]
                 });
-
-                const displayDate = `${momentDate.locale('da').format('YYYY, MMMM')}  (uge ${momentDate.week()})`;
-
-              
+                
+                // console.log('week endDate: ', endDate);
+                // console.log('week')
+                // console.log(momentEndDate.week());
+                const displayDate = `${momentStartDate.locale('da').format('YYYY, MMMM')}  (uge ${momentEndDate.isoWeek()})`;
+                // console.log(displayDate);
+               console.log('startDate', startDate)
                
                return displayDate
                 
@@ -323,7 +342,7 @@ const schedulerConfig: any = {
                 const momentDate = moment(startDate);
                  moment.updateLocale('da', {
                     weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'],
-                    weekdaysMin: ['Ma.', 'Ti.', 'On.', 'To.', 'Fr.', 'Lø.', 'Søn.']
+                    weekdaysMin: ['Søn.', 'Ma.', 'Ti.', 'On.', 'To.', 'Fr.', 'Lø.' ]
                 });
                 
                 const displayDate = momentDate.locale('da').format('DD, dd');
@@ -334,14 +353,134 @@ const schedulerConfig: any = {
         }
 
         ],
-  },
+  };
+
+const myDayAndMonthPreset = {
+
+    
+    id: 'myDayAndMonthPreset',
+    timeResolution : {              
+        unit      : 'day',       
+        increment : 1,
+    },
+    headers: [
+        {
+         unit: "month",
+         increment : 1,
+         renderer  : (startDate:Date, endDate:Date, headerConfig:any, cellIdx:number) => {
+            const momentDate = moment(startDate);
+                moment.updateLocale('da', {
+                    months :['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
+                    weekdays: ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag' ]
+                });
+
+                const displayDate = `${momentDate.locale('da').format('YYYY, MMMM')}`;
+                return displayDate;
+         }
+        },
+        {  unit      : "week",
+            increment : 1, 
+            renderer  : (startDate:Date, endDate:Date, headerConfig:any, cellIdx:number) => {
+                const momentDate = moment(endDate);
+                 moment.updateLocale('da', {
+                    weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'],
+                    weekdaysMin: ['Søn.', 'Ma.', 'Ti.', 'On.', 'To.', 'Fr.', 'Lø.' ]
+                });
+                console.log('startDate', startDate)
+                const displayDate = `uge ${momentDate.isoWeek()}`;
+                return displayDate;
+            }},
+        {
+            unit      : "day",
+            increment : 1, 
+            renderer  : (startDate:Date, endDate:Date, headerConfig:any, cellIdx:number) => {
+                const momentDate = moment(startDate);
+                 moment.updateLocale('da', {
+                    weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'],
+                    weekdaysMin: ['Søn.', 'Ma.', 'Ti.', 'On.', 'To.', 'Fr.', 'Lø.' ]
+                });
+                
+                const displayDate = momentDate.locale('da').format('DD, dd');
+                return displayDate;
+            }
+        },
+        
+    ]
+  }
+
+const my24WeeksPreset = {
+
+        id      : 'my24WeeksPreset',
+        suppresFit: true,
+        timeResolution : {              
+        unit      : 'day',       
+        increment : 1,
+        },
+        headers: [
+
+                {
+                    unit      : "month",
+                    increment : 1, 
+
+                    renderer  : (startDate:Date, endDate:Date, headerConfig:any, cellIdx:number) => {
+                    const momentDate = moment(startDate);
+                    moment.updateLocale('da', {
+                    weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'],
+                    weekdaysMin: ['Søn.', 'Ma.', 'Ti.', 'On.', 'To.', 'Fr.', 'Lø.' ]
+                });
+                
+                    const displayDate = `${momentDate.locale('da').format('YYYY, MMMM')}`;
+                     return displayDate;
+            }
+             },
+                { 
+                    unit      : "week",
+                    increment : 1, 
+
+                    renderer  : (startDate:Date, endDate:Date, headerConfig:any, cellIdx:number) => {
+                    const momentDate = moment(startDate);
+                    moment.updateLocale('da', {
+                    weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'],
+                    weekdaysMin: ['Søn.', 'Ma.', 'Ti.', 'On.', 'To.', 'Fr.', 'Lø.' ]
+                });
+                    console.log('startDate: ', startDate)
+                    // console.log('uge', momentDate.isoWeek())
+                 const displayDate = `uge ${momentDate.isoWeek()}`;
+                return displayDate;
+            }
+                },
+               
+        ]
+        
+}
+
+
+//   Config
+
+const schedulerConfig: any = {
+
+    resourceImagePath: './',
+    minHeight: '20em',
+   
+    nonWorkingDays: 
+    {
+        0: true,
+        1: false,
+        6: false
+    },
+    
+    rowHeight: 30,
+    weekStartDay: 1,
+    presets: [myDayAndMonthPreset, myDayAndWeekPreset, my24WeeksPreset],
+    viewPreset: 'my24WeeksPreset',
       columns: [
         {
             type: 'resourceInfo',
             text: 'Team',
-            showEventCount: true,
+            showEventCount: false,
             showImage: false,
             width: 230,
+            height: 200,
         },
     ],
       listeners: {
@@ -357,7 +496,7 @@ const schedulerConfig: any = {
             },
 
     //*********** Custome edit event ***********//
-        features
+        features,
 
     // listeners : {
     //     beforeEventEditShow({ editor, eventRecord }: any) {
@@ -373,9 +512,12 @@ const schedulerConfig: any = {
     //         // volumeField.hidden = !eventRecord.hasVolume;
     //     }
     // }
-
+    
+   
 
 };
 
 
 export { schedulerConfig };
+
+

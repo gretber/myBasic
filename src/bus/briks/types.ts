@@ -73,6 +73,16 @@ export type UpdateProjectContract = (payload: Project) => UpdateProjectActionTyp
 
 
 
+ // ----------------------------- Sort projects -----------------------------
+
+export const  SORT_PROJECTS = 'SORT_PROJECTS';
+type SortProjectsActionType = {
+    type: typeof SORT_PROJECTS
+}
+
+export type SortProjectsContract = () => SortProjectsActionType
+
+
 // // ----------------------------- Delete -----------------------------
 // export const DELETE_TODO = 'DELETE_TODO';
 // export type DeleteTodoActionType = {
@@ -81,12 +91,13 @@ export type UpdateProjectContract = (payload: Project) => UpdateProjectActionTyp
 // };
 // export type DeleteTodoContract = (payload: string) => DeleteTodoActionType
 
-export type TodosActionTypes =
+export type ProjectActionTypes =
     | SetDataActionType
     | SetNuBrikActionType
     | UpdateSelectionActionType
     | DeleteProjectActionType
     | UpdateProjectActionType
+    | SortProjectsActionType
     // | UpdateTodoActionType
     // | DeleteTodoActionType
 

@@ -10,6 +10,7 @@ import { setBriksAction } from '../actions';
 
 // Types
 import { Data } from '../types';
+import { fetchData } from './fetchData';
 
 
 
@@ -51,7 +52,7 @@ export const updateTimeLine = async (startDate:Date, endDate:Date, view:string) 
 
             
 
-        const encoded = window.btoa(`${login}:${password}`)
+        const encoded = window.btoa(`${login}:${password}`);
         try {
             const response = await fetch(`${InitBriksUrl}&StartDate=${strStartDate}&EndDate=${strEndDate}&View=${serverView}&ViewType=team`, {
                 method:  'POST',
@@ -67,7 +68,7 @@ export const updateTimeLine = async (startDate:Date, endDate:Date, view:string) 
             }
 
             // const data: Data = await response.json();
-
+            fetchData();
             // store.dispatch(setBriksAction(data));
         } catch (error) {
             console.log(error);

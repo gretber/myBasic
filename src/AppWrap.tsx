@@ -1,22 +1,14 @@
-// Core
-import React, {useEffect, useState} from 'react';
-import { useHistory } from "react-router-dom";
+//  Core
 
-
-//Material
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { Button, createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
+import  React, { useEffect, useState }  from 'react';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import {  Typography } from '@material-ui/core';
 
-// import Image from 'material-ui-image';
+// Components 
+import { App } from './App';
+import { fetchData } from './bus/briks/api';
 
-
-
-
-
-
-
+// Styles
 const useStyles = makeStyles((theme: Theme) => 
  createStyles({
     root: {
@@ -44,22 +36,31 @@ const useStyles = makeStyles((theme: Theme) =>
 
 )
 
-export const AuthorizationPage = () => {
 
-    //  Styles
-    const classes = useStyles();
+export const AppWrap = () => {
 
-    // State
-    const [login, setLogin] = useState('');
-    const [password, setPassword] = useState('');
-    const [authError, setAuthError] = useState(false);
-    // Router history
-    let history = useHistory();
+const [isAuthorized, setAuthorized] = useState(false);
+const [authError, setAuthError] = useState(false);
+const [login, setLogin] = useState('');
+const [password, setPassword] = useState('');
 
-    
-    const InitBriksUrl = process.env.REACT_APP_INIT_BRIK_URL;
-    
-    const authorize = async (login: string, password:string) => {
+const classes = useStyles();
+
+ useEffect(()=> {
+        if(localStorage.getItem('schedulerUserLogin') !== null)
+        {
+            if(localStorage.getItem('schedulerUserPassword') !== null)
+            {
+              setAuthorized(true);
+            }
+        }
+        
+    }, []);
+
+
+    // Authorization
+        const InitBriksUrl = process.env.REACT_APP_INIT_BRIK_URL;
+     const authorize = async (login: string, password:string) => {
     
         const encoded = window.btoa(`${login}:${password}`)
         try {
@@ -86,62 +87,65 @@ export const AuthorizationPage = () => {
                     localStorage.setItem("schedulerUserType", "edit")
                     else
                     {
-                        localStorage.setItem("schedulerUserType", 'view')
+                        localStorage.setItem("schedulerUserType", 'read')
                     }
                     localStorage.setItem('schedulerUserLogin', login);
                     localStorage.setItem('schedulerUserPassword', password);
-                    history.push('/sheduler');
+                    setAuthorized(true);
+                    setAuthError(false);
                 }
                  }
                  else setAuthError(true);
         });}
-        
-        
         catch (error) {
             console.log(error);
             setAuthError(true);
+            setAuthorized(false);
             return false; 
         } 
 
     }
 
-    // Login button handler
-    const signInHandler = (event: any) => {
-       if(authorize(login, password))
-       {
 
+
+    // Login button handler
+    const signInHandler = async(event: any) => {
+       if(  await authorize(login, password))
+       {
+        setAuthorized(true);
         
        }
        else
        {
             setAuthError(true);
        }
-        
-        
-      
     }
-    useEffect(()=> {
-        if(localStorage.getItem('schedulerUserLogin') !== null)
-        {
-            if(localStorage.getItem('schedulerUserPassword') !== null)
-            {
-              history.push('/sheduler');
-            }
-        }
-        
-    })
 
-    return (
+    if(isAuthorized)
+    {
+       return <App isAuthorized={isAuthorized} setAuthorized={setAuthorized}/>
+    }
+    else 
+    {
+        return (
     <div className ={classes.root}>
         {authError ? <Typography className={classes.errorText}>Invalid login or password!</Typography> : <Typography className={classes.errorText}></Typography>}
         <form className ={classes.formStyle}>
             <Typography>Please identify yourself:</Typography>
                 
                     <TextField id="login" label="User name" variant="outlined" onChange = {(e:any) => {setLogin(e.target.value)}}/>
-                    <TextField id="password" label="Password"variant="outlined" onChange = {(e:any) => {setPassword(e.target.value)}}/>
+                    <TextField type='password' id="password" label="Password"variant="outlined" onChange = {(e:any) => {setPassword(e.target.value)}}/>
                   
                 
             <Button variant="outlined" color="primary"  onClick={signInHandler}>Sign in</Button>
         </form>
     </div>);
+    }
+
+
+
+
+
+
+
 }

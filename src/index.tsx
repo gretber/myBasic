@@ -1,6 +1,7 @@
 // Core
 import ReactDOM from 'react-dom'
 import App from './App'
+import { AppWrap } from './AppWrap';
 // import {AuthorizationPage} from './pages/AuthPage';
 // import {
 //   BrowserRouter as Router,
@@ -18,6 +19,7 @@ import { theme } from './@init'
 // Redux
 import { Provider as ReduxProvider } from 'react-redux'
 import { store as reduxStore } from './@init/redux'
+import { useState } from 'react'
 
 
 
@@ -31,7 +33,7 @@ ReactDOM.render(
                         <AuthorizationPage />
                     </Route>
                     <Route path='/sheduler'> */}
-                        <App />
+                        <AppWrap />
                     {/* </Route>
                 </Switch>
             </Router> */}

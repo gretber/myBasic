@@ -16,6 +16,10 @@ export const fetchData: FetchData = async () => {
     const password = localStorage.getItem('schedulerUserPassword')
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
     const encoded = window.btoa(`${'lei-lmk'}:${'AAABBB'}`)
+    if(localStorage.getItem('schedulerUserType') !== 'edit')
+    {
+        localStorage.setItem("schedulerUserType", "edit")
+    }
     try {
         const response = await fetch(`${InitBriksUrl}`, {
             method:  'GET',

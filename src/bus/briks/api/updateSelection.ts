@@ -58,7 +58,7 @@ export const updateSelection: UpdateSelection = async (body) => {
 
   try {
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
-    const encoded = window.btoa(`${'lei-lmk'}:${'AAABBB'}`)
+    const encoded = window.btoa(`${login}:${password}`)
     
     const response = await fetch(`${updateSelectionUrl}`, {
         method:  'POST',

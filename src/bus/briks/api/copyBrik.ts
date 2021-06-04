@@ -33,7 +33,7 @@ export const copyBrik: CreateBrikType = async (newBrik) => {
     const login = localStorage.getItem('schedulerUserLogin');
     const password = localStorage.getItem('schedulerUserPassword')
   try {
-     const encoded = window.btoa(`${'lei-lmk'}:${'AAABBB'}`);
+     const encoded = window.btoa(`${login}:${password}`);
 
     const response = await fetch(`${createBrikUrl}`, {
           method:  'POST',

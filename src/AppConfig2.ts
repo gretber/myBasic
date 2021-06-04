@@ -12,10 +12,17 @@
 // -------- Config
 
 const schedulerConfig2: any = {
-      weekStartDay: 1,
-        rowHeight: 50,
-       showHeaderElemens: false,
-     
+    weekStartDay: 1,
+    rowHeight: 50,
+    showHeaderElemens: false,
+    createEventOnDblClick: false,
+    
+    // bodyCls: {
+    //     'b-scheduler-3': 1
+    // },
+    cls: {
+    'b-scheduler-3': 1
+    },
     features: {
         nonWorkingTime : true,
         autoAdjustTimeAxis: false,
@@ -78,6 +85,11 @@ const schedulerConfig2: any = {
             showEventCount: false,
             showImage: false,
             width: 230,
+             enableCellContextMenu: false,
+            enableHeaderContextMenu: false,
+            sortable : false,
+            draggable: false,
+            editor: false
         },
     ],
 

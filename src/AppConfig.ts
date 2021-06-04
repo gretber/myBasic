@@ -15,7 +15,7 @@ export let eventRecordData:any = {};
 
   const features = {
 
-        eventDragCreate: false,
+        
         nonWorkingTime : {
         highlightWeekends: true,
         nonWorkingDays: 
@@ -39,9 +39,29 @@ export let eventRecordData:any = {};
         eventTooltip : {
             // align : 'l-t',
             template : ({eventRecord}:any) => {
+            
+            let projectNo = '', customerName = '', name2 = '', tons = '', factoryItemName = '', area = '';
+            if(eventRecord.data.projectNo !== 'null')
+             projectNo = eventRecord.data.projectNo + ' ';
+
+            if(eventRecord.data.name2 !== 'null')
+            name2 = eventRecord.data.name2 + ' ';
+
+            if(eventRecord.data.customerName !== 'null')
+            customerName = eventRecord.data.customerName + ' ';
+
+            if(eventRecord.data.tons !== 'null')
+            tons = eventRecord.data.tons + ' ton ';
+
+            if(eventRecord.data.factoryItemName !== 'null')
+            factoryItemName = eventRecord.data.factoryItemName + ' ';
+
+            if(eventRecord.data.area !== 'null')
+            area = eventRecord.data.area;
+
             return `<div  class="b-sch-event-tooltip eventToolTip">
-                    <span>${eventRecord.data.details}</span>
-                  
+                    <span>${projectNo}${customerName}${name2}${tons}${factoryItemName}${area} 
+                  </span>
                     </div>`;
             },
         },
@@ -49,6 +69,7 @@ export let eventRecordData:any = {};
             disabled: true,
         },
         eventMenu: {
+            disabled: false,
              items: {
                    editEvent: false,
                    copyEvent: 
@@ -62,16 +83,26 @@ export let eventRecordData:any = {};
 
         },
          scheduleMenu : {
-            items : {
-                addEvent : false
-            },
+           disabled: true,
         },
-            eventEdit: {
-                    }
-                 }
-                 ;
+         eventEdit: {
+                    },
 
-export const configFeatures = {...features};
+         eventResize: {
+            disabled: false,
+        },
+
+       
+
+        eventDrag : {
+            disabled: false,
+        },
+
+        eventDragSelect: true,
+        eventDragCreate: false,
+    };
+
+export const configFeatures : any = {...features};
 
 // View presets 
 const myDayAndWeekPreset = {
@@ -91,18 +122,14 @@ const myDayAndWeekPreset = {
                 
                 const momentStartDate = moment(startDate);
                 const momentEndDate = moment(endDate);
+                momentEndDate.subtract(1, 'days');
                 moment.updateLocale('da', {
                     months :['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
                     weekdays: ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag' ]
                 });
                 
-                // console.log('week endDate: ', endDate);
-                // console.log('week')
-                // console.log(momentEndDate.week());
                 const displayDate = `${momentStartDate.locale('da').format('YYYY, MMMM')}  (uge ${momentEndDate.isoWeek()})`;
-                // console.log(displayDate);
-               console.log('startDate', startDate)
-               
+                           
                return displayDate
                 
             }
@@ -155,11 +182,11 @@ const myDayAndMonthPreset = {
             increment : 1, 
             renderer  : (startDate:Date, endDate:Date, headerConfig:any, cellIdx:number) => {
                 const momentDate = moment(endDate);
+                momentDate.subtract(1, 'days');
                  moment.updateLocale('da', {
                     weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'],
                     weekdaysMin: ['Søn.', 'Ma.', 'Ti.', 'On.', 'To.', 'Fr.', 'Lø.' ]
                 });
-                console.log('startDate', startDate)
                 const displayDate = `uge ${momentDate.isoWeek()}`;
                 return displayDate;
             }},
@@ -216,8 +243,12 @@ const my24WeeksPreset = {
                     weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'],
                     weekdaysMin: ['Søn.', 'Ma.', 'Ti.', 'On.', 'To.', 'Fr.', 'Lø.' ]
                 });
+<<<<<<< HEAD
 
                     // console.log('uge', momentDate.isoWeek())
+=======
+                    
+>>>>>>> 4838501ffae6fa6b0b62a4cf57f160f6efbe9c1f
                  const displayDate = `uge ${momentDate.isoWeek()}`;
                 return displayDate;
             }
@@ -234,14 +265,9 @@ const schedulerConfig: any = {
 
     resourceImagePath: './',
     minHeight: '20em',
-   
-    nonWorkingDays: 
-    {
-        0: true,
-        1: false,
-        6: false
-    },
-    
+    createEventOnDblClick: false,
+
+      
     rowHeight: 30,
     weekStartDay: 1,
     presets: [myDayAndMonthPreset, myDayAndWeekPreset, my24WeeksPreset],
@@ -254,6 +280,13 @@ const schedulerConfig: any = {
             showImage: false,
             width: 230,
             height: 200,
+            enableCellContextMenu: false,
+            enableHeaderContextMenu: false,
+            sortable : false,
+            draggable: false,
+            editor: false
+
+
         },
     ],
       listeners: {

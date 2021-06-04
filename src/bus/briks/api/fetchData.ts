@@ -14,12 +14,11 @@ const InitBriksUrl = process.env.REACT_APP_INIT_BRIK_URL;
 export const fetchData: FetchData = async () => {
     const login = localStorage.getItem('schedulerUserLogin');
     const password = localStorage.getItem('schedulerUserPassword')
-    store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
-    const encoded = window.btoa(`${'lei-lmk'}:${'AAABBB'}`)
-    if(localStorage.getItem('schedulerUserType') !== 'edit')
+    if(localStorage.getItem('schedulerUserLogin') !== null && localStorage.getItem('schedulerUserPassword') !== null)
     {
-        localStorage.setItem("schedulerUserType", "edit")
-    }
+    store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
+    const encoded = window.btoa(`${login}:${password}`)
+    
     try {
         const response = await fetch(`${InitBriksUrl}`, {
             method:  'GET',
@@ -39,7 +38,9 @@ export const fetchData: FetchData = async () => {
         store.dispatch(setBriksAction(data));
     } catch (error) {
         console.log(error);
+        
     } finally {
         store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
+    }
     }
 };

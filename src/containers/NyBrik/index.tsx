@@ -76,6 +76,10 @@ export const NyBrik = () => {
     left: false,
   });
 
+  let isDisabled = true;
+  if(localStorage.getItem('schedulerUserType') === 'edit')
+  isDisabled = false
+
   const { createBrik } = useBriksMutations();
 
   const toggleDrawer = (anchor: Anchor, open: boolean) => (
@@ -97,7 +101,7 @@ export const NyBrik = () => {
       <MuiDialogTitle disableTypography className={classes.root} {...other}>
         <Typography variant="h6">{children}</Typography>
         {onClose ? (
-          <IconButton
+          <IconButton 
             aria-label="close"
             className={classes.closeButton}
             onClick={onClose}
@@ -191,7 +195,7 @@ export const NyBrik = () => {
 
   return (
     <div>
-      <Button className={classes.nyBrik} onClick={toggleDrawer("left", true)}>
+      <Button disabled={isDisabled} className={classes.nyBrik} onClick={toggleDrawer("left", true)}>
         <NoteAddRoundedIcon className={classes.nyBrikIcon} />
         Ny brik
       </Button>

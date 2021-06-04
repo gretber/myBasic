@@ -64,7 +64,7 @@ import { Factory, Project, SelectionValue, SelectionType } from './bus/briks/dat
 
 import Popup from './elements/popup/Popup';
 
-export const App: FunctionComponent = () => {
+export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAuthorized: React.Dispatch<React.SetStateAction<boolean>>}) => {
 
     const initialBrik = {
     id: null,
@@ -176,6 +176,8 @@ const [popupShown, showPopup] = useState(false);
                     newState.viewPreset = 'my24WeeksPreset';
                 }
                 setPeriod(data.root.view.timeframe)
+
+                
 
                 return newState
             })
@@ -328,7 +330,7 @@ const [popupShown, showPopup] = useState(false);
             }
         }
 
-    }, [data, loading])
+    }, [data, loading, isAuthorized])
 
     // Drop event handler
     const handlerOnAfterEventDrop = (event: any) => {
@@ -486,7 +488,7 @@ const [popupShown, showPopup] = useState(false);
     if(loading){
         return (
             <Fragment>
-                {(Object.keys(data).length !== 0) && <NavigationPanel offLineEndDate={offLineEndDate} saveOffLineEndDate = {saveOffLineEndDate} period = {period} schedulerConfig = {config} setConfig={setConfig}/>}
+                {(Object.keys(data).length !== 0) && <NavigationPanel setAuthorized={setAuthorized} offLineEndDate={offLineEndDate} /*saveOffLineEndDate = {saveOffLineEndDate} */period = {period} schedulerConfig = {config} /*setConfig={setConfig}*//>}
                 <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "500px", marginBottom: "500px"}}>
                     <CircularProgress color="primary" />
                 </div>
@@ -494,14 +496,44 @@ const [popupShown, showPopup] = useState(false);
         )
     }
      
-     configFeatures.eventMenu.items.copyEvent.onItem = () => {handlerOnCopy();}
-
+     
+    if(localStorage.getItem('schedulerUserType') !== 'edit')
+                {
+                    configFeatures.eventDragCreate = false;
+                    configFeatures.eventDragSelect = false;
+                    configFeatures.eventResize.disabled = true; 
+                    configFeatures.eventDrag.disabled = true;
+                    
+                    
+                    configFeatures.eventMenu.items.copyEvent = false;
+                    configFeatures.eventMenu.items.deleteEvent = false;
+                    configFeatures.eventEdit.disabled = true;
+                    
+                }
+                else
+                {   
+                   
+                    configFeatures.eventDragCreate = false;
+                    configFeatures.eventDragSelect = true;
+                    configFeatures.eventResize.disabled = false ; 
+                    configFeatures.eventDrag.disabled = false;
+                    configFeatures.eventEdit = {}
+                    delete configFeatures.eventMenu.items.deleteEvent;
+                    configFeatures.eventMenu.items.copyEvent =
+                    {
+                        text: 'Duplicate',
+                        icon: 'b-fa-copy',
+                        onItem : () => {handlerOnCopy();}
+                    } ;
+                    
+                    
+                }
     //  console.log({topEvents, bottomEvents});
 
 
     return (
         <Fragment>
-            <NavigationPanel offLineEndDate={offLineEndDate} saveOffLineEndDate = {saveOffLineEndDate}  period={period} schedulerConfig = {config} setConfig={setConfig}/>
+            <NavigationPanel setAuthorized={setAuthorized} offLineEndDate={offLineEndDate} /*saveOffLineEndDate = {saveOffLineEndDate} */ period={period} schedulerConfig = {config} /*setConfig={setConfig}*//>
             <BryntumScheduler
                  {...Object.assign({}, config, configFeatures) }
                 // {...config}
@@ -534,12 +566,12 @@ const [popupShown, showPopup] = useState(false);
                     ></Popup>
                 ) : null}
             </div>
-            {schedulerRef1.current&&<BryntumScheduler
+            {schedulerRef1.current&&<div style={{height: '40%'}}><BryntumScheduler
                                             ref={schedulerRef2} 
                                             resources={bottomResources}
                                             events={bottomEvents}
                                             {...config2}
-                                            partner={schedulerRef1.current.schedulerInstance} />}  
+                                            partner={schedulerRef1.current.schedulerInstance} /></div>}  
                                                   </Fragment>
     );
 };

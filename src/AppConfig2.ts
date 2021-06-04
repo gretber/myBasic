@@ -85,6 +85,11 @@ const schedulerConfig2: any = {
             showEventCount: false,
             showImage: false,
             width: 230,
+             enableCellContextMenu: false,
+            enableHeaderContextMenu: false,
+            sortable : false,
+            draggable: false,
+            editor: false
         },
     ],
 

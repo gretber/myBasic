@@ -276,7 +276,10 @@ const schedulerConfig: any = {
             width: 230,
             height: 200,
             enableCellContextMenu: false,
-            enableHeaderContextMenu: false
+            enableHeaderContextMenu: false,
+            sortable : false,
+            draggable: false,
+            editor: false
 
 
         },

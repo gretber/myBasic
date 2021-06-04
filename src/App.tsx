@@ -201,9 +201,9 @@ const [popupShown, showPopup] = useState(false);
             if(selectedFabriksCount.length === 0){
                 // console.log('selectedFabriksCount.length === 0');
                 // Sort by selected Teams
-                const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: SelectionValue) => item['-selected'] === true )
+                const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: SelectionValue) => item['-selected'] === true ) // Filter by selected teams
                 
-                // Transform teams ( add resourceId, id fields )
+                // Transform teams ( add id fields )
                 const copySelectionTeams = selectionTeams.map( item => {
                     return { ...item }
                 })
@@ -358,7 +358,7 @@ const [popupShown, showPopup] = useState(false);
             default: jType = ''
         }
 
-        console.log(jType)
+        // console.log(jType)
 
             let currentLeader: any = {}
             let currentFactory: any = {}
@@ -412,18 +412,19 @@ const [popupShown, showPopup] = useState(false);
         
             // event.eventRecord.setData("duration", 5)
             // event.values.duration = 5
-            console.log("event save", event)
+            // console.log("event save", event)
            
         
         updateProject(body)
         event.context.finalize()
     },[])
 
-    const handlerOnAfterSave = (event: any) => {
-    }
+    // const handlerOnAfterSave = (event: any) => {
+    // }
 
 
-       // Resize event handler
+    // Resize event handler
+    
     const handlerOnEventResizeEnd = (event: any) => {
 
         if(event.eventRecord){
@@ -518,7 +519,7 @@ const [popupShown, showPopup] = useState(false);
                 onCopy={handlerOnCopy}
                 onEventResizeEnd={handlerOnEventResizeEnd}
                 onBeforeEventSave={handlerOnBeforeSave}
-                onAfterEventSave={handlerOnAfterSave}
+                // onAfterEventSave={handlerOnAfterSave}
                 onAfterEventDrop={handlerOnAfterEventDrop}
                 onBeforeEventDelete={handlerOnAfterEventDelete}
                 //onBeforeEventEditShow={beforeEventEditShow}

@@ -46,22 +46,6 @@ export const Status = ({ status, state, setStatus, setState }: any) => {
   };
   return (
     <FormControl component="fieldset" className={classes.wrapper}>
-      {/* <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel id="status">Status</InputLabel>
-        <Select
-          labelId="status"
-          id="status"
-          defaultValue={20}
-          value={state}
-          onChange={handleSelectChange}
-          label="Status"
-        >
-          <MenuItem value={10}>Budgetteret</MenuItem>
-          <MenuItem value={20}>Planlagt</MenuItem>
-          <MenuItem value={30}>Udført Sag</MenuItem>
-          <MenuItem value={40}>Slettet</MenuItem>
-        </Select>
-      </FormControl> */}
       <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel htmlFor="status" id="status">Status</InputLabel>
         <Select

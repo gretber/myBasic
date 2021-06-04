@@ -150,13 +150,13 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
   },[varighed])
 
   // State for job type
-  const [jobType, setJobType] = useState("");
+  const [jobTypeId, setJobTypeId] = useState("");
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
-      return {...prevState, jobType}
+      return {...prevState, jobType: jobTypeId}
     })
-  },[jobType])
+  },[jobTypeId])
 
   // State for teams (HOLD)
   const [ teamId, setTeamId ] = useState('')
@@ -253,7 +253,8 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
 
       <KundeNavn  setCustomerName={setCustomerName}
                   projectName={projectName}
-                  customerName={customerName} />
+                  customerName={customerName}
+                  setCustomerId={setCustomerId} />
 
       <DatePeriod setVarighed={setVarighed}
                   startDate={startDate}
@@ -275,7 +276,7 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
               state={state}
               setState={setState} />
 
-      <JobType jobType={jobType} setJobType={setJobType} />
+      <JobType jobTypeId={jobTypeId} setJobTypeId={setJobTypeId} />
 
       <Hold setTeamId={setTeamId}/>
 

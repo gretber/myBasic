@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const KundeNavn = ({ setCustomerName, projectName, customerName }: any) => {
+export const KundeNavn = ({ setCustomerName, projectName, customerName, setCustomerId }: any) => {
   // Styles
   const classes = useStyles();
 
@@ -68,10 +68,14 @@ export const KundeNavn = ({ setCustomerName, projectName, customerName }: any) =
 
   // Handler
   const handlerOnChange = ( event: any, value: any ) => {
-    if(value && ('customer' in value)){
-      setCustomerName(value.customer)
+    if(value && ('name' in value)){
+      console.log("if",{value})
+      setCustomerName(value.name)
+      setCustomerId(value.id)
     } else {
-      setCustomerName(null)
+      console.log("else",{value})
+      setCustomerName("null")
+      setCustomerId("null")
     }
   }
 

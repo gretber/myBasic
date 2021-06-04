@@ -216,7 +216,7 @@ const my24WeeksPreset = {
                     weekdays: ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'],
                     weekdaysMin: ['Søn.', 'Ma.', 'Ti.', 'On.', 'To.', 'Fr.', 'Lø.' ]
                 });
-                    console.log('startDate: ', startDate)
+
                     // console.log('uge', momentDate.isoWeek())
                  const displayDate = `uge ${momentDate.isoWeek()}`;
                 return displayDate;

@@ -1,5 +1,5 @@
 // Core
-import React from "react";
+import React, {useState} from "react";
 
 // Material
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -10,6 +10,10 @@ import InputLabel from "@material-ui/core/InputLabel";
 
 // Hooks
 import { useSelector } from '../../../hooks/useSelector';
+
+// Helpers
+import { idToJobType } from '../../../helpers/idToJobType';
+import { jobTypeToId } from '../../../helpers/jobTypeToId';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,9 +27,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const JobType = ({ jobType, setJobType }: any) => {
+export const JobType = ({ jobTypeId, setJobTypeId }: any) => {
   // Styles
   const classes = useStyles();
+
+  const [state, setState] = useState(idToJobType(jobTypeId))
 
   // Get job types
   const jobs = useSelector( state => {
@@ -34,8 +40,9 @@ export const JobType = ({ jobType, setJobType }: any) => {
     }
   });
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setJobType(event.target.value as string);
+  const handleChange = (event: React.ChangeEvent<{ value: any }>) => {
+    setJobTypeId(jobTypeToId(event.target.value));
+    setState(event.target.value)
   };
 
   // Job list
@@ -52,7 +59,7 @@ export const JobType = ({ jobType, setJobType }: any) => {
         <Select
           labelId="job-type"
           id="job-type"
-          value={jobType}
+          value={state}
           onChange={handleChange}
           label="job-type"
         >

@@ -1,5 +1,10 @@
 
-export const getProjectDetails = async (setRegionId: any, projectNo: string, setCustomerName: any, setCustomerId: any, setFactoryId: any) => {
+export const getProjectDetails = async (
+  setRegionId: any, projectNo: string, setCustomerName: any,
+  setCustomerId: any, setFactoryId: any, setProjectName: any,
+  setProjectNo: any, setCurrentProject:any, setName2: any
+  ) => {
+
   const projectDetails = process.env.REACT_APP_GET_PROJECT_DETAILS;
 
   const encoded = window.btoa('lei-lmk:AAABBB')
@@ -15,8 +20,21 @@ export const getProjectDetails = async (setRegionId: any, projectNo: string, set
         
   const project: any = await response.json();
 
-  setRegionId(project.root.projects.project[0].regionId)
-  setCustomerName(project.root.projects.project[0].customerName)
-  setFactoryId(project.root.projects.project[0].factoryId)
-  setCustomerId(project.root.projects.project[0].customerId)
+  if(project.root.projects.project[0]){
+      const {
+      regionId, customerName, factoryId,
+      customerId, name, projectNo: numberOfProject, name2
+    } = project.root.projects.project[0]
+    
+    setRegionId(regionId)
+    setCustomerName(customerName)
+    setFactoryId(factoryId)
+    setCustomerId(customerId)
+    setProjectName(name)
+    setProjectNo(numberOfProject)
+    setName2(name2)
+    setCurrentProject({id: projectNo, name: name})
+
+  }
+
 };

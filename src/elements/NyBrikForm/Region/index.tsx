@@ -30,7 +30,7 @@ export const Region = ({setRegionId, projectName, regionId}: any) => {
   const regionName = useSelector( state => {
      if("root" in state.data && regionId){
       const region = state.data.root.districs.district.filter( item => item.id === regionId)
-      return region[0].name
+      return region[0]
     }
   })
 
@@ -49,11 +49,12 @@ export const Region = ({setRegionId, projectName, regionId}: any) => {
         disabled={!!projectName}
         className={classes.Autocomplete}
         id="region"
+        value={regionName}
         onChange={handlerOnChange}
         options={regions?regions:[]}
-        getOptionLabel={(option: any) => option.name}
+        getOptionLabel={(option: any) =>  option.name }
         renderInput={(params) => (
-          <TextField {...params} label={regionName?regionName:"Region"} variant="outlined" />
+          <TextField {...params} label={"Region"} variant="outlined" />
         )}
       />
     </div>

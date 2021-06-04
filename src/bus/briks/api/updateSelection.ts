@@ -49,8 +49,7 @@ export const updateSelection: UpdateSelection = async (body) => {
   const updateSelectionUrl = process.env.REACT_APP_UPDATE_SELECTION;
   
  
-    if( localStorage.getItem('schedulerUserType') === 'edit')
-    {
+    
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
   
     const login = localStorage.getItem('schedulerUserLogin');
@@ -75,17 +74,16 @@ export const updateSelection: UpdateSelection = async (body) => {
       throw new Error('Todo create failed');
     }
     
-      store.dispatch(updateSelectionAction(body));
+      // store.dispatch(updateSelectionAction(body));
       fetchData();
   } catch (error) {
       console.log(error);
   } finally {
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
   }
+  
+  // store.dispatch(sortProjectsAction());
+  
   }
-  else 
-  {
-  store.dispatch(updateSelectionAction(body));
-  store.dispatch(sortProjectsAction());
-  }
-};
+  
+  

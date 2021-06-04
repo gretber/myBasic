@@ -14,8 +14,7 @@ const InitBriksUrl = process.env.REACT_APP_INIT_BRIK_URL;
 export const fetchData: FetchData = async () => {
     const login = localStorage.getItem('schedulerUserLogin');
     const password = localStorage.getItem('schedulerUserPassword')
-    if(localStorage.getItem('schedulerUserLogin') !== null && localStorage.getItem('schedulerUserPassword') !== null)
-    {
+    
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
     const encoded = window.btoa(`${login}:${password}`)
     
@@ -42,5 +41,5 @@ export const fetchData: FetchData = async () => {
     } finally {
         store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
     }
-    }
+    
 };

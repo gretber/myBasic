@@ -123,7 +123,7 @@ const [popupShown, showPopup] = useState(false);
         setResourceStore(resourceStore);
     }, []);
 
-    const showEditor = useCallback(eventRecord => {
+  const showEditor = useCallback(eventRecord => {
         setEventRecord(eventRecord);
         showPopup(true);
     }, []);
@@ -279,7 +279,7 @@ const [popupShown, showPopup] = useState(false);
                 setTopEvents(selectedProjects);
                 // @ts-ignore
                 setTopResources(selectedTeams);
-                console.log("top scheduler: ", {resources: selectedTeams, events: selectedProjects});
+                // console.log("top scheduler: ", {resources: selectedTeams, events: selectedProjects});
 
                 // Sort Regions
                 const selectionRegion = data.root.selections.selection[1].values.value
@@ -298,7 +298,7 @@ const [popupShown, showPopup] = useState(false);
                         activeFactories.push(forEachItem)
                     }
                 })
-                console.log({copySelectedFabriks})
+                // console.log({copySelectedFabriks})
 
                 // Sorted Teams
                 const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
@@ -309,15 +309,8 @@ const [popupShown, showPopup] = useState(false);
                     item["resourceId"] = item["-id"]
                     item["id"] = item["-id"]
                 })
-<<<<<<< HEAD
-                // Sort Regions
-                const selectionRegion = data.root.selections.selection[1].values.value
-                const sortedByRegions = sortSelectedRegions(sortedFabriks, selectionRegion)
-                // console.log({sortedByRegions});
-=======
 
 
->>>>>>> e7fef566dad5774c46c2eb349590111524cdc659
                 const events = sortedByRegions.filter( (item: any) => {
                     // Project date
                     const projectStartDate = moment(item.startDate, "YYYY-MM-DD").unix()
@@ -329,7 +322,7 @@ const [popupShown, showPopup] = useState(false);
 
                     return projectEndDate > viewStartDate || projectStartDate < viewEndDate
                 })
-                console.log({events});
+                // console.log({events});
 
                 // const resourseFactoryId = sortedByRegions.map((a: any) => ({...a})); // Copy projects containing selected regions
                 // console.log({resourseFactoryId})
@@ -365,15 +358,10 @@ const [popupShown, showPopup] = useState(false);
                 
 
 
-<<<<<<< HEAD
-                // setBottomResources(activeFactories);
-                // setBottomEvents(dropEmptyTons);
-=======
 
 
                 setBottomResources(activeFactories)
                 setBottomEvents(dropEmptyTons)
->>>>>>> e7fef566dad5774c46c2eb349590111524cdc659
 
                 setTopEvents(events);
                 setTopResources(sortTeams);
@@ -430,10 +418,10 @@ const [popupShown, showPopup] = useState(false);
                 projectNo = ""
             }
             
-            console.log("projectNo", projectNo)
-            console.log("projectNo", currentLeader)
-            console.log("projectNo", currentFactory)
-            console.log("projectNo", currentRegion)
+            // console.log("projectNo", projectNo)
+            // console.log("projectNo", currentLeader)
+            // console.log("projectNo", currentFactory)
+            // console.log("projectNo", currentRegion)
          
             const body = {
                 id:                 event.eventRecord.data.id,
@@ -461,7 +449,7 @@ const [popupShown, showPopup] = useState(false);
                 color:              event.eventRecord.data.color,
                 details:            event.eventRecord.data.details,
             }
-            console.log("body save", body)
+            // console.log("body save", body)
         
             // event.eventRecord.setData("duration", 5)
             // event.values.duration = 5
@@ -505,7 +493,7 @@ const [popupShown, showPopup] = useState(false);
 
     // On Copy click
         const handlerOnCopy = () => {
-     
+            console.log('handlerOnCopy');
         const projectCopy = {
             id: 'null',          
             regionId:           eventRecordData.regionId,
@@ -589,6 +577,7 @@ const [popupShown, showPopup] = useState(false);
                  {...Object.assign({}, config, configFeatures) }
                 // {...config}
                 listeners={{
+                    ...config.listeners,
                 beforeEventEdit: (source: any) => {
                     source.eventRecord.resourceId = source.resourceRecord.id;
                     showEditor(source.eventRecord);

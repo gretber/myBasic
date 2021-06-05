@@ -154,6 +154,7 @@ const [popupShown, showPopup] = useState(false);
                 
                 newState.startDate = startDate
                 newState.endDate = endDate
+
                 saveOffLineEndDate(config.endDate);
 
                 if(data.root.view.timeframe === 'week')
@@ -280,8 +281,24 @@ const [popupShown, showPopup] = useState(false);
                 setTopResources(selectedTeams);
                 console.log("top scheduler: ", {resources: selectedTeams, events: selectedProjects});
 
+                // Sort Regions
+                const selectionRegion = data.root.selections.selection[1].values.value
+                const sortedByRegions = sortSelectedRegions(sortedFabriks, selectionRegion)
+
+                const copySortedByRegions = sortedByRegions.map ((item: any)=> ({...item, resourceId: item["factoryId"]})) // Copy sortedByRegions and add id field resourceId
+                const eventsWithCountedTons = transformFactoriesEvents(copySortedByRegions)
+                const dropEmptyTons = eventsWithCountedTons.filter( (item: any) => item.tons !== 0 )
 
 
+                const copySelectedFabriks = selectedFabriksCount.map( (item: any) => ({...item, id: item["-id"]}) ) // Copy selected fabriks and add id field id
+                const activeFactories: any = []
+                copySelectedFabriks.forEach( forEachItem => {
+                    const resultItem = eventsWithCountedTons.find( (findItem: any) => forEachItem.id === findItem.resourceId)
+                    if (resultItem) {
+                        activeFactories.push(forEachItem)
+                    }
+                })
+                console.log({copySelectedFabriks})
 
                 // Sorted Teams
                 const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
@@ -292,10 +309,15 @@ const [popupShown, showPopup] = useState(false);
                     item["resourceId"] = item["-id"]
                     item["id"] = item["-id"]
                 })
+<<<<<<< HEAD
                 // Sort Regions
                 const selectionRegion = data.root.selections.selection[1].values.value
                 const sortedByRegions = sortSelectedRegions(sortedFabriks, selectionRegion)
                 // console.log({sortedByRegions});
+=======
+
+
+>>>>>>> e7fef566dad5774c46c2eb349590111524cdc659
                 const events = sortedByRegions.filter( (item: any) => {
                     // Project date
                     const projectStartDate = moment(item.startDate, "YYYY-MM-DD").unix()
@@ -332,12 +354,10 @@ const [popupShown, showPopup] = useState(false);
 
 
                 const sortTeams: any = []
-
                  copySelectionTeams.map( (team: any) => {
                     const hasIvent = sortedByRegions.find( (event: any) => {
                         return event.teamId === team.id
                     })
-
                     if (hasIvent){
                         sortTeams.push(team)
                     }
@@ -345,8 +365,15 @@ const [popupShown, showPopup] = useState(false);
                 
 
 
+<<<<<<< HEAD
                 // setBottomResources(activeFactories);
                 // setBottomEvents(dropEmptyTons);
+=======
+
+
+                setBottomResources(activeFactories)
+                setBottomEvents(dropEmptyTons)
+>>>>>>> e7fef566dad5774c46c2eb349590111524cdc659
 
                 setTopEvents(events);
                 setTopResources(sortTeams);

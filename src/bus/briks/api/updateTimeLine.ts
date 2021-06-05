@@ -1,27 +1,13 @@
 // Core
 import moment from 'moment';
 
-// Store
-import { store } from '../../../@init';
-
-// Actions
-import { togglerCreatorAction } from '../../client';
-import { setBriksAction } from '../actions';
-
 // Types
-import { Data } from '../types';
 import { fetchData } from './fetchData';
-
-
-
 
 const InitBriksUrl = process.env.REACT_APP_INIT_BRIK_URL;
 
 export const updateTimeLine = async (startDate:Date, endDate:Date, view:string) => {
     
-    
-
-   
         const login = localStorage.getItem('schedulerUserLogin');
         const password = localStorage.getItem('schedulerUserPassword')
         const strStartDate = moment(startDate).format('DD, MM, YYYY').replace(/[^0-9]/g, '');

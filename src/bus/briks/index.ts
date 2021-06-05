@@ -13,12 +13,13 @@ import { fetchData,
 import { useTogglersRedux } from '../client';
 
 export const useDataQuery = () => {
-    const data = useSelector(({ data }) => data);
-    const { togglersRedux: { isDataFetching }} = useTogglersRedux();
-
+    
     useEffect(() => {
         fetchData();
     }, []);
+
+    const data = useSelector(({ data }) => data);
+    const { togglersRedux: { isDataFetching }} = useTogglersRedux();
 
     return {
         data,

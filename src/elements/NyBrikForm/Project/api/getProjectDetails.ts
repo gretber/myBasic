@@ -26,15 +26,13 @@ export const getProjectDetails = async (
       customerId, name, projectNo: numberOfProject, name2
     } = project.root.projects.project[0]
     
+    if(name2){setName2(name2)}
     setRegionId(regionId)
     setCustomerName(customerName)
     setFactoryId(factoryId)
     setCustomerId(customerId)
     setProjectName(name)
     setProjectNo(numberOfProject)
-    setName2(name2)
     setCurrentProject({id: projectNo, name: name})
-
   }
-
 };

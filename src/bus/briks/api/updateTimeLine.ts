@@ -31,7 +31,7 @@ export const updateTimeLine = async (startDate:Date, endDate:Date, view:string) 
         {
             serverView = 'week';
         }
-        else if(view ==='To uges')
+        else if(view ==='To uger')
         {
             serverView = '2weeks';
         }

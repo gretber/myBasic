@@ -1,5 +1,5 @@
 // Core
-import React from "react";
+import React, { useState } from "react";
 
 // Material
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Hold = ({setTeamId}: any) => {
+export const Hold = ({teamId, setTeamId}: any) => {
   // Styles
   const classes = useStyles();
 
@@ -29,11 +29,14 @@ export const Hold = ({setTeamId}: any) => {
       return teams
     }
   });
+  const curentTeam = teams?.find( (item: any)=> item.id === teamId)
+  const [value, setValue] = useState<any>(curentTeam)
 
   // Handler
   const handlerOnChange = (event: any, value: any) => {
     if(value && ('id' in value)){
       setTeamId(value.id)
+      setValue(value)
     } else {
       setTeamId('')
     }
@@ -45,6 +48,7 @@ export const Hold = ({setTeamId}: any) => {
         className={classes.Autocomplete}
         id="hold"
         onChange={handlerOnChange}
+        value={value}
         options={teams?teams:[]}
         getOptionLabel={(option) => option.name}
         renderInput={(params) => (

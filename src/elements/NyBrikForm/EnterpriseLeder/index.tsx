@@ -1,5 +1,5 @@
 // Core
-import React from "react";
+import Reac, { useState } from "react";
 
 // Material
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const EnterpriseLeder = ({setLeaderId}: any) => {
+export const EnterpriseLeder = ({leaderId, setLeaderId}: any) => {
   // Styles
   const classes = useStyles();
 
@@ -29,10 +29,14 @@ export const EnterpriseLeder = ({setLeaderId}: any) => {
     }
   });
 
+  const curentLeader = leaders?.find( (item: any)=> item.id === leaderId)
+  const [value, setValue] = useState<any>(curentLeader)
+
   // Handler
   const handlerOnChange = (event: any, value: any) => {
     if(value && ('id' in value)){
       setLeaderId(value.id)
+      setValue(value)
     } else {
       setLeaderId('')
     }
@@ -43,6 +47,7 @@ export const EnterpriseLeder = ({setLeaderId}: any) => {
       <Autocomplete
         className={classes.Autocomplete}
         id="enterprise-leder"
+        value={value}
         onChange={handlerOnChange}
         options={leaders?leaders:[]}
         getOptionLabel={(option) => option.name}

@@ -185,7 +185,7 @@ const [popupShown, showPopup] = useState(false);
            
             // Transform data
             const transformedProjects = data.root.projects.project.map((item) => {
-                item["resourceId"] = item["teamId"];
+                item["resourceId"] = item["teamId"]; // add connection field between resource and events
 
                 if(!("eventColor" in item)){
                     item["eventColor"] = item["color"];
@@ -195,9 +195,9 @@ const [popupShown, showPopup] = useState(false);
             })
 
             // Sort Fabrik
-            const selectionFabriks = data.root.selections.selection[2].values.value
-            const sortedFabriks = sortSelectedFabriks(transformedProjects, selectionFabriks)
-            const selectedFabriksCount = selectionFabriks.filter( item => item["-selected"] === true )
+            const selectionFabriks = data.root.selections.selection[2].values.value // All fabriks
+            const sortedFabriks = sortSelectedFabriks(transformedProjects, selectionFabriks) // Sorted projects by fabriks 
+            const selectedFabriksCount = selectionFabriks.filter( item => item["-selected"] === true ) // Only selected 
             // console.log({selectedFabriksCount});
 
             if(selectedFabriksCount.length === 0){
@@ -222,7 +222,6 @@ const [popupShown, showPopup] = useState(false);
                 })
 
                 const resourseFactoryId = sortedByRegions.map((a: any) => ({...a})); // Copy projects containing selected regions
-                console.log({resourseFactoryId})
 
                 resourseFactoryId.map((item: any)=> {  
                     item["resourceId"] = item["factoryId"];  // Resource 

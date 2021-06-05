@@ -100,7 +100,11 @@ export const Project = ({ setProjectName, setProjectNo, regionId, setRegionId, s
         setOpen(false);
       }}
       getOptionSelected={(option, value) => option.name === value.name}
-      getOptionLabel={(option: any) => `${option.id} - ${option.name}`}
+      getOptionLabel={(option: any) => {
+        const project = `${option.id} - ${option.name}`
+        
+        return option.name?project:''
+      }}
       renderOption={(option) => (
         <React.Fragment>
           <Typography variant='body1'>{`${option.id} - ${option.name}`}</Typography>

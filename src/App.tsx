@@ -253,32 +253,33 @@ const [popupShown, showPopup] = useState(false);
 
 
             } else {
-                // console.log('selectedFabriksCount.length !== 0');
-                // type ISelectionType = 'team' | 'region' | 'factory';
+                console.log('selectedFabriksCount.length !== 0');
+                type ISelectionType = 'team' | 'region' | 'factory';
 
-                // const getEntitiesSelectionByType= (data: any, type: ISelectionType) => {
-                //     return data.root.selections.selection
-                //         .find((selection: {type: SelectionType, values: any}) => selection.type === type)
-                //         ?.values
-                //         ?.value
-                //         ?.filter((entity: any) => entity['-selected'] === true)
-                //         ?.map((selectedEntity: any) => selectedEntity['-id']);
-                // }
-
-
-                // const selectedFactoriesIds = getEntitiesSelectionByType(data, 'factory');
-                // // const selectedProjects = data.root.projects.project.filter((project: Project) => selectedFactoriesIds?.includes(project.factoryId)) as <Array<Project> | []>;
-                // // const selectedTeams = data.root.teams.team.filter((team) => selectedProjects.find((project) => project.teamId === team.id)) as <Array<SelectionValue> | []>;
+                const getEntitiesSelectionByType= (data: any, type: ISelectionType) => {
+                    return data.root.selections.selection
+                        .find((selection: {type: SelectionType, values: any}) => selection.type === type)
+                        ?.values
+                        ?.value
+                        ?.filter((entity: any) => entity['-selected'] === true)
+                        ?.map((selectedEntity: any) => selectedEntity['-id']);
+                }
 
 
-                // const selectedProjects = data.root.projects.project.filter((project: Project) => selectedFactoriesIds?.includes(project.factoryId));
-                // const selectedTeams = data.root.teams.team.filter((team) => selectedProjects.find((project) => project.teamId === team.id));
+                const selectedFactoriesIds = getEntitiesSelectionByType(data, 'factory');
+                console.log({selectedFactoriesIds});
+                // const selectedProjects = data.root.projects.project.filter((project: Project) => selectedFactoriesIds?.includes(project.factoryId)) as <Array<Project> | []>;
+                // const selectedTeams = data.root.teams.team.filter((team) => selectedProjects.find((project) => project.teamId === team.id)) as <Array<SelectionValue> | []>;
 
-                // // @ts-ignore
-                // setTopEvents(selectedProjects);
-                // // @ts-ignore
-                // setTopResources(selectedTeams);
-                // console.log({resources: selectedTeams, events: selectedProjects});
+
+                const selectedProjects = data.root.projects.project.filter((project: Project) => selectedFactoriesIds?.includes(project.factoryId));
+                const selectedTeams = data.root.teams.team.filter((team) => selectedProjects.find((project) => project.teamId === team.id));
+               
+                // @ts-ignore
+                setTopEvents(selectedProjects);
+                // @ts-ignore
+                setTopResources(selectedTeams);
+                console.log("top scheduler: ", {resources: selectedTeams, events: selectedProjects});
 
 
 
@@ -287,7 +288,7 @@ const [popupShown, showPopup] = useState(false);
                 const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
                 
                 // Transform teams
-                const copySelectionTeams = [...selectionTeams]
+                const copySelectionTeams = [...selectionTeams];
                 copySelectionTeams.map( (item: any) =>  {
                     item["resourceId"] = item["-id"]
                     item["id"] = item["-id"]
@@ -295,7 +296,7 @@ const [popupShown, showPopup] = useState(false);
                 // Sort Regions
                 const selectionRegion = data.root.selections.selection[1].values.value
                 const sortedByRegions = sortSelectedRegions(sortedFabriks, selectionRegion)
-
+                // console.log({sortedByRegions});
                 const events = sortedByRegions.filter( (item: any) => {
                     // Project date
                     const projectStartDate = moment(item.startDate, "YYYY-MM-DD").unix()
@@ -307,6 +308,29 @@ const [popupShown, showPopup] = useState(false);
 
                     return projectEndDate > viewStartDate || projectStartDate < viewEndDate
                 })
+                console.log({events});
+
+                // const resourseFactoryId = sortedByRegions.map((a: any) => ({...a})); // Copy projects containing selected regions
+                // console.log({resourseFactoryId})
+
+                // resourseFactoryId.map((item: any)=> {  
+                //     item["resourceId"] = item["factoryId"];  // Resource 
+                // })
+
+                //  const transformFactories = transformFactoriesEvents(resourseFactoryId);
+                // const dropEmptyTons = transformFactories.filter( (item: any) => item.tons !== 0 )
+
+                //  const factories = data.root.factories.factory.map( (item: Factory) => {
+                //     return {...item} 
+                // })
+                // const activeFactories: any = []
+                // factories.forEach( forEachItem => {
+                //     const resultItem = transformFactories.find( (findItem: any) => forEachItem.id === findItem.resourceId)
+                //     if (resultItem) {
+                //         activeFactories.push(forEachItem)
+                //     }
+                // })
+
 
                 const sortTeams: any = []
 
@@ -319,14 +343,15 @@ const [popupShown, showPopup] = useState(false);
                         sortTeams.push(team)
                     }
                 })
+                
 
 
-
-
+                // setBottomResources(activeFactories);
+                // setBottomEvents(dropEmptyTons);
 
                 setTopEvents(events);
                 setTopResources(sortTeams);
-                console.log({events, sortTeams})
+                
             }
         }
 

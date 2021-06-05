@@ -31,6 +31,7 @@ const calculateWeekend = (startDate: any, endDate: any) => {
 };
 
 export const transformFactoriesEvents = (events: any) => {
+  console.log('in transform: ',{events});
   const modifiedDB: any = [];
   
   events.forEach((el: any) => {

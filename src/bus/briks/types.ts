@@ -71,23 +71,10 @@ type UpdateProjectActionType = {
 
 export type UpdateProjectContract = (payload: Project) => UpdateProjectActionType
 
-
-
- // ----------------------------- Sort projects -----------------------------
-
-export const  SORT_PROJECTS = 'SORT_PROJECTS';
-type SortProjectsActionType = {
-    type: typeof SORT_PROJECTS
-}
-
-export type SortProjectsContract = () => SortProjectsActionType
-
-
-
 export type ProjectActionTypes =
     | SetDataActionType
     | SetNuBrikActionType
     | UpdateSelectionActionType
     | DeleteProjectActionType
     | UpdateProjectActionType
-    | SortProjectsActionType
+

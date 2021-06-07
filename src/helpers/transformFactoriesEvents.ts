@@ -4,7 +4,6 @@ import moment from 'moment';
 const startFormat = (el: any) => {
   let date = el.startDate;
   date = date.split("-");
-  // date = date.reverse();
   date = date.join(" ");
   return date;
 };
@@ -12,7 +11,6 @@ const startFormat = (el: any) => {
 const endFormat = (el: any) => {
   let date = el.endDate;
   date = date.split("-");
-  // date = date.reverse();
   date = date.join(" ");
   return date;
 };
@@ -72,7 +70,6 @@ export const transformFactoriesEvents = (events: any) => {
     });
   };
   weekendRemove();
-
 
    let sorted: any = [];
 

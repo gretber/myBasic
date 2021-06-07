@@ -28,7 +28,6 @@ export const updateProject = async (body: Project) => {
 
   const updateProjectURL = process.env.REACT_APP_UPDATE_PROJECT;
 
-  //store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));  
   try {
      const {login, password} = getUserLoginData();
     const encoded = window.btoa(`${login}:${password}`) 
@@ -52,8 +51,5 @@ export const updateProject = async (body: Project) => {
 
   } catch (error) {
     console.log(error);
-  } finally {
-    //store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
-  }
-
+  } 
 }

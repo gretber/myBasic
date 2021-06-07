@@ -1,15 +1,8 @@
-// Types
-import { Project } from '../../bus/briks/dataTypes';
-
 // Store
 import { store } from '../../@init';
 
 // Actions
-import { togglerCreatorAction } from '../../bus/client';
 import {updateProjectAction} from '../../bus/briks/actions';
-
-// API
-import { fetchData } from '../../bus/briks/api/fetchData'
 
 // Moment
 import moment from 'moment';
@@ -63,7 +56,6 @@ export const dropProject = async (data: any) => {
 
   const updateProjectURL = process.env.REACT_APP_UPDATE_PROJECT;
 
-  //store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));  
   try {
     const {login, password} = getUserLoginData();
     const encoded = window.btoa(`${login}:${password}`) 
@@ -84,12 +76,9 @@ export const dropProject = async (data: any) => {
     }
 
     store.dispatch(updateProjectAction(body))
-    //fetchData()
 
   } catch (error) {
     console.log(error);
-  } finally {
-    //store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
-  }
+  } 
 
 }

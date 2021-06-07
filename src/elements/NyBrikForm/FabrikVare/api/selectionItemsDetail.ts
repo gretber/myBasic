@@ -6,8 +6,8 @@ import { getUserLoginData } from '../../../../helpers/getUserLoginData';
 export const selectionItemsDetail = async ( setOptions: any, active: boolean, factoryId: string ) => {
   const selectionItemsDetail = process.env.REACT_APP_SELECTION_ITEM_DETAILS;
 
-   const {login, password} = getUserLoginData();
-    const encoded = window.btoa(`${login}:${password}`) 
+  const {login, password} = getUserLoginData();
+  const encoded = window.btoa(`${login}:${password}`) 
   const response = await fetch(`${selectionItemsDetail}${factoryId}`, {
         method:  'GET',
         credentials: 'include',
@@ -16,8 +16,6 @@ export const selectionItemsDetail = async ( setOptions: any, active: boolean, fa
             'Authorization': `Basic ${encoded}`,
         },
     });
-
-        
   const projects: ItemType = await response.json();
 
   if (active) {

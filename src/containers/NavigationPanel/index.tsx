@@ -36,28 +36,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const NavigationPanel = ({schedulerConfig, /*setConfig*/ period, offLineEndDate, /*saveOffLineEndDate*/ setAuthorized}:
-   {schedulerConfig: any, /*setConfig:  React.Dispatch<any>*/ period: string, offLineEndDate: Date, /*</any>saveOffLineEndDate: React.Dispatch<React.SetStateAction<Date>>,*/ setAuthorized:React.Dispatch<React.SetStateAction<boolean>>}) => {
+export const NavigationPanel = ({schedulerConfig, period, offLineEndDate, setAuthorized}:
+   {schedulerConfig: any, period: string, offLineEndDate: Date, setAuthorized:React.Dispatch<React.SetStateAction<boolean>>}) => {
 
   // Styles
   const classes = useStyles();
-
-  // Router history
-    // let history = useHistory();
-
- 
-
-  // Login Check
-  // useEffect(() => {
-  
-  //   if(localStorage.getItem('schedulerUserLogin') === null)
-  //       {
-  //           if(localStorage.getItem('schedulerUserPassword') === null)
-  //           {
-  //             history.push('/');
-  //           }
-  //       }
-  // });
 
   // Event Handlers
   const logOutButtonClickHandler = () => {
@@ -74,7 +57,7 @@ export const NavigationPanel = ({schedulerConfig, /*setConfig*/ period, offLineE
           <div className={classes.gap} />
          
           {/* <JobType /> */}
-          <PeriodPicker offLineEndDate={offLineEndDate} /*saveOffLineEndDate = {saveOffLineEndDate}*/ period ={period} config={schedulerConfig} /*setConfig={setConfig}*//>
+          <PeriodPicker offLineEndDate={offLineEndDate} period ={period} config={schedulerConfig} />
           <Button disabled>
             <FullscreenIcon />
           </Button>

@@ -14,8 +14,6 @@ import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutli
 
 // API 
 import { updateTimeLine } from '../../bus/briks/api/updateTimeLine';
-import { Button } from "@material-ui/core";
-import { fetchData } from "../../bus/briks/api";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -56,12 +54,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-
-
-
-
-export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, saveOffLineEndDate*/}: 
-  {config: any, /*setConfig : React.Dispatch<any>*/ period: string, offLineEndDate:Date, /*</any>saveOffLineEndDate: React.Dispatch<React.SetStateAction<Date>>*/}) => {
+export const PeriodPicker = ({config, period }: 
+  {config: any,  period: string, offLineEndDate:Date}) => {
   const classes = useStyles();
   
   const [periode, setPeriode] = React.useState(period);
@@ -88,17 +82,14 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
       const newState = Object.assign({}, config);
       const newEndDate = moment(newState.startDate)
       const newStartDate = moment(newState.startDate);
-      // let savedEndDate = moment(offLineEndDate);
+      
         if(event.target.value === 'Uge')
         {
           newState.viewPreset = 'myDayAndWeekPreset';
           newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(1, 'weeks').toDate();
-          // savedEndDate = moment(newEndDate);
           updateTimeLine(newState.startDate, newState.endDate, event.target.value as string);
-          // setConfig(newState);
-          
         }
 
         else if(event.target.value === 'To uger')
@@ -107,9 +98,7 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
           newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(2, 'weeks').toDate();
-          // savedEndDate = moment(newEndDate);
           updateTimeLine(newState.startDate, newState.endDate, event.target.value as string);
-          // setConfig(newState); 
         }
 
        else if(event.target.value === 'Måned')
@@ -118,9 +107,7 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
           newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(1, 'months').toDate();
-          // savedEndDate =  moment(newEndDate);
           updateTimeLine(newState.startDate, newState.endDate, event.target.value as string);
-          // setConfig(newState);
         }
 
         else if(event.target.value === event.target.value as string)
@@ -129,12 +116,8 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
           newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(24, 'weeks').toDate();
-          // savedEndDate =  moment(newEndDate);
           updateTimeLine(newState.startDate, newState.endDate, event.target.value as string);
-          // setConfig(newState);
-          // fetchData();
         }
-        // saveOffLineEndDate(savedEndDate.toDate()) ;
     }
    
    setPeriode(event.target.value as string);
@@ -147,7 +130,6 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
     const newState = Object.assign({}, config);
     newState.startDate = moment(newState.startDate);
     const newEndDate = moment(newState.endDate);
-    // const savedEndDate = moment(offLineEndDate);
     switch(periode)
     {
       case "Uge":
@@ -156,14 +138,12 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
       {
         newState.startDate = newState.startDate.add(-1, 'week');
         newEndDate.add(-1, 'week');
-        // savedEndDate.add(-1, 'week');
         break;
       }
       else
       {
         newState.startDate = newState.startDate.add(1, 'week');
         newEndDate.add(1, 'week');
-        // savedEndDate.add(1, 'week');
         break;
       }
       }
@@ -173,14 +153,12 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
       {
         newState.startDate = newState.startDate.add(-2, 'week');
        newEndDate.add(-2, 'week');
-      //  savedEndDate.add(-2, 'week');
         break;
       }
       else
       {
         newState.startDate = newState.startDate.add(2, 'week');
         newEndDate.add(2, 'week');
-        // savedEndDate.add(2, 'week');
         break;
       }
       }
@@ -190,13 +168,11 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
         {
           newState.startDate.add(-1, 'months');
           newEndDate.add(-1, 'months');
-          // savedEndDate.add(-1, 'months');
         }
     else
        {
           newState.startDate.add(1, 'months');
           newEndDate.add(1, 'months');
-          // savedEndDate.add(1, 'months');
        }
         break;
       }
@@ -207,14 +183,12 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
       {
         newState.startDate = newState.startDate.add(-24, 'week');
         newEndDate.add(-24, 'week');
-        // savedEndDate.add(-24, 'week');
         break;
       }
       else
       {
         newState.startDate = newState.startDate.add(24, 'week');
         newEndDate.add(24, 'week');
-        // savedEndDate.add(24, 'week');
         break;
       }
       }
@@ -222,9 +196,7 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
     }
     newState.startDate = newState.startDate.toDate();
  
-    // saveOffLineEndDate(savedEndDate.toDate());
     updateTimeLine(newState.startDate, newEndDate.toDate(), periode);
-    // setConfig(newState);
   }
 
   const changeTimeLineByMonth = (direction: string) => {
@@ -232,25 +204,20 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
     const newState = Object.assign({}, config);
     newState.startDate = moment(newState.startDate);
     const newEndDate = moment(newState.endDate);
-    // const savedEndDate = moment(offLineEndDate);
     if(direction === 'Left')
     {
       newState.startDate.add(-1, 'months');
       newEndDate.add(-1, 'months');
-      // savedEndDate.add(-1, 'months');
     }
     else
     {
       newState.startDate.add(1, 'months');
       newEndDate.add(1, 'months');
-      // savedEndDate.add(1, 'months');
     }
     newState.startDate = newState.startDate.toDate();
     
-    // saveOffLineEndDate(savedEndDate.toDate());
     console.log({periode});
     updateTimeLine(newState.startDate, newEndDate.toDate(), periode);
-    // setConfig(newState);
   }
 
   return (

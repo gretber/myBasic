@@ -6,7 +6,6 @@ import { getUserLoginData } from '../../../helpers/getUserLoginData';
 
 // Actions
 import { togglerCreatorAction } from '../../client';
-import { sortProjectsAction, updateSelectionAction } from '../actions';
 import { fetchData } from './fetchData';
 
 // Types
@@ -40,22 +39,10 @@ export const updateSelection: UpdateSelection = async (body) => {
     }
   }
 
-  const syncBody = {
-        selection: [
-          {type: "team", values: { value: clearTeam }},
-          {type: "region", values: { value: region }},
-          {type: "factory", values: { value: factory }}
-        ]
-      };
-
-
   const updateSelectionUrl = process.env.REACT_APP_UPDATE_SELECTION;
+  store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
   
- 
-    
-    store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
-  
-    const {login, password} = getUserLoginData();
+  const {login, password} = getUserLoginData();
   try {
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
     const encoded = window.btoa(`${login}:${password}`)
@@ -74,17 +61,13 @@ export const updateSelection: UpdateSelection = async (body) => {
     if (response.status !== 200) {
       throw new Error('Todo create failed');
     }
-    
-      // store.dispatch(updateSelectionAction(body));
-      fetchData();
+     fetchData();
   } catch (error) {
       console.log(error);
   } finally {
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
   }
-  
-  // store.dispatch(sortProjectsAction());
-  
-  }
+
+}
   
   

@@ -1,6 +1,9 @@
 // Core
 import moment from 'moment';
 
+// Helpers
+import { getUserLoginData } from '../../../helpers/getUserLoginData';
+
 // Types
 import { fetchData } from './fetchData';
 
@@ -8,10 +11,11 @@ const InitBriksUrl = process.env.REACT_APP_INIT_BRIK_URL;
 
 export const updateTimeLine = async (startDate:Date, endDate:Date, view:string) => {
     
-        const login = localStorage.getItem('schedulerUserLogin');
-        const password = localStorage.getItem('schedulerUserPassword')
+        const {login, password} = getUserLoginData();
         const strStartDate = moment(startDate).format('DD, MM, YYYY').replace(/[^0-9]/g, '');
         const strEndDate = moment(endDate).format('DD, MM, YYYY').replace(/[^0-9]/g, '')
+        console.log({view});
+        
         let serverView = '';
         if(view === 'Uge')
         {

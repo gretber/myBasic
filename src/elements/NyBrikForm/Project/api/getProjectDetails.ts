@@ -1,3 +1,5 @@
+// Helpers
+import { getUserLoginData } from "../../../../helpers/getUserLoginData";
 
 export const getProjectDetails = async (
   setRegionId: any, projectNo: string, setCustomerName: any,
@@ -7,7 +9,8 @@ export const getProjectDetails = async (
 
   const projectDetails = process.env.REACT_APP_GET_PROJECT_DETAILS;
 
-  const encoded = window.btoa('lei-lmk:AAABBB')
+  const {login, password} = getUserLoginData();
+    const encoded = window.btoa(`${login}:${password}`) 
   const response = await fetch(`${projectDetails}${projectNo}`, {
         method:  'GET',
         credentials: 'include',

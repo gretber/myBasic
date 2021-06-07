@@ -1,7 +1,11 @@
+// Helpers
+import { getUserLoginData } from "../../helpers/getUserLoginData";
+
 export const getProjectDetails = async (projectNo: any, project: any, arbejdsplads: any, kundeNavn: any, factory: any, data: any, setEditBrik: any ) => {
     const projectDetails = process.env.REACT_APP_GET_PROJECT_DETAILS;
 
-    const encoded = window.btoa('lei-lmk:AAABBB')
+    const {login, password} = getUserLoginData();
+    const encoded = window.btoa(`${login}:${password}`);
 
     // Get editing project
     const projectResponse = await fetch(`${projectDetails}${projectNo}`, {

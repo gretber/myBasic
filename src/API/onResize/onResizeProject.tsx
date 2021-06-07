@@ -9,7 +9,10 @@ import { togglerCreatorAction } from '../../bus/client';
 import {updateProjectAction} from '../../bus/briks/actions';
 
 // API
-import { fetchData } from '../../bus/briks/api/fetchData'
+import { fetchData } from '../../bus/briks/api/fetchData';
+
+// Helpers
+import { getUserLoginData } from '../../helpers/getUserLoginData';
 
 export const onResizeProject = async (body: Project) => {
   const id = body.id
@@ -27,8 +30,9 @@ export const onResizeProject = async (body: Project) => {
   const updateProjectURL = process.env.REACT_APP_UPDATE_PROJECT;
 
   //store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));  
-  try {
-    const encoded = window.btoa('lei-lmk:AAABBB')
+  try { 
+     const {login, password} = getUserLoginData();
+    const encoded = window.btoa(`${login}:${password}`) 
 
     const response = await fetch(`${updateProjectURL}${id}`, {
     method:  'POST',

@@ -9,11 +9,13 @@ import { setBriksAction } from '../actions';
 import { FetchData } from './types';
 import { Data } from '../types';
 
+// Hellpers
+import { getUserLoginData } from '../../../helpers/getUserLoginData';
+
 const InitBriksUrl = process.env.REACT_APP_INIT_BRIK_URL;
 
 export const fetchData: FetchData = async () => {
-    const login = localStorage.getItem('schedulerUserLogin');
-    const password = localStorage.getItem('schedulerUserPassword')
+  const {login, password} = getUserLoginData();
     
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
     const encoded = window.btoa(`${login}:${password}`)

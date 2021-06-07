@@ -1,10 +1,13 @@
 // Types
 import { ItemType } from '../types';
+// Helpers
+import { getUserLoginData } from '../../../../helpers/getUserLoginData';
 
 export const selectionItemsDetail = async ( setOptions: any, active: boolean, factoryId: string ) => {
   const selectionItemsDetail = process.env.REACT_APP_SELECTION_ITEM_DETAILS;
 
-  const encoded = window.btoa('lei-lmk:AAABBB')
+   const {login, password} = getUserLoginData();
+    const encoded = window.btoa(`${login}:${password}`) 
   const response = await fetch(`${selectionItemsDetail}${factoryId}`, {
         method:  'GET',
         credentials: 'include',

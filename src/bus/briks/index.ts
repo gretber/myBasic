@@ -6,7 +6,7 @@ import { useSelector } from '../../hooks';
 import { fetchData,
     createBrik,
     updateSelection,
-    // deleteTodo
+   
 } from './api';
 
 // Toglers
@@ -33,7 +33,7 @@ export const useBriksMutations = () => {
     return {
         createBrik,
         updateSelection,
-        // deleteTodo,
+        
         loading: isDataFetching,
     };
 };

@@ -15,8 +15,3 @@ export type UpdateSelectionInput = {
 };
 export type UpdateSelection = (input: UpdateSelectionInput) => Promise<void>;
 
-// // Delete
-// export type DeleteTodoInput = {
-//     todoId: string
-// };
-// export type DeleteTodo = (input: DeleteTodoInput) => Promise<void>;

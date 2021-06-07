@@ -1,7 +1,11 @@
+// Helpers
+import { getUserLoginData } from "../../helpers/getUserLoginData";
+
 export const getAllCustomers = async (kundeNavn: any, customer: any, setEditBrik: any) => {
   const getCustomers = process.env.REACT_APP_GET_CUSTOMERS;
 
-  const encoded = window.btoa('lei-lmk:AAABBB')
+  const {login, password} = getUserLoginData();
+  const encoded = window.btoa(`${login}:${password}`) 
   const response = await fetch(`${getCustomers}`, {
     method:  'GET',
     credentials: 'include',

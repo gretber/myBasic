@@ -63,23 +63,7 @@ export const dataReducer: Reducer<types.Data, types.ProjectActionTypes> = (state
                 }
                 else return state;
         }
-            
-
-        // case types.SET_TODO:
-        //     return [ action.payload, ...state ];
-
-        // case types.UPDATE_TODO:
-        //     return state.map((todo) => {
-        //         if (todo.id === action.payload.id) {
-        //             return action.payload;
-        //         }
-
-        //         return todo;
-        //     });
-
-        // case types.DELETE_TODO:
-        //     return state.filter((todo) => todo.id !== action.payload);
-
+     
         default:
             return state;
     }

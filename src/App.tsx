@@ -123,7 +123,7 @@ const [popupShown, showPopup] = useState(false);
         setResourceStore(resourceStore);
     }, []);
 
-    const showEditor = useCallback(eventRecord => {
+  const showEditor = useCallback(eventRecord => {
         setEventRecord(eventRecord);
         showPopup(true);
     }, []);
@@ -152,8 +152,8 @@ const [popupShown, showPopup] = useState(false);
                 const startDate = moment(data.root.view.startDate, "DD/MM/YYYY").toDate()
                 const endDate = moment(data.root.view.endDate, "DD/MM/YYYY").toDate()
                 
-                newState.startDate = startDate
-                newState.endDate = endDate
+                newState.startDate = startDate;
+                newState.endDate = endDate;
 
                 saveOffLineEndDate(config.endDate);
 
@@ -164,7 +164,7 @@ const [popupShown, showPopup] = useState(false);
                 }
                 else if(data.root.view.timeframe === '2weeks')
                 {
-                    setPeriod('To uges')
+                    setPeriod('To uger')
                     newState.viewPreset = 'myDayAndWeekPreset';
                 }
                 else if(data.root.view.timeframe === 'month')
@@ -176,7 +176,7 @@ const [popupShown, showPopup] = useState(false);
                     setPeriod('24 uger');
                     newState.viewPreset = 'my24WeeksPreset';
                 }
-                setPeriod(data.root.view.timeframe)
+               
 
                 
 
@@ -253,32 +253,33 @@ const [popupShown, showPopup] = useState(false);
 
 
             } else {
-                // console.log('selectedFabriksCount.length !== 0');
-                // type ISelectionType = 'team' | 'region' | 'factory';
+                console.log('selectedFabriksCount.length !== 0');
+                type ISelectionType = 'team' | 'region' | 'factory';
 
-                // const getEntitiesSelectionByType= (data: any, type: ISelectionType) => {
-                //     return data.root.selections.selection
-                //         .find((selection: {type: SelectionType, values: any}) => selection.type === type)
-                //         ?.values
-                //         ?.value
-                //         ?.filter((entity: any) => entity['-selected'] === true)
-                //         ?.map((selectedEntity: any) => selectedEntity['-id']);
-                // }
-
-
-                // const selectedFactoriesIds = getEntitiesSelectionByType(data, 'factory');
-                // // const selectedProjects = data.root.projects.project.filter((project: Project) => selectedFactoriesIds?.includes(project.factoryId)) as <Array<Project> | []>;
-                // // const selectedTeams = data.root.teams.team.filter((team) => selectedProjects.find((project) => project.teamId === team.id)) as <Array<SelectionValue> | []>;
+                const getEntitiesSelectionByType= (data: any, type: ISelectionType) => {
+                    return data.root.selections.selection
+                        .find((selection: {type: SelectionType, values: any}) => selection.type === type)
+                        ?.values
+                        ?.value
+                        ?.filter((entity: any) => entity['-selected'] === true)
+                        ?.map((selectedEntity: any) => selectedEntity['-id']);
+                }
 
 
-                // const selectedProjects = data.root.projects.project.filter((project: Project) => selectedFactoriesIds?.includes(project.factoryId));
-                // const selectedTeams = data.root.teams.team.filter((team) => selectedProjects.find((project) => project.teamId === team.id));
+                const selectedFactoriesIds = getEntitiesSelectionByType(data, 'factory');
+                console.log({selectedFactoriesIds});
+                // const selectedProjects = data.root.projects.project.filter((project: Project) => selectedFactoriesIds?.includes(project.factoryId)) as <Array<Project> | []>;
+                // const selectedTeams = data.root.teams.team.filter((team) => selectedProjects.find((project) => project.teamId === team.id)) as <Array<SelectionValue> | []>;
 
-                // // @ts-ignore
-                // setTopEvents(selectedProjects);
-                // // @ts-ignore
-                // setTopResources(selectedTeams);
-                // console.log({resources: selectedTeams, events: selectedProjects});
+
+                const selectedProjects = data.root.projects.project.filter((project: Project) => selectedFactoriesIds?.includes(project.factoryId));
+                const selectedTeams = data.root.teams.team.filter((team) => selectedProjects.find((project) => project.teamId === team.id));
+               
+                // @ts-ignore
+                setTopEvents(selectedProjects);
+                // @ts-ignore
+                setTopResources(selectedTeams);
+                // console.log("top scheduler: ", {resources: selectedTeams, events: selectedProjects});
 
                 // Sort Regions
                 const selectionRegion = data.root.selections.selection[1].values.value
@@ -297,13 +298,13 @@ const [popupShown, showPopup] = useState(false);
                         activeFactories.push(forEachItem)
                     }
                 })
-                console.log({copySelectedFabriks})
+                // console.log({copySelectedFabriks})
 
                 // Sorted Teams
                 const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
                 
                 // Transform teams
-                const copySelectionTeams = [...selectionTeams]
+                const copySelectionTeams = [...selectionTeams];
                 copySelectionTeams.map( (item: any) =>  {
                     item["resourceId"] = item["-id"]
                     item["id"] = item["-id"]
@@ -321,6 +322,29 @@ const [popupShown, showPopup] = useState(false);
 
                     return projectEndDate > viewStartDate || projectStartDate < viewEndDate
                 })
+                // console.log({events});
+
+                // const resourseFactoryId = sortedByRegions.map((a: any) => ({...a})); // Copy projects containing selected regions
+                // console.log({resourseFactoryId})
+
+                // resourseFactoryId.map((item: any)=> {  
+                //     item["resourceId"] = item["factoryId"];  // Resource 
+                // })
+
+                //  const transformFactories = transformFactoriesEvents(resourseFactoryId);
+                // const dropEmptyTons = transformFactories.filter( (item: any) => item.tons !== 0 )
+
+                //  const factories = data.root.factories.factory.map( (item: Factory) => {
+                //     return {...item} 
+                // })
+                // const activeFactories: any = []
+                // factories.forEach( forEachItem => {
+                //     const resultItem = transformFactories.find( (findItem: any) => forEachItem.id === findItem.resourceId)
+                //     if (resultItem) {
+                //         activeFactories.push(forEachItem)
+                //     }
+                // })
+
 
                 const sortTeams: any = []
                  copySelectionTeams.map( (team: any) => {
@@ -331,6 +355,7 @@ const [popupShown, showPopup] = useState(false);
                         sortTeams.push(team)
                     }
                 })
+                
 
 
 
@@ -340,7 +365,7 @@ const [popupShown, showPopup] = useState(false);
 
                 setTopEvents(events);
                 setTopResources(sortTeams);
-                console.log({events, sortTeams})
+                
             }
         }
 
@@ -393,10 +418,10 @@ const [popupShown, showPopup] = useState(false);
                 projectNo = ""
             }
             
-            console.log("projectNo", projectNo)
-            console.log("projectNo", currentLeader)
-            console.log("projectNo", currentFactory)
-            console.log("projectNo", currentRegion)
+            // console.log("projectNo", projectNo)
+            // console.log("projectNo", currentLeader)
+            // console.log("projectNo", currentFactory)
+            // console.log("projectNo", currentRegion)
          
             const body = {
                 id:                 event.eventRecord.data.id,
@@ -424,7 +449,7 @@ const [popupShown, showPopup] = useState(false);
                 color:              event.eventRecord.data.color,
                 details:            event.eventRecord.data.details,
             }
-            console.log("body save", body)
+            // console.log("body save", body)
         
             // event.eventRecord.setData("duration", 5)
             // event.values.duration = 5
@@ -468,7 +493,7 @@ const [popupShown, showPopup] = useState(false);
 
     // On Copy click
         const handlerOnCopy = () => {
-     
+            console.log('handlerOnCopy');
         const projectCopy = {
             id: 'null',          
             regionId:           eventRecordData.regionId,
@@ -552,6 +577,7 @@ const [popupShown, showPopup] = useState(false);
                  {...Object.assign({}, config, configFeatures) }
                 // {...config}
                 listeners={{
+                    ...config.listeners,
                 beforeEventEdit: (source: any) => {
                     source.eventRecord.resourceId = source.resourceRecord.id;
                     showEditor(source.eventRecord);

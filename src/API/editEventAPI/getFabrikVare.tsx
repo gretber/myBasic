@@ -1,7 +1,11 @@
+// Helpers
+import { getUserLoginData } from "../../helpers/getUserLoginData";
+
 export const getFabrikVare = async (factoryId: any, fabrikVare: any, factoryItemName: any, setEditBrik: any ) => {
   const selectionItemsDetailURL = process.env.REACT_APP_SELECTION_ITEM_DETAILS;
 
-  const encoded = window.btoa('lei-lmk:AAABBB')
+  const {login, password} = getUserLoginData();
+  const encoded = window.btoa(`${login}:${password}`);
   const response = await fetch(`${selectionItemsDetailURL}${factoryId}`, {
         method:  'GET',
         credentials: 'include',

@@ -9,9 +9,6 @@ import moment from 'moment';
 
 // Config
 export let eventRecordData:any = {};
-// console.log(eventRecordData);
-
-
 
   const features = {
 
@@ -32,12 +29,10 @@ export let eventRecordData:any = {};
                 showCurrentTimeLine : true,
                 showHeaderElements  : false,
                 enableResizing      : true,
-               
-                
+         
 
             },
         eventTooltip : {
-            // align : 'l-t',
             template : ({eventRecord}:any) => {
             
             let projectNo = '', customerName = '', name2 = '', tons = '', factoryItemName = '', area = '';
@@ -79,8 +74,7 @@ export let eventRecordData:any = {};
                      onItem: () => console.log('clicked copy')
                    }
                }
-            
-
+      
         },
          scheduleMenu : {
            disabled: true,
@@ -91,8 +85,6 @@ export let eventRecordData:any = {};
          eventResize: {
             disabled: false,
         },
-
-       
 
         eventDrag : {
             disabled: false,
@@ -147,9 +139,7 @@ const myDayAndWeekPreset = {
                 
                 const displayDate = momentDate.locale('da').format('DD, dd');
                 return displayDate;
-                }
-                
-            
+                }    
         }
 
         ],
@@ -248,8 +238,7 @@ const my24WeeksPreset = {
                 return displayDate;
             }
                 },
-               
-        ]
+       ]
         
 }
 
@@ -261,8 +250,6 @@ const schedulerConfig: any = {
     resourceImagePath: './',
     minHeight: '20em',
     createEventOnDblClick: false,
-
-      
     rowHeight: 30,
     weekStartDay: 1,
     presets: [myDayAndMonthPreset, myDayAndWeekPreset, my24WeeksPreset],
@@ -281,45 +268,16 @@ const schedulerConfig: any = {
             draggable: false,
             editor: false
 
-
         },
     ],
       listeners: {
-                // catchAll: (e:any) => {console.log(e);}
-                // eventClick: (e:any) => {console.log(e);},
                 eventContextMenu: (e: any) => {
-                    
                 eventRecordData = e.eventRecord.originalData;
                },
-                
                 eventDblClick: (e: any) => {
-                    eventRecordData = e.eventRecord.originalData;
+                eventRecordData = e.eventRecord.originalData;
                 }
             },
-
-    //*********** Custome edit event ***********//
-        features,
-
-    // listeners : {
-    //     beforeEventEditShow({ editor, eventRecord }: any) {
-    //         // const equipmentCombo = editor.widgetMap.equipment;    
-    //         // const volumeField = editor.widgetMap.volume;
-    //         const region = editor.widgetMap.region
-
-    //         console.log('region', region)
-
-    //         // // update data in combo list
-    //         // equipmentCombo.items = this.equipmentStore.getRange();
-    //         // // update field visibility state
-    //         // volumeField.hidden = !eventRecord.hasVolume;
-    //     }
-    // }
-    
-   
-
+    features,
 };
-
-
 export { schedulerConfig };
-
-

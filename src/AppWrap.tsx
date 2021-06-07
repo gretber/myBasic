@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 
 // Components 
 import { App } from './App';
-import { fetchData } from './bus/briks/api';
 
 // Styles
 const useStyles = makeStyles((theme: Theme) => 
@@ -31,11 +30,8 @@ const useStyles = makeStyles((theme: Theme) =>
         color: 'red',
         height: 24,
     }
-   
   })
-
 )
-
 
 export const AppWrap = () => {
 
@@ -56,7 +52,6 @@ const classes = useStyles();
         }
         
     }, []);
-
 
     // Authorization
         const InitBriksUrl = process.env.REACT_APP_INIT_BRIK_URL;
@@ -103,10 +98,7 @@ const classes = useStyles();
             setAuthorized(false);
             return false; 
         } 
-
     }
-
-
 
     // Login button handler
     const signInHandler = async(event: any) => {
@@ -141,11 +133,4 @@ const classes = useStyles();
         </form>
     </div>);
     }
-
-
-
-
-
-
-
 }

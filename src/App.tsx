@@ -5,17 +5,15 @@
 // Core
 import React, {
     Fragment,
-    FunctionComponent,
     useEffect,
     useState,
     useRef,
     useCallback,
-    createFactory
-} from 'react'
+    } from 'react'
 import {
     BryntumScheduler,
 } from '@bryntum/scheduler-react';
-import { EventModel } from '@bryntum/scheduler/scheduler.umd.js';
+
 
 // Config
 import { schedulerConfig, eventRecordData, configFeatures } from './AppConfig';
@@ -40,16 +38,10 @@ import { swap } from './helpers/swapElArr';
 import { sortSelectedRegions } from './helpers/sortSelectedRegions';
 import { sortSelectedFabriks } from './helpers/sortSelectedFabriks';
 import { lagInDays } from './helpers/lagInDays';
-import { addDays } from './helpers/addDays';
 import { subDays } from './helpers/subDays';
 import { transformFactoriesEvents } from './helpers/transformFactoriesEvents';
-import {convertDate} from './helpers/convertDate'
 
 // API
-import { getAllCustomers } from './API/editEventAPI/getAllCustomers';
-import { getProjectDetails } from './API/editEventAPI/getProjectDetails';
-import { selectionProjectDetails } from './API/editEventAPI/selectionProjectDetails';
-import { getFabrikVare } from './API/editEventAPI/getFabrikVare';
 import { updateProject } from './API/onSaveAPI/updateProject';
 import { deleteProject } from './API/onDeleteAPI/deleteProject';
 import { dropProject } from './API/onDropAPI/dropProject';
@@ -106,7 +98,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
     const [bottomResources, setBottomResources] = useState<any>([]);
 
     const [config, setConfig] = useState({...schedulerConfig});
-    const [config2, setConfig2] = useState({...schedulerConfig2});
+    const [config2] = useState({...schedulerConfig2});
     const [period, setPeriod] = useState('');
 
 
@@ -133,10 +125,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
         showPopup(false);
     }, []);
 
-    // Edit brik states
-    const [editBrik, setEditBrik] = useState(initialBrik)
-
-    // Displayed Date in header
+      // Displayed Date in header
     const [offLineEndDate, saveOffLineEndDate] = useState(new Date());
     // Get data
     const { data, loading } = useDataQuery();
@@ -177,9 +166,6 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                     newState.viewPreset = 'my24WeeksPreset';
                 }
                
-
-                
-
                 return newState
             })
 
@@ -239,18 +225,11 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                     }
                 })
 
-                // console.log("setBottomResources", activeFactories)
-                // console.log("setBottomEvents", dropEmptyTons)
                 setBottomResources(activeFactories);
                 setBottomEvents(dropEmptyTons);
 
-
-                //console.log("MAIN EVENTS", sortedByRegions)
                 setTopResources(copySelectionTeams);
                 setTopEvents(sortedByRegions);
-                // console.log('copySelectionTeams', copySelectionTeams);
-                // console.log({copySelectionTeams, sortedByRegions});
-
 
             } else {
                 console.log('selectedFabriksCount.length !== 0');
@@ -268,10 +247,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
 
                 const selectedFactoriesIds = getEntitiesSelectionByType(data, 'factory');
                 console.log({selectedFactoriesIds});
-                // const selectedProjects = data.root.projects.project.filter((project: Project) => selectedFactoriesIds?.includes(project.factoryId)) as <Array<Project> | []>;
-                // const selectedTeams = data.root.teams.team.filter((team) => selectedProjects.find((project) => project.teamId === team.id)) as <Array<SelectionValue> | []>;
-
-
+             
                 const selectedProjects = data.root.projects.project.filter((project: Project) => selectedFactoriesIds?.includes(project.factoryId));
                 const selectedTeams = data.root.teams.team.filter((team) => selectedProjects.find((project) => project.teamId === team.id));
                
@@ -279,8 +255,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                 setTopEvents(selectedProjects);
                 // @ts-ignore
                 setTopResources(selectedTeams);
-                // console.log("top scheduler: ", {resources: selectedTeams, events: selectedProjects});
-
+               
                 // Sort Regions
                 const selectionRegion = data.root.selections.selection[1].values.value
                 const sortedByRegions = sortSelectedRegions(sortedFabriks, selectionRegion)
@@ -298,8 +273,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                         activeFactories.push(forEachItem)
                     }
                 })
-                // console.log({copySelectedFabriks})
-
+           
                 // Sorted Teams
                 const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
                 
@@ -322,30 +296,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
 
                     return projectEndDate > viewStartDate || projectStartDate < viewEndDate
                 })
-                // console.log({events});
-
-                // const resourseFactoryId = sortedByRegions.map((a: any) => ({...a})); // Copy projects containing selected regions
-                // console.log({resourseFactoryId})
-
-                // resourseFactoryId.map((item: any)=> {  
-                //     item["resourceId"] = item["factoryId"];  // Resource 
-                // })
-
-                //  const transformFactories = transformFactoriesEvents(resourseFactoryId);
-                // const dropEmptyTons = transformFactories.filter( (item: any) => item.tons !== 0 )
-
-                //  const factories = data.root.factories.factory.map( (item: Factory) => {
-                //     return {...item} 
-                // })
-                // const activeFactories: any = []
-                // factories.forEach( forEachItem => {
-                //     const resultItem = transformFactories.find( (findItem: any) => forEachItem.id === findItem.resourceId)
-                //     if (resultItem) {
-                //         activeFactories.push(forEachItem)
-                //     }
-                // })
-
-
+               
                 const sortTeams: any = []
                  copySelectionTeams.map( (team: any) => {
                     const hasIvent = sortedByRegions.find( (event: any) => {
@@ -356,10 +307,6 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                     }
                 })
                 
-
-
-
-
                 setBottomResources(activeFactories)
                 setBottomEvents(dropEmptyTons)
 
@@ -399,8 +346,6 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
             default: jType = ''
         }
 
-        // console.log(jType)
-
             let currentLeader: any = {}
             let currentFactory: any = {}
             let currentRegion: any = {}
@@ -418,11 +363,6 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                 projectNo = ""
             }
             
-            // console.log("projectNo", projectNo)
-            // console.log("projectNo", currentLeader)
-            // console.log("projectNo", currentFactory)
-            // console.log("projectNo", currentRegion)
-         
             const body = {
                 id:                 event.eventRecord.data.id,
                 regionId:           currentRegion?.id,
@@ -449,20 +389,10 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                 color:              event.eventRecord.data.color,
                 details:            event.eventRecord.data.details,
             }
-            // console.log("body save", body)
-        
-            // event.eventRecord.setData("duration", 5)
-            // event.values.duration = 5
-            // console.log("event save", event)
            
-        
         updateProject(body)
         event.context.finalize()
     },[])
-
-    // const handlerOnAfterSave = (event: any) => {
-    // }
-
 
     // Resize event handler
     
@@ -527,7 +457,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
     if(loading){
         return (
             <Fragment>
-                {(Object.keys(data).length !== 0) && <NavigationPanel setAuthorized={setAuthorized} offLineEndDate={offLineEndDate} /*saveOffLineEndDate = {saveOffLineEndDate} */period = {period} schedulerConfig = {config} /*setConfig={setConfig}*//>}
+                {(Object.keys(data).length !== 0) && <NavigationPanel setAuthorized={setAuthorized} offLineEndDate={offLineEndDate} period = {period} schedulerConfig = {config} />}
                 <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "500px", marginBottom: "500px"}}>
                     <CircularProgress color="primary" />
                 </div>
@@ -537,43 +467,33 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
      
      
     if(localStorage.getItem('schedulerUserType') !== 'edit')
-                {
-                    configFeatures.eventDragCreate = false;
-                    configFeatures.eventDragSelect = false;
-                    configFeatures.eventResize.disabled = true; 
-                    configFeatures.eventDrag.disabled = true;
-                    
-                    
-                    configFeatures.eventMenu.items.copyEvent = false;
-                    configFeatures.eventMenu.items.deleteEvent = false;
-                    configFeatures.eventEdit.disabled = true;
-                    
-                }
+        {
+            configFeatures.eventDragCreate = false;
+            configFeatures.eventDragSelect = false;
+            configFeatures.eventResize.disabled = true; 
+            configFeatures.eventDrag.disabled = true;
+            configFeatures.eventMenu.items.copyEvent = false;
+            configFeatures.eventMenu.items.deleteEvent = false;
+            configFeatures.eventEdit.disabled = true;
+               }
                 else
                 {   
-                   
-                    configFeatures.eventDragCreate = false;
-                    configFeatures.eventDragSelect = true;
-                    configFeatures.eventResize.disabled = false ; 
-                    configFeatures.eventDrag.disabled = false;
-                    configFeatures.eventEdit.disabled = false;
-                    delete configFeatures.eventMenu.items.deleteEvent;
-                    configFeatures.eventMenu.items.copyEvent =
+            configFeatures.eventDragCreate = false;
+            configFeatures.eventDragSelect = true;
+            configFeatures.eventResize.disabled = false ; 
+            configFeatures.eventDrag.disabled = false;
+            configFeatures.eventEdit.disabled = false;
+            delete configFeatures.eventMenu.items.deleteEvent;
+            configFeatures.eventMenu.items.copyEvent =
                     {
                         text: 'Duplicate',
                         icon: 'b-fa-copy',
                         onItem : () => {handlerOnCopy();}
                     } ;
-                    
-                    
                 }
-              
-    //  console.log({topEvents, bottomEvents});
-    console.log({configFeatures});
-
-    return (
+return (
         <Fragment>
-            <NavigationPanel setAuthorized={setAuthorized} offLineEndDate={offLineEndDate} /*saveOffLineEndDate = {saveOffLineEndDate} */ period={period} schedulerConfig = {config} /*setConfig={setConfig}*//>
+            <NavigationPanel setAuthorized={setAuthorized} offLineEndDate={offLineEndDate} period={period} schedulerConfig = {config} />
             <BryntumScheduler
                  {...Object.assign({}, config, configFeatures) }
                 // {...config}
@@ -592,10 +512,9 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                 onCopy={handlerOnCopy}
                 onEventResizeEnd={handlerOnEventResizeEnd}
                 onBeforeEventSave={handlerOnBeforeSave}
-                // onAfterEventSave={handlerOnAfterSave}
                 onAfterEventDrop={handlerOnAfterEventDrop}
                 onBeforeEventDelete={handlerOnAfterEventDelete}
-                //onBeforeEventEditShow={beforeEventEditShow}
+                
             /><div>
                 {popupShown ? (
                     <Popup

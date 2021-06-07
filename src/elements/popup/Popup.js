@@ -10,21 +10,10 @@ import React, { useState, useEffect } from 'react';
 import { lagInDays } from '../../helpers/lagInDays';
 import { convertDate } from '../../helpers/convertDate';
 import { subDays } from '../../helpers/subDays';
-import { idToJobType } from '../../helpers/idToJobType';
 
 import List from "@material-ui/core/List";
 import './Popup.scss';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDateTimePicker
-} from '@material-ui/pickers';
 
 // Elements
 import { Region } from '../NyBrikForm/Region';
@@ -47,7 +36,7 @@ import { updateProject } from '../../API/onSaveAPI/updateProject'
 
 const Popup = (props) => {
 
-     const [ dataState, setDataState ] = useState({
+     const [ dataState ] = useState({
         name      : '',
         eventType : 'Meeting',
         location  : '',
@@ -277,12 +266,7 @@ const Popup = (props) => {
     },[tons])
 
     const saveClickHandler = (newBrik) => {
-        // const eventRecord = props.eventRecord;
-        // eventRecord.set({ dataState });
-        // if (!eventRecord.eventStore) {
-        //     props.eventStore.add(eventRecord);
-        // }
-
+       
         updateProject(newBrik)
 
         props.closePopup();

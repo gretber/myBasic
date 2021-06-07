@@ -14,8 +14,7 @@ export const updateTimeLine = async (startDate:Date, endDate:Date, view:string) 
         const {login, password} = getUserLoginData();
         const strStartDate = moment(startDate).format('DD, MM, YYYY').replace(/[^0-9]/g, '');
         const strEndDate = moment(endDate).format('DD, MM, YYYY').replace(/[^0-9]/g, '')
-        console.log({view});
-        
+
         let serverView = '';
         if(view === 'Uge')
         {
@@ -34,13 +33,6 @@ export const updateTimeLine = async (startDate:Date, endDate:Date, view:string) 
             serverView = '24weeks';
         }
 
-     
-        // store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
-
-    
-
-            
-
         const encoded = window.btoa(`${login}:${password}`);
         try {
             const response = await fetch(`${InitBriksUrl}&StartDate=${strStartDate}&EndDate=${strEndDate}&View=${serverView}&ViewType=team`, {
@@ -55,16 +47,9 @@ export const updateTimeLine = async (startDate:Date, endDate:Date, view:string) 
             if (response.status !== 200) {
                 throw new Error('Data fetch failed');
             }
-
-            // const data: Data = await response.json();
-            fetchData();
-            // store.dispatch(setBriksAction(data));
+           fetchData();
         } catch (error) {
             console.log(error);
         } 
-        // finally {
-        //     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: false }));
-        // }
-
 };
 

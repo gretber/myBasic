@@ -1,5 +1,5 @@
 // Core
-import React, { useState, useMemo } from "react";
+import React from "react";
 
 // Material
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";

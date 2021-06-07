@@ -25,5 +25,3 @@ export const updateProjectAction: types.UpdateProjectContract = (payload) => ({
     type: types.UPDATE_PROJECT,
     payload,
 });
-
-export const sortProjectsAction: types.SortProjectsContract = () => ({type: types.SORT_PROJECTS});

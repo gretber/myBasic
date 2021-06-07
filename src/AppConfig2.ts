@@ -3,12 +3,6 @@
  * Application configuration
  */
 
-
-
-// View presets 
-
-
-
 // -------- Config
 
 const schedulerConfig2: any = {
@@ -16,10 +10,6 @@ const schedulerConfig2: any = {
     rowHeight: 50,
     showHeaderElemens: false,
     createEventOnDblClick: false,
-    
-    // bodyCls: {
-    //     'b-scheduler-3': 1
-    // },
     cls: {
     'b-scheduler-3': 1
     },
@@ -38,7 +28,6 @@ const schedulerConfig2: any = {
             },
         },
          eventTooltip : {
-            // align : 'l-t', 
             template : ({eventRecord}:any) => {
             return `<div  class="b-sch-event-tooltip eventToolTip">
                     <span>${eventRecord.data.tons} tons</span>

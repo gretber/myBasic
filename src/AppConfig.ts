@@ -286,9 +286,9 @@ const schedulerConfig: any = {
     ],
       listeners: {
                 // catchAll: (e:any) => {console.log(e);}
-                eventClick: (e:any) => {console.log(e);},
+                // eventClick: (e:any) => {console.log(e);},
                 eventContextMenu: (e: any) => {
-                    console.log({e});
+                    
                 eventRecordData = e.eventRecord.originalData;
                },
                 

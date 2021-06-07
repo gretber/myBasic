@@ -1,6 +1,9 @@
 // Store
 import { store } from '../../../@init';
 
+// Helpers
+import { getUserLoginData } from '../../../helpers/getUserLoginData';
+
 // Actions
 import { togglerCreatorAction } from '../../client';
 import { sortProjectsAction, updateSelectionAction } from '../actions';
@@ -52,9 +55,7 @@ export const updateSelection: UpdateSelection = async (body) => {
     
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
   
-    const login = localStorage.getItem('schedulerUserLogin');
-    const password = localStorage.getItem('schedulerUserPassword')
-
+    const {login, password} = getUserLoginData();
   try {
     store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
     const encoded = window.btoa(`${login}:${password}`)

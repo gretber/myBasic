@@ -50,13 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
       '&:hover': {
         boxShadow:'4px 4px 15px 0px rgba(34, 60, 80, 0.5);',
       },
-      '&.false': {
-        cursor: 'default',
-        color: '#ad5700',
-        '&:hover': {
-        boxShadow:'none',
-      },
-      }
+     
     },
     
   })
@@ -71,9 +65,8 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
   const classes = useStyles();
   
   const [periode, setPeriode] = React.useState(period);
-  const [isPeriodeChoosed, setPeriodeIsChoosed] = React.useState(false)
-   const  startDate = moment(config.startDate);
-   const endDate = moment(config.endDate);
+  const  startDate = moment(config.startDate);
+  const endDate = moment(config.endDate);
      moment.updateLocale('da', {
                     months :['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
                     monthsShort: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'Maj', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Okt.', 'Nov.', 'Dec.'],
@@ -83,10 +76,13 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
      const displayedStartDate = startDate.format('MMM, YYYY');
      const displayedEndDate = endDate.format('MMM, YYYY');
 
-   
-    // Select Handler
+   useEffect(() => {
+     console.log({period});
+     setPeriode(period);
+   }, [period])
+  //   Select Handler
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setPeriodeIsChoosed(true);
+    
     if(event.target.value !==  periode)
     {
       const newState = Object.assign({}, config);
@@ -252,6 +248,7 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
     newState.startDate = newState.startDate.toDate();
     
     // saveOffLineEndDate(savedEndDate.toDate());
+    console.log({periode});
     updateTimeLine(newState.startDate, newEndDate.toDate(), periode);
     // setConfig(newState);
   }
@@ -260,10 +257,10 @@ export const PeriodPicker = ({config, /*setConfig*/ period, /*offLineEndDate, sa
     <div className={classes.root}>
       <div className={classes.displayedPeriod}>{displayedStartDate} - {displayedEndDate}</div>
       <div>
-          <ArrowLeftOutlinedIcon className={`${classes.arrowButtons} ${isPeriodeChoosed}`}  onClick={(e) => {e.stopPropagation(); changeTimeLineByPeriod('Left')}}/>
+          <ArrowLeftOutlinedIcon className={`${classes.arrowButtons}`}  onClick={(e) => {e.stopPropagation(); changeTimeLineByPeriod('Left')}}/>
           <ArrowBackIosOutlinedIcon className={`${classes.arrowButtons}`} onClick={(e) => {e.stopPropagation(); changeTimeLineByMonth('Left')}}/>
           <ArrowForwardIosOutlinedIcon className={`${classes.arrowButtons}`} onClick={(e) => {e.stopPropagation(); changeTimeLineByMonth('Right')}}/>
-          <ArrowRightOutlinedIcon className={`${classes.arrowButtons} ${isPeriodeChoosed}`} onClick={(e) => {e.stopPropagation(); changeTimeLineByPeriod('Right')}}/>
+          <ArrowRightOutlinedIcon className={`${classes.arrowButtons}`} onClick={(e) => {e.stopPropagation(); changeTimeLineByPeriod('Right')}}/>
       </div>
       <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel id="periode">Periode</InputLabel>

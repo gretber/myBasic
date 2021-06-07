@@ -83,13 +83,6 @@ type SortProjectsActionType = {
 export type SortProjectsContract = () => SortProjectsActionType
 
 
-// // ----------------------------- Delete -----------------------------
-// export const DELETE_TODO = 'DELETE_TODO';
-// export type DeleteTodoActionType = {
-//     type: typeof DELETE_TODO;
-//     payload: string;
-// };
-// export type DeleteTodoContract = (payload: string) => DeleteTodoActionType
 
 export type ProjectActionTypes =
     | SetDataActionType
@@ -98,6 +91,3 @@ export type ProjectActionTypes =
     | DeleteProjectActionType
     | UpdateProjectActionType
     | SortProjectsActionType
-    // | UpdateTodoActionType
-    // | DeleteTodoActionType
-

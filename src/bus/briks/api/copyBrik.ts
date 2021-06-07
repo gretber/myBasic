@@ -11,6 +11,9 @@ import { CreateBrikType } from './types';
 // API
 import { fetchData } from './fetchData';
 
+// Helpers
+import { getUserLoginData } from '../../../helpers/getUserLoginData';
+
 export const copyBrik: CreateBrikType = async (newBrik) => {
 
   // Clean request data
@@ -25,13 +28,11 @@ export const copyBrik: CreateBrikType = async (newBrik) => {
       }
     }
   };
-  console.log('body');
-  console.log(body);
+  
   const createBrikUrl = process.env.REACT_APP_CREATE_PROJECT;
   // store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
-  
-    const login = localStorage.getItem('schedulerUserLogin');
-    const password = localStorage.getItem('schedulerUserPassword')
+const {login, password} = getUserLoginData();
+
   try {
      const encoded = window.btoa(`${login}:${password}`);
 

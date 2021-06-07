@@ -10,6 +10,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 // Types
 import { Customer, CustomersType } from './types';
 
+// Helpers
+import { getUserLoginData } from "../../../helpers/getUserLoginData";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     Autocomplete: {
@@ -37,7 +40,8 @@ export const KundeNavn = ({ setCustomerName, projectName, customerName, setCusto
     (async () => {
       const getCustomers = process.env.REACT_APP_GET_CUSTOMERS;
 
-      const encoded = window.btoa('lei-lmk:AAABBB')
+       const {login, password} = getUserLoginData();
+    const encoded = window.btoa(`${login}:${password}`) 
       const response = await fetch(`${getCustomers}`, {
         method:  'GET',
         credentials: 'include',

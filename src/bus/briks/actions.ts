@@ -27,7 +27,3 @@ export const updateProjectAction: types.UpdateProjectContract = (payload) => ({
 });
 
 export const sortProjectsAction: types.SortProjectsContract = () => ({type: types.SORT_PROJECTS});
-// export const deleteTodoAction: types.DeleteTodoContract = (payload) => ({
-//     type: types.DELETE_TODO,
-//     payload,
-// });

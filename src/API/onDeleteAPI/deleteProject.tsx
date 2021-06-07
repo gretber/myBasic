@@ -11,6 +11,9 @@ import {deleteProjectAction} from '../../bus/briks/actions';
 // API
 import { fetchData } from '../../bus/briks/api/fetchData'
 
+// Helpers
+import { getUserLoginData } from '../../helpers/getUserLoginData';
+
 export const deleteProject = async (id: string) => {
 console.log('delete project api');
   const body = {
@@ -30,8 +33,8 @@ console.log('delete project api');
 
   //store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));  
   try {
-    const encoded = window.btoa('lei-lmk:AAABBB')
-
+     const {login, password} = getUserLoginData();
+    const encoded = window.btoa(`${login}:${password}`) 
     const response = await fetch(`${updateProjectURL}${id}`, {
     method:  'POST',
         credentials: 'include',

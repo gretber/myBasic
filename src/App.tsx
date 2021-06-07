@@ -152,8 +152,8 @@ const [popupShown, showPopup] = useState(false);
                 const startDate = moment(data.root.view.startDate, "DD/MM/YYYY").toDate()
                 const endDate = moment(data.root.view.endDate, "DD/MM/YYYY").toDate()
                 
-                newState.startDate = startDate
-                newState.endDate = endDate
+                newState.startDate = startDate;
+                newState.endDate = endDate;
 
                 saveOffLineEndDate(config.endDate);
 
@@ -164,7 +164,7 @@ const [popupShown, showPopup] = useState(false);
                 }
                 else if(data.root.view.timeframe === '2weeks')
                 {
-                    setPeriod('To uges')
+                    setPeriod('To uger')
                     newState.viewPreset = 'myDayAndWeekPreset';
                 }
                 else if(data.root.view.timeframe === 'month')
@@ -176,7 +176,7 @@ const [popupShown, showPopup] = useState(false);
                     setPeriod('24 uger');
                     newState.viewPreset = 'my24WeeksPreset';
                 }
-                setPeriod(data.root.view.timeframe)
+               
 
                 
 

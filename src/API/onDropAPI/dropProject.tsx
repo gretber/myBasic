@@ -17,6 +17,9 @@ import moment from 'moment';
 // Helpers
 import { subDays } from '../../helpers/subDays';
 
+// Helpers
+import { getUserLoginData } from '../../helpers/getUserLoginData';
+
 export const dropProject = async (data: any) => {
 
   const body = {
@@ -62,7 +65,8 @@ export const dropProject = async (data: any) => {
 
   //store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));  
   try {
-    const encoded = window.btoa('lei-lmk:AAABBB')
+    const {login, password} = getUserLoginData();
+    const encoded = window.btoa(`${login}:${password}`) 
 
     const response = await fetch(`${updateProjectURL}${id}`, {
     method:  'POST',

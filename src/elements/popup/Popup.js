@@ -54,33 +54,33 @@ const Popup = (props) => {
         ...props.eventRecord.data
     })
 
-    const initialBrik = {
-        id: null,
-        regionId: "",
-        leaderId: "",
-        projectNo: null,
-        factoryItemName: "",
-        factoryItemId: null,
-        customerId: null,
-        customerName: null,
-        state: "2",
-        status: "",
-        name: "",
-        name2: "",
-        startDate: "",
-        endDate: "",
-        duration: 0,
-        calculatedDuration: 0,
-        weekendWork: false,
-        jobType: null,
-        teamId: "",
-        factoryId: "",
-        tons: 0.0,
-        area: 0.0,
-        color: "",
-        eventColor: "#469e38",
-        details: ""
-    }
+  const initialBrik = {
+    id: "null",
+    regionId: "null",
+    leaderId: "null",
+    projectNo: "null",
+    factoryItemName: "null",
+    factoryItemId: "null",
+    customerId: "null",
+    customerName: "null",
+    state: "2",
+    status: "null",
+    name: "null",
+    name2: "null",
+    startDate: "null",
+    endDate: "null",
+    duration: 0,
+    calculatedDuration: 0,
+    weekendWork: false,
+    jobType: "null",
+    teamId: "null",
+    factoryId: "null",
+    tons: 0.0,
+    area: 0.0,
+    color: "",
+    eventColor: "#469e38",
+    details: ""
+  }
 
   const [ newBrik, setNewBrik ] = useState(initialBrik)
 
@@ -105,7 +105,7 @@ const Popup = (props) => {
     },[regionId])
 
     // State for Project and Arbejdsplads
-    const [ projectName, setProjectName ] = useState("")
+    const [ projectName, setProjectName ] = useState(dataState.name)
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
@@ -245,7 +245,6 @@ const Popup = (props) => {
     },[factoryItemId])
 
     // State for status and clips
-
     const [status, setStatus] = useState(dataState.status); // Clip on front
     const [state, setState] = useState(dataState.state);    // Status on front
 
@@ -317,7 +316,7 @@ const Popup = (props) => {
                         <KalkuleBesk setName2={setName2} name2={name2} />
 
                         <KundeNavn  setCustomerName={setCustomerName}
-                                    projectName={projectName}
+                                    projectNo={projectNo}
                                     customerName={customerName}
                                     setCustomerId={setCustomerId}
                                     customerId={customerId} />

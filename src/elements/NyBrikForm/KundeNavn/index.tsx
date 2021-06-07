@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const KundeNavn = ({ setCustomerName, projectName, customerName, setCustomerId, customerId }: any) => {
+export const KundeNavn = ({ setCustomerName, projectNo, customerName, setCustomerId, customerId }: any) => {
   // Styles
   const classes = useStyles();
   const [value, setValue] = useState({id: customerId , name: customerName})
@@ -82,10 +82,10 @@ export const KundeNavn = ({ setCustomerName, projectName, customerName, setCusto
       setCustomerId("null")
     }
   }
-
+  console.log({projectNo})
   return (
     <Autocomplete
-      disabled={!!projectName}
+      disabled={projectNo!=='null'}
       className={classes.Autocomplete}
       id="kunde-navn"
       value={value}

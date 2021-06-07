@@ -84,6 +84,9 @@ const Popup = (props) => {
 
   const [ newBrik, setNewBrik ] = useState(initialBrik)
 
+    useEffect(()=>{
+        console.log(newBrik)
+    },[newBrik])
     // State for region
     const [ regionId, setRegionId ] = useState(dataState.regionId);
 
@@ -316,7 +319,8 @@ const Popup = (props) => {
                         <KundeNavn  setCustomerName={setCustomerName}
                                     projectName={projectName}
                                     customerName={customerName}
-                                    setCustomerId={setCustomerId} />
+                                    setCustomerId={setCustomerId}
+                                    customerId={customerId} />
 
                         <DatePeriod setVarighed={setVarighed}
                                     startDate={startDate}

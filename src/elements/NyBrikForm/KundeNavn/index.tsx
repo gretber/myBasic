@@ -19,10 +19,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const KundeNavn = ({ setCustomerName, projectName, customerName, setCustomerId }: any) => {
+export const KundeNavn = ({ setCustomerName, projectName, customerName, setCustomerId, customerId }: any) => {
   // Styles
   const classes = useStyles();
-
+  const [value, setValue] = useState({id: customerId , name: customerName})
+  
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<Array<Customer>|[]>([]);
   const loading = open && options.length === 0;
@@ -69,11 +70,10 @@ export const KundeNavn = ({ setCustomerName, projectName, customerName, setCusto
   // Handler
   const handlerOnChange = ( event: any, value: any ) => {
     if(value && ('name' in value)){
-      console.log("if",{value})
       setCustomerName(value.name)
       setCustomerId(value.id)
+      setValue(value)
     } else {
-      console.log("else",{value})
       setCustomerName("null")
       setCustomerId("null")
     }
@@ -84,6 +84,7 @@ export const KundeNavn = ({ setCustomerName, projectName, customerName, setCusto
       disabled={!!projectName}
       className={classes.Autocomplete}
       id="kunde-navn"
+      value={value}
       onChange={handlerOnChange}
       open={open}
       onOpen={() => {
@@ -93,21 +94,21 @@ export const KundeNavn = ({ setCustomerName, projectName, customerName, setCusto
         setOpen(false);
       }}
       getOptionSelected={(option, value) => option.name === value.name}
-      getOptionLabel={(option: any) => `${option.name}`}
+      getOptionLabel={(option: any) => `${option.name==='null'?'':option.name}`}
       options={options}
       loading={loading}
       renderInput={(params) => (
         <TextField
           {...params}
-          label={customerName?customerName:"Kunde Navn"}
+          label={"Kunde Navn"}
           variant="outlined"
           InputProps={{
             ...params.InputProps,
             endAdornment: (
-              <React.Fragment>
+              <>
                 {loading ? <CircularProgress color="inherit" size={20} /> : null}
                 {params.InputProps.endAdornment}
-              </React.Fragment>
+              </>
             ),
           }}
         />

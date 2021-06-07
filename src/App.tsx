@@ -112,7 +112,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
 
 
 
-const [popupShown, showPopup] = useState(false);
+    const [popupShown, showPopup] = useState(false);
     const [eventRecord, setEventRecord] = useState(null);
     const [eventStore, setEventStore] = useState(null);
     const [resourceStore, setResourceStore] = useState(null);
@@ -577,7 +577,7 @@ const [popupShown, showPopup] = useState(false);
                  {...Object.assign({}, config, configFeatures) }
                 // {...config}
                 listeners={{
-                    ...config.listeners,
+                ...config.listeners,
                 beforeEventEdit: (source: any) => {
                     source.eventRecord.resourceId = source.resourceRecord.id;
                     showEditor(source.eventRecord);

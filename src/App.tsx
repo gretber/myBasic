@@ -556,7 +556,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                     configFeatures.eventDragSelect = true;
                     configFeatures.eventResize.disabled = false ; 
                     configFeatures.eventDrag.disabled = false;
-                    configFeatures.eventEdit = {}
+                    configFeatures.eventEdit.disabled = false;
                     delete configFeatures.eventMenu.items.deleteEvent;
                     configFeatures.eventMenu.items.copyEvent =
                     {
@@ -567,8 +567,9 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                     
                     
                 }
+              
     //  console.log({topEvents, bottomEvents});
-
+    console.log({configFeatures});
 
     return (
         <Fragment>

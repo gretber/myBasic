@@ -556,7 +556,7 @@ const [popupShown, showPopup] = useState(false);
                     configFeatures.eventDragSelect = true;
                     configFeatures.eventResize.disabled = false ; 
                     configFeatures.eventDrag.disabled = false;
-                    configFeatures.eventEdit = {}
+                    configFeatures.eventEdit.disabled = false;
                     delete configFeatures.eventMenu.items.deleteEvent;
                     configFeatures.eventMenu.items.copyEvent =
                     {
@@ -567,8 +567,9 @@ const [popupShown, showPopup] = useState(false);
                     
                     
                 }
+              
     //  console.log({topEvents, bottomEvents});
-
+    console.log({configFeatures});
 
     return (
         <Fragment>

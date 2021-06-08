@@ -8,6 +8,9 @@ import { getUserLoginData } from '../../../helpers/getUserLoginData';
 import { togglerCreatorAction } from '../../client';
 import { setNuBrikAction } from '../actions';
 
+// API
+import { fetchData } from './fetchData';
+
 // Types
 import { CreateBrikType } from './types';
 
@@ -51,7 +54,8 @@ export const createBrik: CreateBrikType = async (newBrik) => {
         throw new Error('Todo create failed');
       }
 
-      store.dispatch(setNuBrikAction(newBrik));
+    store.dispatch(setNuBrikAction(newBrik));
+    fetchData();
 
   } catch (error) {
       console.log(error);

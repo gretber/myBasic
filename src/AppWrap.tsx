@@ -7,6 +7,8 @@ import TextField from '@material-ui/core/TextField';
 // Components 
 import { App } from './App';
 
+
+
 // Styles
 const useStyles = makeStyles((theme: Theme) => 
  createStyles({
@@ -118,7 +120,7 @@ const classes = useStyles();
     if(isAuthorized)
     {
 
-       return <App isAuthorized={isAuthorized}  setAuthorized={setAuthorized}/>
+       return (<App isAuthorized={isAuthorized}  setAuthorized={setAuthorized}/>)
     }
     else 
     {

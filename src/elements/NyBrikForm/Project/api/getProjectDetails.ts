@@ -20,7 +20,6 @@ export const getProjectDetails = async (
         },
     });
 
-        
   const project: any = await response.json();
 
   if(project.root.projects.project[0]){

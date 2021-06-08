@@ -1,3 +1,6 @@
+// Core
+import { useState } from 'react';
+
 // Material
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -15,10 +18,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Region = ({setRegionId, projectName, regionId}: any) => {
+export const Region = ({setRegionId, projectNo, regionId}: any) => {
   // Styles
   const classes = useStyles();
-
   // Get data
   const regions = useSelector( state => {
      if("root" in state.data){
@@ -34,22 +36,28 @@ export const Region = ({setRegionId, projectName, regionId}: any) => {
     }
   })
 
+  const [value, setValue] = useState(regionName)
+
   // Handler
-  const handlerOnChange = (event: any, value: any) => {
+  const handlerOnChange = (event: any, value: any, reason: any) => {
     if(value && ('id' in value)){
       setRegionId(value.id)
-    } else {
-      setRegionId('')
+      setValue(value)
+    }
+
+    if(reason==="clear"){
+      setValue({id: '', name: ''})
+      setRegionId('null')
     }
   }
-
+  console.log({projectNo})
   return (
     <div>
       <Autocomplete
-        disabled={!!projectName}
+        disabled={projectNo!=='null'}
         className={classes.Autocomplete}
         id="region"
-        value={regionName}
+        value={value}
         onChange={handlerOnChange}
         options={regions?regions:[]}
         getOptionLabel={(option: any) =>  option.name }

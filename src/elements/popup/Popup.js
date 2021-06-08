@@ -66,9 +66,9 @@ const Popup = (props) => {
     factoryId: "null",
     tons: 0.0,
     area: 0.0,
-    color: "",
+    color: "null",
     eventColor: "#469e38",
-    details: ""
+    details: "null"
   }
 
   const [ newBrik, setNewBrik ] = useState(initialBrik)
@@ -82,14 +82,14 @@ const Popup = (props) => {
     // Set id 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, id: dataState.id}
+            return {...prevState, id: dataState.id}
         })
     },[])
 
     // State for region
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, regionId}
+            return {...prevState, regionId}
         })
     },[regionId])
 
@@ -98,7 +98,7 @@ const Popup = (props) => {
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, name: projectName}
+            return {...prevState, name: projectName}
         })
     },[projectName])
 
@@ -106,7 +106,7 @@ const Popup = (props) => {
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, projectNo}
+            return {...prevState, projectNo}
         })
     },[projectNo])
 
@@ -115,7 +115,7 @@ const Popup = (props) => {
     
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, name2}
+            return {...prevState, name2}
         })
     },[name2])
 
@@ -124,7 +124,7 @@ const Popup = (props) => {
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, customerName}
+            return {...prevState, customerName}
         })
     },[customerName])
 
@@ -133,7 +133,7 @@ const Popup = (props) => {
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, customerId}
+            return {...prevState, customerId}
         })
     },[customerId])
 
@@ -143,7 +143,7 @@ const Popup = (props) => {
     useEffect(()=>{
         const date = convertDate(startDate)
         setNewBrik((prevState)=> {
-        return {...prevState, startDate: date}
+            return {...prevState, startDate: date}
         })
     },[startDate])
 
@@ -153,7 +153,7 @@ const Popup = (props) => {
     useEffect(()=>{
         const date = convertDate(endDate)
         setNewBrik((prevState)=> {
-        return {...prevState, endDate: date}
+            return {...prevState, endDate: date}
         })
     },[endDate])
 
@@ -162,7 +162,7 @@ const Popup = (props) => {
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, weekendWork: isWorkWeekends}
+            return {...prevState, weekendWork: isWorkWeekends}
         })
     },[isWorkWeekends])
 
@@ -171,7 +171,7 @@ const Popup = (props) => {
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, duration: lagInDays(startDate, endDate, true)}
+            return {...prevState, duration: lagInDays(startDate, endDate, true)}
         })
     },[varighed])
 
@@ -179,7 +179,7 @@ const Popup = (props) => {
     
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, calculatedDuration: varighed}
+            return {...prevState, calculatedDuration: varighed}
         })
     },[varighed])
 
@@ -188,7 +188,7 @@ const Popup = (props) => {
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, jobType: jobTypeId}
+            return {...prevState, jobType: jobTypeId}
         })
     },[jobTypeId])
 
@@ -197,7 +197,7 @@ const Popup = (props) => {
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, teamId}
+            return {...prevState, teamId}
         })
     },[teamId])
 
@@ -206,7 +206,7 @@ const Popup = (props) => {
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, leaderId}
+            return {...prevState, leaderId}
         })
     },[leaderId])
 
@@ -217,19 +217,19 @@ const Popup = (props) => {
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, factoryId}
+            return {...prevState, factoryId}
         })
     },[factoryId])
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, factoryItemName}
+            return {...prevState, factoryItemName}
         })
     },[factoryItemName])
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, factoryItemId}
+            return {...prevState, factoryItemId}
         })
     },[factoryItemId])
 
@@ -239,13 +239,13 @@ const Popup = (props) => {
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, status}
+            return {...prevState, status}
         })
     },[status])
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, state}
+            return {...prevState, state}
         })
     },[state])
 
@@ -255,13 +255,13 @@ const Popup = (props) => {
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, area}
+            return {...prevState, area}
         })
     },[area])
 
     useEffect(()=>{
         setNewBrik((prevState)=> {
-        return {...prevState, tons}
+            return {...prevState, tons}
         })
     },[tons])
 
@@ -281,7 +281,7 @@ const Popup = (props) => {
                 <article>
                     <List>
                         <Region setRegionId={setRegionId}
-                                projectName={projectName}
+                                projectNo={projectNo}
                                 regionId={regionId} />
 
                         <Project    projectNo={projectNo}
@@ -295,7 +295,7 @@ const Popup = (props) => {
                                     setName2={setName2} />
 
                         <Arbejdsplads projectName={projectName}
-                                        setProjectName={setProjectName} />
+                                    setProjectName={setProjectName} />
 
                         <KalkuleBesk setName2={setName2} name2={name2} />
 

@@ -28,7 +28,7 @@ export const Arbejdsplads = ({ projectName, setProjectName }: any) => {
 
   return (
     <form className={classes.root} noValidate autoComplete="off">
-      <TextField id="arbejdsplads" label="Arbejdsplads" variant="outlined" onChange={onChangeHandler} value={projectName} />
+      <TextField id="arbejdsplads" label="Arbejdsplads" variant="outlined" onChange={onChangeHandler} value={projectName==='null'?'':projectName} />
     </form>
   );
 }

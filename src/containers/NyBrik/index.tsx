@@ -143,9 +143,9 @@ export const NyBrik = () => {
     factoryId: "null",
     tons: 0.0,
     area: 0.0,
-    color: "",
+    color: "null",
     eventColor: "#469e38",
-    details: ""
+    details: "null"
   }
 
   const [ newBrik, setNewBrik ] = useState<Project>(initialBrik)

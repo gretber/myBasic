@@ -51,7 +51,7 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
   // }, [ formState ]);
 
   // State for region
-  const [ regionId, setRegionId ] = useState('');
+  const [ regionId, setRegionId ] = useState("null");
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
@@ -60,7 +60,7 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
   },[regionId])
 
   // State for Project and Arbejdsplads
-  const [ projectName, setProjectName ] = useState("")
+  const [ projectName, setProjectName ] = useState("null")
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
@@ -68,7 +68,7 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
     })
   },[projectName])
 
-  const [ projectNo, setProjectNo ] = useState(null)
+  const [ projectNo, setProjectNo ] = useState("null")
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
@@ -77,7 +77,7 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
   },[projectNo])
 
   // State for Kalkule Besk
-  const [ name2, setName2 ] = useState(null)
+  const [ name2, setName2 ] = useState("null")
   
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
@@ -86,7 +86,7 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
   },[name2])
 
   // State for kunde navn (customer)
-  const [ customerName, setCustomerName ] = useState(null);
+  const [ customerName, setCustomerName ] = useState("null");
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
@@ -95,7 +95,7 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
   },[customerName])
 
   // State for customerID
-  const [ customerId, setCustomerId ] = useState(null)
+  const [ customerId, setCustomerId ] = useState("null")
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
@@ -150,7 +150,7 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
   },[varighed])
 
   // State for job type
-  const [jobTypeId, setJobTypeId] = useState("");
+  const [jobTypeId, setJobTypeId] = useState("null");
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
@@ -159,7 +159,7 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
   },[jobTypeId])
 
   // State for teams (HOLD)
-  const [ teamId, setTeamId ] = useState('')
+  const [ teamId, setTeamId ] = useState("null")
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
@@ -168,7 +168,7 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
   },[teamId])
 
   // State for enterprise Leder
-  const [ leaderId, setLeaderId ] = useState('')
+  const [ leaderId, setLeaderId ] = useState("null")
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
@@ -177,9 +177,9 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
   },[leaderId])
 
   // State for fabrik (factory)
-  const [factoryItemName, setFactoryItemName] = useState('')
-  const [factoryItemId, setFactoryItemId] = useState('')
-  const [factoryId, setFactoryId] = useState('')
+  const [factoryItemName, setFactoryItemName] = useState("null")
+  const [factoryItemId, setFactoryItemId] = useState("null")
+  const [factoryId, setFactoryId] = useState("null")
 
   useEffect(()=>{
     setNewBrik((prevState: any)=> {
@@ -235,7 +235,7 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
   return (
     <List>
       <Region setRegionId={setRegionId}
-              projectName={projectName}
+              projectNo={projectNo}
               regionId={regionId} />
 
       <Project  setFactoryId={setFactoryId}
@@ -252,7 +252,7 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
       <KalkuleBesk setName2={setName2} />
 
       <KundeNavn  setCustomerName={setCustomerName}
-                  projectName={projectName}
+                  projectNo={projectNo}
                   customerName={customerName}
                   setCustomerId={setCustomerId} />
 

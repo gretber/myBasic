@@ -31,7 +31,7 @@ export const Project = ({ setProjectName, setProjectNo, regionId, setRegionId, s
 
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<Array<ProjectNo>|[]>([]);
-  const [currentProject, setCurrentProject] = useState<any>(null)
+  const [currentProject, setCurrentProject] = useState<any>({id: '', name: ''})
 
   const loading = open && options.length === 0;
 
@@ -48,8 +48,10 @@ export const Project = ({ setProjectName, setProjectNo, regionId, setRegionId, s
     }
 
     // If region exist get projects in this region
-    if(regionId){
+    if(regionId && regionId !== ""){
       selectionProjectDetails(setOptions, active, regionId)
+    } else {
+      setOptions([{id: '', name: ''}])
     }
 
     return () => {
@@ -68,14 +70,15 @@ export const Project = ({ setProjectName, setProjectNo, regionId, setRegionId, s
 
     if(reason==="clear"){
       setCurrentProject({id: "", name: ""})
+      setProjectNo('null')
+      setProjectName('null')
     }
+
     if(value && ('name' in value) && ('id' in value)){
+      console.log('get PROJECTS')
       getProjectDetails(setRegionId, value.id, setCustomerName, setCustomerId, setFactoryId, setProjectName, setProjectNo, setCurrentProject, setName2)
       // setProjectName(value.name)
       // setProjectNo(value.id)
-    } else {
-      setRegionId('')
-      setProjectName('')
     }
   }
 

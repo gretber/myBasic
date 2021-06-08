@@ -14,8 +14,9 @@ import { CreateBrikType } from './types';
 export const createBrik: CreateBrikType = async (newBrik) => {
 
   // Clean request data
-  const bodyNewBrik = { ...newBrik }
+  const bodyNewBrik = { ...newBrik}
   delete bodyNewBrik.eventColor
+  delete bodyNewBrik.resourceId
 
   const body = {
     root: {
@@ -30,7 +31,8 @@ export const createBrik: CreateBrikType = async (newBrik) => {
   const createBrikUrl = process.env.REACT_APP_CREATE_PROJECT;
   store.dispatch(togglerCreatorAction({ type: 'isDataFetching', value: true }));
   
-    const {login, password} = getUserLoginData();
+  const {login, password} = getUserLoginData();
+
   try {
      const encoded = window.btoa(`${login}:${password}`);
 

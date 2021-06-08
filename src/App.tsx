@@ -475,9 +475,9 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
             configFeatures.eventMenu.items.copyEvent = false;
             configFeatures.eventMenu.items.deleteEvent = false;
             configFeatures.eventEdit.disabled = true;
-               }
-                else
-                {   
+        }
+        else
+        {   
             configFeatures.eventDragCreate = false;
             configFeatures.eventDragSelect = true;
             configFeatures.eventResize.disabled = false ; 
@@ -486,6 +486,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
             delete configFeatures.eventMenu.items.deleteEvent;
             configFeatures.eventMenu.items.copyEvent =
                     {
+                        weight: 0,
                         text: 'Duplicate',
                         icon: 'b-fa-copy',
                         onItem : () => {handlerOnCopy();}

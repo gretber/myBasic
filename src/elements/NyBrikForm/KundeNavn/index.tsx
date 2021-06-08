@@ -26,6 +26,9 @@ export const KundeNavn = ({ setCustomerName, projectNo, customerName, setCustome
   // Styles
   const classes = useStyles();
   const [value, setValue] = useState({id: customerId , name: customerName})
+  useEffect(()=>{
+    setValue({id: customerId , name: customerName})
+  },[customerName])
   
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<Array<Customer>|[]>([]);
@@ -72,22 +75,26 @@ export const KundeNavn = ({ setCustomerName, projectNo, customerName, setCustome
 
 
   // Handler
-  const handlerOnChange = ( event: any, value: any ) => {
+  const handlerOnChange = ( event: any, value: any, reason: any ) => {
     if(value && ('name' in value)){
+      setValue(value)
       setCustomerName(value.name)
       setCustomerId(value.id)
-      setValue(value)
-    } else {
-      setCustomerName("null")
-      setCustomerId("null")
+    } 
+    if(reason === 'clear'){
+      setValue({id: '', name: ''})
+      setCustomerName('null')
+      setCustomerId('null')
     }
   }
+
   console.log({projectNo})
+
   return (
     <Autocomplete
       disabled={projectNo!=='null'}
       className={classes.Autocomplete}
-      id="kunde-navn"
+      id='kunde-navn'
       value={value}
       onChange={handlerOnChange}
       open={open}

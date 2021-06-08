@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
-// 
+
 
 
 // Icons
@@ -18,9 +18,8 @@ import { PeriodPicker } from "../../components/PeriodPicker";
 import { JobType } from "../../components/JobType";
 import { Selection } from "../../components/Selection";
 
-
-// Hooks
-// import { useEffect } from "react";
+// Cookies
+import { useCookies } from "react-cookie";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,13 +38,19 @@ const useStyles = makeStyles((theme: Theme) =>
 export const NavigationPanel = ({schedulerConfig, period, offLineEndDate, setAuthorized}:
    {schedulerConfig: any, period: string, offLineEndDate: Date, setAuthorized:React.Dispatch<React.SetStateAction<boolean>>}) => {
 
+
+  //  Cookies
+   const [cookies, setCookie, removeCookie] = useCookies([]);
+
   // Styles
   const classes = useStyles();
 
   // Event Handlers
   const logOutButtonClickHandler = () => {
-    setAuthorized(false);
-    localStorage.clear();
+    
+      removeCookie('DomAuthSessId');
+      setAuthorized(false);
+      localStorage.clear();
   }
 
   return (

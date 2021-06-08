@@ -48,6 +48,7 @@ const classes = useStyles();
             if(localStorage.getItem('schedulerUserPassword') !== null)
             {
               setAuthorized(true);
+              
             }
         }
         
@@ -86,8 +87,9 @@ const classes = useStyles();
                     }
                     localStorage.setItem('schedulerUserLogin', login);
                     localStorage.setItem('schedulerUserPassword', password);
-                    setAuthorized(true);
                     setAuthError(false);
+                    setAuthorized(true);
+                    
                 }
                  }
                  else setAuthError(true);
@@ -115,7 +117,8 @@ const classes = useStyles();
 
     if(isAuthorized)
     {
-       return <App isAuthorized={isAuthorized} setAuthorized={setAuthorized}/>
+
+       return <App isAuthorized={isAuthorized}  setAuthorized={setAuthorized}/>
     }
     else 
     {

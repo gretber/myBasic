@@ -35,27 +35,31 @@ export let eventRecordData:any = {};
         eventTooltip : {
             template : ({eventRecord}:any) => {
             
-            let projectNo = '', customerName = '', name2 = '', tons = '', factoryItemName = '', area = '';
-            if(eventRecord.data.projectNo !== 'null')
-             projectNo = eventRecord.data.projectNo + ' ';
+            // let projectNo = '', customerName = '', name2 = '', tons = '', factoryItemName = '', area = '';
+            // if(eventRecord.data.projectNo !== 'null')
+            //  projectNo = eventRecord.data.projectNo + ' ';
 
-            if(eventRecord.data.name2 !== 'null')
-            name2 = eventRecord.data.name2 + ' ';
+            // if(eventRecord.data.name2 !== 'null')
+            // name2 = eventRecord.data.name2 + ' ';
 
-            if(eventRecord.data.customerName !== 'null')
-            customerName = eventRecord.data.customerName + ' ';
+            // if(eventRecord.data.customerName !== 'null')
+            // customerName = eventRecord.data.customerName + ' ';
 
-            if(eventRecord.data.tons !== 'null')
-            tons = eventRecord.data.tons + ' ton ';
+            // if(eventRecord.data.tons !== 'null')
+            // tons = eventRecord.data.tons + ' ton ';
 
-            if(eventRecord.data.factoryItemName !== 'null')
-            factoryItemName = eventRecord.data.factoryItemName + ' ';
+            // if(eventRecord.data.factoryItemName !== 'null')
+            // factoryItemName = eventRecord.data.factoryItemName + ' ';
 
-            if(eventRecord.data.area !== 'null')
-            area = eventRecord.data.area;
+            // if(eventRecord.data.area !== 'null')
+            // area = eventRecord.data.area;
 
-            return `<div  class="b-sch-event-tooltip eventToolTip">
-                    <span>${projectNo}${customerName}${name2}${tons}${factoryItemName}${area} 
+            // return `<div  class="b-sch-event-tooltip eventToolTip">
+            //         <span>${projectNo}${customerName}${name2}${tons}${factoryItemName}${area} 
+            //       </span>
+            //         </div>`;
+             return `<div  class="b-sch-event-tooltip eventToolTip">
+                    <span>${eventRecord.details} 
                   </span>
                     </div>`;
             },

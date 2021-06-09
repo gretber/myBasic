@@ -7,13 +7,16 @@ import InputLabel from "@material-ui/core/InputLabel";
 import moment from 'moment';
 
 // Icons
-import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
-import ArrowLeftOutlinedIcon from '@material-ui/icons/ArrowLeftOutlined';
-import ArrowRightOutlinedIcon from '@material-ui/icons/ArrowRightOutlined';
-import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined';
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
+import { DoubleArrowSvgButtonIcon } from "../../assets/icons/doubleArrowIcon";
 
 // API 
 import { updateTimeLine } from '../../bus/briks/api/updateTimeLine';
+
+// Components
+import { WeekCountInput } from "../WeekCountInput.tsx";
+import { Button } from "@material-ui/core";
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,6 +28,8 @@ const useStyles = makeStyles((theme: Theme) =>
     formControl: {
       margin: theme.spacing(1),
       minWidth: 120,
+      display: 'flex',
+      flexDirection: 'row',
     },
     displayedPeriod : {
       marginRight: 7,
@@ -45,17 +50,34 @@ const useStyles = makeStyles((theme: Theme) =>
     arrowButtons: {
       borderRadius: '50%',
       cursor: 'pointer',
+      backgroundColor: 'transparent',
+      
       '&:hover': {
         boxShadow:'4px 4px 15px 0px rgba(34, 60, 80, 0.5);',
       },
      
     },
-    
+
+    arrowButtonRevers: {
+      transform: 'rotate(180deg)',
+    },
+
+    doubleArrowButton : {
+      height: 15,
+      color: '#000',
+    },
+    arrowButtonsWrapper: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    periodSelect : {
+      width: 105,
+    }
   })
 );
 
 export const PeriodPicker = ({config, period }: 
-  {config: any,  period: string, offLineEndDate:Date}) => {
+  {config: any,  period: string, offLineEndDate: Date}) => {
   const classes = useStyles();
   
   const [periode, setPeriode] = React.useState(period);
@@ -85,7 +107,7 @@ export const PeriodPicker = ({config, period }:
       
         if(event.target.value === 'Uge')
         {
-          newState.viewPreset = 'myDayAndWeekPreset';
+          // newState.viewPreset = 'myDayAndWeekPreset';
           newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(1, 'weeks').toDate();
@@ -94,7 +116,7 @@ export const PeriodPicker = ({config, period }:
 
         else if(event.target.value === 'To uger')
         {
-          newState.viewPreset = 'myDayAndWeekPreset';
+          // newState.viewPreset = 'myDayAndWeekPreset';
           newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(2, 'weeks').toDate();
@@ -103,7 +125,7 @@ export const PeriodPicker = ({config, period }:
 
        else if(event.target.value === 'Måned')
         {
-          newState.viewPreset ='myDayAndMonthPreset';
+          // newState.viewPreset ='myDayAndMonthPreset';
           newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(1, 'months').toDate();
@@ -112,7 +134,7 @@ export const PeriodPicker = ({config, period }:
 
         else if(event.target.value === event.target.value as string)
         {
-          newState.viewPreset ='my24WeeksPreset';
+          // newState.viewPreset ='my24WeeksPreset';
           newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(24, 'weeks').toDate();
@@ -125,80 +147,101 @@ export const PeriodPicker = ({config, period }:
 
   // Toggle Handlers
 
-  const changeTimeLineByPeriod = (direction: string) => {
+  // const changeTimeLineByPeriod = (direction: string) => {
 
+  //   const newState = Object.assign({}, config);
+  //   newState.startDate = moment(newState.startDate);
+  //   const newEndDate = moment(newState.endDate);
+  //   switch(periode)
+  //   {
+  //     case "Uge":
+  //     {
+  //       if(direction === 'Left')
+  //     {
+  //       newState.startDate = newState.startDate.add(-1, 'week');
+  //       newEndDate.add(-1, 'week');
+  //       break;
+  //     }
+  //     else
+  //     {
+  //       newState.startDate = newState.startDate.add(1, 'week');
+  //       newEndDate.add(1, 'week');
+  //       break;
+  //     }
+  //     }
+  //     case "To uger" : 
+  //     {
+  //        if(direction === 'Left')
+  //     {
+  //       newState.startDate = newState.startDate.add(-2, 'week');
+  //      newEndDate.add(-2, 'week');
+  //       break;
+  //     }
+  //     else
+  //     {
+  //       newState.startDate = newState.startDate.add(2, 'week');
+  //       newEndDate.add(2, 'week');
+  //       break;
+  //     }
+  //     }
+  //     case "Måned": 
+  //     {
+  //       if(direction === 'Left')
+  //       {
+  //         newState.startDate.add(-1, 'months');
+  //         newEndDate.add(-1, 'months');
+  //       }
+  //   else
+  //      {
+  //         newState.startDate.add(1, 'months');
+  //         newEndDate.add(1, 'months');
+  //      }
+  //       break;
+  //     }
+
+  //     case "24 uger" : 
+  //     {
+  //       if(direction === 'Left')
+  //     {
+  //       newState.startDate = newState.startDate.add(-24, 'week');
+  //       newEndDate.add(-24, 'week');
+  //       break;
+  //     }
+  //     else
+  //     {
+  //       newState.startDate = newState.startDate.add(24, 'week');
+  //       newEndDate.add(24, 'week');
+  //       break;
+  //     }
+  //     }
+      
+  //   }
+  //   newState.startDate = newState.startDate.toDate();
+ 
+  //   updateTimeLine(newState.startDate, newEndDate.toDate(), periode);
+  // }
+
+  const changeTimeLineByWeek = (direction: string) => {
     const newState = Object.assign({}, config);
     newState.startDate = moment(newState.startDate);
     const newEndDate = moment(newState.endDate);
-    switch(periode)
+ 
+    if(direction === 'Left')
     {
-      case "Uge":
-      {
-        if(direction === 'Left')
-      {
-        newState.startDate = newState.startDate.add(-1, 'week');
-        newEndDate.add(-1, 'week');
-        break;
-      }
-      else
-      {
-        newState.startDate = newState.startDate.add(1, 'week');
-        newEndDate.add(1, 'week');
-        break;
-      }
-      }
-      case "To uger" : 
-      {
-         if(direction === 'Left')
-      {
-        newState.startDate = newState.startDate.add(-2, 'week');
-       newEndDate.add(-2, 'week');
-        break;
-      }
-      else
-      {
-        newState.startDate = newState.startDate.add(2, 'week');
-        newEndDate.add(2, 'week');
-        break;
-      }
-      }
-      case "Måned": 
-      {
-        if(direction === 'Left')
-        {
-          newState.startDate.add(-1, 'months');
-          newEndDate.add(-1, 'months');
-        }
+      newState.startDate.add(-1, 'week');
+      newEndDate.add(-1, 'week');
+    }
     else
-       {
-          newState.startDate.add(1, 'months');
-          newEndDate.add(1, 'months');
-       }
-        break;
-      }
-
-      case "24 uger" : 
-      {
-        if(direction === 'Left')
-      {
-        newState.startDate = newState.startDate.add(-24, 'week');
-        newEndDate.add(-24, 'week');
-        break;
-      }
-      else
-      {
-        newState.startDate = newState.startDate.add(24, 'week');
-        newEndDate.add(24, 'week');
-        break;
-      }
-      }
-      
+    {
+      newState.startDate.add(1, 'week');
+      newEndDate.add(1, 'week');
     }
     newState.startDate = newState.startDate.toDate();
- 
+    
+    console.log({periode});
     updateTimeLine(newState.startDate, newEndDate.toDate(), periode);
+    
   }
-
   const changeTimeLineByMonth = (direction: string) => {
     
     const newState = Object.assign({}, config);
@@ -206,13 +249,13 @@ export const PeriodPicker = ({config, period }:
     const newEndDate = moment(newState.endDate);
     if(direction === 'Left')
     {
-      newState.startDate.add(-1, 'months');
-      newEndDate.add(-1, 'months');
+      newState.startDate.add(-4, 'weeks');
+      newEndDate.add(-4, 'weeks');
     }
     else
     {
-      newState.startDate.add(1, 'months');
-      newEndDate.add(1, 'months');
+      newState.startDate.add(4, 'weeks');
+      newEndDate.add(4, 'weeks');
     }
     newState.startDate = newState.startDate.toDate();
     
@@ -223,26 +266,30 @@ export const PeriodPicker = ({config, period }:
   return (
     <div className={classes.root}>
       <div className={classes.displayedPeriod}>{displayedStartDate} - {displayedEndDate}</div>
-      <div>
-          <ArrowLeftOutlinedIcon className={`${classes.arrowButtons}`}  onClick={(e) => {e.stopPropagation(); changeTimeLineByPeriod('Left')}}/>
-          <ArrowBackIosOutlinedIcon className={`${classes.arrowButtons}`} onClick={(e) => {e.stopPropagation(); changeTimeLineByMonth('Left')}}/>
-          <ArrowForwardIosOutlinedIcon className={`${classes.arrowButtons}`} onClick={(e) => {e.stopPropagation(); changeTimeLineByMonth('Right')}}/>
-          <ArrowRightOutlinedIcon className={`${classes.arrowButtons}`} onClick={(e) => {e.stopPropagation(); changeTimeLineByPeriod('Right')}}/>
+      <div className ={classes.arrowButtonsWrapper}> 
+          <DoubleArrowSvgButtonIcon className={`${classes.arrowButtons} ${classes.arrowButtonRevers} ${classes.doubleArrowButton}`}  onClick={(e:any) => {e.stopPropagation(); changeTimeLineByMonth('Left')}}/>
+          <KeyboardArrowLeftIcon className={`${classes.arrowButtons}`} onClick={(e) => {e.stopPropagation(); changeTimeLineByWeek('Left')}}/>
+          <KeyboardArrowLeftIcon className={`${classes.arrowButtons} ${classes.arrowButtonRevers}`} onClick={(e) => {e.stopPropagation(); changeTimeLineByWeek('Right')}}/>
+          <DoubleArrowSvgButtonIcon className={`${classes.arrowButtons} ${classes.doubleArrowButton}`} onClick={(e:any) => {e.stopPropagation(); changeTimeLineByMonth('Right') }}/>
       </div>
       <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel id="periode">Periode</InputLabel>
-        <Select
+        <Select 
+        className = {classes.periodSelect}
           labelId="periode"
           id="periode"
           value={periode}
           onChange={handleChange}
           label="periode"
-        >
+        > 
+        
+          <MenuItem value={"Other"} disabled>Other</MenuItem>
           <MenuItem value={"24 uger"}>24 uger</MenuItem>
           <MenuItem value={"Måned"}>Måned</MenuItem>
           <MenuItem value={"To uger"}>To uger</MenuItem>
           <MenuItem value={"Uge"}>Uge</MenuItem>
         </Select>
+        <WeekCountInput config={config}/>
       </FormControl>
     </div>
   );

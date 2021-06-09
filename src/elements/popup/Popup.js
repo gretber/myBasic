@@ -339,6 +339,7 @@ const Popup = (props) => {
 
                         <Ejendomme area={area} setArea={setArea} tons={tons} setTons={setTons} />
                     </List>
+                   
                 </article>
                 <footer style={{display: "flex", justifyContent: "flex-end", paddingRight: "24px"}}>
                     <Button variant="text" color="secondary" onClick={props.closePopup}>Cancel</Button>

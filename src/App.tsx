@@ -161,9 +161,14 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                     setPeriod('Måned');
                     newState.viewPreset = 'myDayAndMonthPreset';
                 }
-                else {
+                else if(data.root.view.timeframe === '24weeks'){
                     setPeriod('24 uger');
                     newState.viewPreset = 'my24WeeksPreset';
+                }
+                else
+                {
+                    setPeriod('Other')
+                    newState.viewPreset = 'myDayAndMonthPreset';
                 }
                
                 return newState

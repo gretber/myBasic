@@ -29,8 +29,8 @@ const classes = useStyles();
   const [kalkule, setKalkule] = useState(name2==="null"?'':name2)
 
   return (
-    <form className={classes.root} noValidate autoComplete="off">
+    <div className={classes.root}>
       <TextField id="kalkule-besk" label="Kalkule Besk" variant="outlined" multiline rows={4} onChange={onChangeHandler} value={kalkule} />
-    </form>
+    </div>
   );
 };

@@ -38,7 +38,7 @@ export const EnterpriseLeder = ({leaderId, setLeaderId}: any) => {
       setLeaderId(value.id)
       setValue(value)
     } else {
-      setLeaderId('')
+      setLeaderId('null')
     }
   }
 

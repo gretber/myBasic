@@ -4,7 +4,7 @@
 // Material
 
 // Core
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 // Helpers
 import { lagInDays } from '../../helpers/lagInDays';
@@ -35,41 +35,57 @@ import { Ejendomme } from '../NyBrikForm/Ejendomme';
 import { updateProject } from '../../API/onSaveAPI/updateProject'
 
 const Popup = (props) => {
+        
+    // Close popup on esc press
+    useEffect(() => {
+        document.addEventListener("keydown", escFunction, false);
 
-     const [ dataState ] = useState({
+        return () => {
+            document.removeEventListener("keydown", escFunction, false);
+        };
+    }, []);
+
+    const escFunction = useCallback((event) => {
+        if(event.keyCode === 27) {
+            //Do whatever when esc is pressed
+            props.closePopup()
+        }
+    }, []);
+
+    const [ dataState ] = useState({
         name      : '',
         eventType : 'Meeting',
         location  : '',
         ...props.eventRecord.data
     })
 
-  const initialBrik = {
-    id: "null",
-    regionId: "null",
-    leaderId: "null",
-    projectNo: "null",
-    factoryItemName: "null",
-    factoryItemId: "null",
-    customerId: "null",
-    customerName: "null",
-    state: "2",
-    status: "null",
-    name: "null",
-    name2: "null",
-    startDate: "null",
-    endDate: "null",
-    duration: 0,
-    calculatedDuration: 0,
-    weekendWork: false,
-    jobType: "null",
-    teamId: "null",
-    factoryId: "null",
-    tons: 0.0,
-    area: 0.0,
-    color: "null",
-    eventColor: "#469e38",
-    details: "null"
-  }
+    const initialBrik = {
+        id: "null",
+        regionId: "null",
+        leaderId: "null",
+        projectNo: "null",
+        factoryItemName: "null",
+        factoryItemId: "null",
+        customerId: "null",
+        customerName: "null",
+        state: "2",
+        status: "null",
+        name: "null",
+        name2: "null",
+        startDate: "null",
+        endDate: "null",
+        duration: 0,
+        calculatedDuration: 0,
+        weekendWork: false,
+        jobType: "null",
+        teamId: "null",
+        factoryId: "null",
+        tons: 0.0,
+        area: 0.0,
+        color: "null",
+        eventColor: "#469e38",
+        details: "null"
+    }
 
   const [ newBrik, setNewBrik ] = useState(initialBrik)
 
@@ -268,8 +284,8 @@ const Popup = (props) => {
     const saveClickHandler = (newBrik) => {
        
         updateProject(newBrik)
-
         props.closePopup();
+        
     } // saveClickHandler
 
     console.log({dataState})
@@ -334,11 +350,17 @@ const Popup = (props) => {
                         <Fabrik setFactoryId={setFactoryId} factoryId={factoryId} />
 
                         <FabrikVare factoryId={factoryId}
+                                    factoryItemName={factoryItemName}
+                                    factoryItemId={factoryItemId}
                                     setFactoryItemName={setFactoryItemName}
                                     setFactoryItemId={setFactoryItemId} />
 
                         <Ejendomme area={area} setArea={setArea} tons={tons} setTons={setTons} />
                     </List>
+                    <div className="details" dangerouslySetInnerHTML =
+                    {
+                        { __html: !dataState.details||dataState.details ==='null'?"":dataState.details }
+                    } />
                 </article>
                 <footer style={{display: "flex", justifyContent: "flex-end", paddingRight: "24px"}}>
                     <Button variant="text" color="secondary" onClick={props.closePopup}>Cancel</Button>

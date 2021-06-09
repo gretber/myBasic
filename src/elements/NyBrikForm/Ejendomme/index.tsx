@@ -40,38 +40,36 @@ export const Ejendomme = ({ area, setArea, tons, setTons }: any) => {
   }
 
   return (
-    <form className={classes.root} noValidate autoComplete="off">
-      <div className={classes.wrapper}>
-        <TextField
-          id="m2"
-          label="Area"
-          type="number"
-          onChange={handlerOnAreaChange}
-          value={area}
-          InputProps={{
-            endAdornment: <InputAdornment position="end">m2</InputAdornment>,
-          }}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
+    <div className={`${classes.wrapper} ${classes.root}`}>
+      <TextField
+        id="m2"
+        label="Area"
+        type="number"
+        onChange={handlerOnAreaChange}
+        value={area}
+        InputProps={{
+          endAdornment: <InputAdornment position="end">m2</InputAdornment>,
+        }}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        variant="outlined"
+      />
 
-        <TextField
-          id="tons"
-          label="Tons"
-          type="number"
-          onChange={handlerOnTonsChange}
-          value={tons}
-          InputProps={{
-            endAdornment: <InputAdornment position="end">tons</InputAdornment>,
-          }}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
-      </div>
-    </form>
+      <TextField
+        id="tons"
+        label="Tons"
+        type="number"
+        onChange={handlerOnTonsChange}
+        value={tons}
+        InputProps={{
+          endAdornment: <InputAdornment position="end">tons</InputAdornment>,
+        }}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        variant="outlined"
+      />
+    </div>
   );
 }

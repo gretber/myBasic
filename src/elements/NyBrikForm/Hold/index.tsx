@@ -38,7 +38,7 @@ export const Hold = ({teamId, setTeamId}: any) => {
       setTeamId(value.id)
       setValue(value)
     } else {
-      setTeamId('')
+      setTeamId('null')
     }
   }
 

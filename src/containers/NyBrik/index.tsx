@@ -1,5 +1,5 @@
 // Core
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // Material
 import {
@@ -23,32 +23,34 @@ import NoteAddRoundedIcon from "@material-ui/icons/NoteAddRounded";
 // Elements
 import { NyBrikForm } from "../../components/NyBrikForm";
 
-// Store
-import { store } from '../../@init';
-
-// Actions
-import { setNuBrikAction } from '../../bus/briks/actions';
-
 // Types
 import { Project } from '../../bus/briks/dataTypes';
 
 // Hooks
 import { useBriksMutations } from '../../bus/briks/';
 
-const useStyles = makeStyles({
-  list: {
-    width: "500px",
-  },
-  anchor: {
-    overflowAnchor: "none",
-  },
-  nyBrik: {
-    marginRight: 16,
-  },
-  nyBrikIcon: {
-    marginRight: 8,
-  }
-});
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      "& > *": {
+        margin: theme.spacing(1),
+        width: "96%",
+      },
+    },
+    list: {
+      width: "500px",
+    },
+    anchor: {
+      overflowAnchor: "none",
+    },
+    nyBrik: {
+      marginRight: 16,
+    },
+    nyBrikIcon: {
+      marginRight: 8,
+    }
+  })
+);
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -148,16 +150,51 @@ export const NyBrik = () => {
     details: "null"
   }
 
-  const [ newBrik, setNewBrik ] = useState<Project>(initialBrik)
+  const initialValidation = {
+    region: '',
+    kundeNavn: '',
+    hold: ''
+  }
+
+  const [validation, setValidation] = useState<any>(initialValidation)
+
+  const [newBrik, setNewBrik] = useState<Project>(initialBrik)
+
+  useEffect(()=>{
+    setValidation( (prevState: any) => {
+      const newState = { 
+        region: newBrik.regionId,
+        arbejdsplads: newBrik.name,
+        hold: newBrik.teamId,
+      }
+      return newState
+    })
+  },[newBrik])
   
-  // console.log("newBrik", newBrik)
   
+  console.log("newBrik", newBrik)
+  console.log({validation})
   // Clean request data
   const bodyNewBrik = { ...newBrik }
   delete bodyNewBrik.eventColor
 
   const onSave = () => {
-    createBrik(newBrik)
+    if(newBrik.regionId !== 'null' && newBrik.name !== 'null' && newBrik.teamId !== 'null'){
+      //createBrik(newBrik)
+      console.log("success!!!")
+    } else {
+      console.log("fields not fill")
+    }
+  }
+
+  const onMouseUpHandler = () => {
+    if(newBrik.regionId !== 'null' && newBrik.name !== 'null' && newBrik.teamId !== 'null'){
+      //toggleDrawer("left", false)
+      console.log("success!!!")
+    } else {
+      console.log("fields not fill")
+    }
+    
   }
 
   const list = (
@@ -169,27 +206,28 @@ export const NyBrik = () => {
         Ny brik
       </DialogTitle>
       <Divider />
+      <div className={classes.root}>
+        <NyBrikForm setNewBrik={setNewBrik} />
 
-      <NyBrikForm setNewBrik={setNewBrik} />
-
-      <Divider />
-      <DialogActions>
-        <Button
-          onClick={toggleDrawer("left", false)}
-          color="secondary"
-          
-        >
-          CANCEL
-        </Button>
-        <Button
-          onMouseDown={()=>onSave()}
-          onMouseUp={toggleDrawer("left", false)}
-          color="primary"
-        >
-          <SaveRoundedIcon />
-          SAVE
-        </Button>
-      </DialogActions>
+        <Divider />
+        <DialogActions>
+          <Button
+            onClick={toggleDrawer("left", false)}
+            color="secondary"
+          >
+            CANCEL
+          </Button>
+          <Button
+            type="submit"
+            onMouseDown={ () => onSave() }
+            onMouseUp={ () => onMouseUpHandler() }
+            color="primary"
+          >
+            <SaveRoundedIcon />
+            SAVE
+          </Button>
+        </DialogActions>
+      </div>
     </div>
   );
 

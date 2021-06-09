@@ -23,12 +23,16 @@ export const Arbejdsplads = ({ projectName, setProjectName }: any) => {
   
   // Handler
   const onChangeHandler = (event: any) => {
-    setProjectName(event.target.value)
+    if(!event.target.value){
+      setProjectName("null")
+    } else {
+      setProjectName(event.target.value)
+    }
   }
 
   return (
-    <form className={classes.root} noValidate autoComplete="off">
+    <div className={classes.root}>
       <TextField id="arbejdsplads" label="Arbejdsplads" variant="outlined" onChange={onChangeHandler} value={projectName==='null'?'':projectName} />
-    </form>
+    </div>
   );
 }

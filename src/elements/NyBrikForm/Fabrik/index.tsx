@@ -43,7 +43,7 @@ export const Fabrik = ({ factoryId, setFactoryId }: any ) => {
     if(value && ('id' in value)){
       setFactoryId(value.id)
     } else {
-      setFactoryId('')
+      setFactoryId('null')
     }
 
   }

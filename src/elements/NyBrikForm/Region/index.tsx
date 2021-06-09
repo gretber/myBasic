@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { FormHelperText } from "@material-ui/core";
 
 // Hooks
 import { useSelector } from '../../../hooks/useSelector';
@@ -37,6 +38,7 @@ export const Region = ({setRegionId, projectNo, regionId}: any) => {
   })
 
   const [value, setValue] = useState(regionName)
+  const [error, setError] = useState("error message")
 
   // Handler
   const handlerOnChange = (event: any, value: any, reason: any) => {
@@ -50,7 +52,7 @@ export const Region = ({setRegionId, projectNo, regionId}: any) => {
       setRegionId('null')
     }
   }
-  console.log({projectNo})
+
   return (
     <div>
       <Autocomplete
@@ -65,6 +67,9 @@ export const Region = ({setRegionId, projectNo, regionId}: any) => {
           <TextField {...params} label={"Region"} variant="outlined" />
         )}
       />
+      {/* <FormHelperText error={true}>
+              {error}
+      </FormHelperText> */}
     </div>
   );
 };

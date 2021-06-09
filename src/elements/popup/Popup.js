@@ -285,7 +285,7 @@ const Popup = (props) => {
        
         updateProject(newBrik)
         props.closePopup();
-        
+
     } // saveClickHandler
 
     console.log({dataState})

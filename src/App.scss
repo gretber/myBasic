@@ -57,8 +57,34 @@ align-items: flex-start;
 .b-theme-classic-material .b-has-label label {
     color: #616161;
 }
+
+// Custom css
 .b-scheduler-3 {
     height: 40%;
+}
+.b-sch-event-content {
+    color: #444444!important;
+}
+
+.b-sch-nonworkingtime {
+    background-color: rgba(255, 136, 0, 0.3)!important;
+}
+
+.b-column-line {
+    border-color: rgb(182, 182, 182);
+}
+.b-column-line-major {
+     border-color: rgb(182, 182, 182);
+}
+.b-sch-header-timeaxis-cell {
+    border-right: 1px solid rgb(182, 182, 182);
+}
+.b-grid-row {
+border-bottom: 1px solid rgb(182, 182, 182);
+}
+
+.b-grid-header-container {
+    border-bottom: 1px solid rgb(182, 182, 182);
 }
 // .b-sch-style-plain  {
 // max-height: 30px;

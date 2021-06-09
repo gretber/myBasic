@@ -16,6 +16,7 @@ export const updateTimeLine = async (startDate:Date, endDate:Date, view:string) 
         const strEndDate = moment(endDate).format('DD, MM, YYYY').replace(/[^0-9]/g, '')
 
         let serverView = '';
+        
         if(view === 'Uge')
         {
             serverView = 'week';
@@ -28,11 +29,15 @@ export const updateTimeLine = async (startDate:Date, endDate:Date, view:string) 
         {
             serverView = 'month';
         }
-        else
+        else if(view === '24 uger')
         {
             serverView = '24weeks';
         }
-
+        else 
+        {
+            serverView = 'other'
+        }
+        console.log(serverView);
         const encoded = window.btoa(`${login}:${password}`);
         try {
             const response = await fetch(`${InitBriksUrl}&StartDate=${strStartDate}&EndDate=${strEndDate}&View=${serverView}&ViewType=team`, {

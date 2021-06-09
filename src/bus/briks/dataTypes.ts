@@ -7,7 +7,7 @@ export type User = {
 export type View = {
             startDate: string,
             endDate: string,
-            timeframe: "year" | "month" | "2weeks"| "week",
+            timeframe: "24weeks" | "month" | "2weeks"| "week" | "other",
             view: "team",
             project: string | "null"
 }

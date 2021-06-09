@@ -17,9 +17,11 @@ import { NyBrik } from "../NyBrik";
 import { PeriodPicker } from "../../components/PeriodPicker";
 import { JobType } from "../../components/JobType";
 import { Selection } from "../../components/Selection";
+import { WeekCountInput } from "../../components/WeekCountInput.tsx";
 
 // Cookies
 import { useCookies } from "react-cookie";
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -63,6 +65,7 @@ export const NavigationPanel = ({schedulerConfig, period, offLineEndDate, setAut
          
           {/* <JobType /> */}
           <PeriodPicker offLineEndDate={offLineEndDate} period ={period} config={schedulerConfig} />
+           
           <Button disabled>
             <FullscreenIcon />
           </Button>

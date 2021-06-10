@@ -7,6 +7,8 @@
 // Date
 import moment from 'moment';
 
+import copyIcon from './copy-two.png';
+
 // Config
 export let eventRecordData:any = {};
 
@@ -25,7 +27,6 @@ export let eventRecordData:any = {};
         showHeaderElements: false,
         autoAdjustTimeAxis: false,
         timeRanges : {
-                
                 showCurrentTimeLine : true,
                 showHeaderElements  : false,
                 enableResizing      : true,
@@ -34,30 +35,7 @@ export let eventRecordData:any = {};
             },
         eventTooltip : {
             template : ({eventRecord}:any) => {
-            
-            // let projectNo = '', customerName = '', name2 = '', tons = '', factoryItemName = '', area = '';
-            // if(eventRecord.data.projectNo !== 'null')
-            //  projectNo = eventRecord.data.projectNo + ' ';
-
-            // if(eventRecord.data.name2 !== 'null')
-            // name2 = eventRecord.data.name2 + ' ';
-
-            // if(eventRecord.data.customerName !== 'null')
-            // customerName = eventRecord.data.customerName + ' ';
-
-            // if(eventRecord.data.tons !== 'null')
-            // tons = eventRecord.data.tons + ' ton ';
-
-            // if(eventRecord.data.factoryItemName !== 'null')
-            // factoryItemName = eventRecord.data.factoryItemName + ' ';
-
-            // if(eventRecord.data.area !== 'null')
-            // area = eventRecord.data.area;
-
-            // return `<div  class="b-sch-event-tooltip eventToolTip">
-            //         <span>${projectNo}${customerName}${name2}${tons}${factoryItemName}${area} 
-            //       </span>
-            //         </div>`;
+                
              return `<div  class="b-sch-event-tooltip eventToolTip">
                     <span>${eventRecord.details} 
                   </span>
@@ -69,15 +47,9 @@ export let eventRecordData:any = {};
         },
         eventMenu: {
             disabled: false,
-             items: {
-                   editEvent: false,
-                   copyEvent: 
-                   {
-                    text: 'Duplicate',
-                    icon: 'b-fa-copy',
-                     onItem: () => console.log('clicked copy')
-                   }
-               }
+            items: {
+                editEvent: false,
+            }
       
         },
          scheduleMenu : {

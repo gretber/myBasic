@@ -22,13 +22,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const FabrikVare = ({ factoryId, setFactoryItemName, setFactoryItemId }: any) => {
+export const FabrikVare = ({ factoryId, setFactoryItemName, setFactoryItemId, factoryItemName, factoryItemId }: any) => {
   // Styles
   const classes = useStyles();
 
   // Initial State
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<Array<Item>>([]);
+  const [value, setValue] = useState({id: factoryItemId, name: factoryItemName})
+
   const loading = open && options.length === 0;
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export const FabrikVare = ({ factoryId, setFactoryItemName, setFactoryItemId }: 
       return undefined;
     }
 
-    if(factoryId){
+    if(factoryId !== 'null'){
       selectionItemsDetail(setOptions, active, factoryId)
     }
 
@@ -55,23 +57,25 @@ export const FabrikVare = ({ factoryId, setFactoryItemName, setFactoryItemId }: 
   }, [open]);
 
   // Handler
-  const handlerOnChange = (event: any, value: any) => {
+  const handlerOnChange = (event: any, value: any, reason: any) => {
     if(value && ('name' in value)){
+      setValue(value)
       setFactoryItemName(value.name)
-    } else {
-      setFactoryItemName('')
-    }
-    if(value && ('id' in value)){
       setFactoryItemId(value.id)
-    } else {
-      setFactoryItemId('')
+    } 
+
+    if(reason === 'clear'){
+      setValue({id: '', name: ''})
+      setFactoryItemName('null')
+      setFactoryItemId('null')
     }
   }
 
 
   return (
     <Autocomplete
-      disabled={!factoryId}
+      value={value}
+      disabled={factoryId === 'null'}
       className={classes.Autocomplete}
       onChange={handlerOnChange}
       id="fabrik-vare"

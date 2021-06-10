@@ -88,8 +88,6 @@ export const KundeNavn = ({ setCustomerName, projectNo, customerName, setCustome
     }
   }
 
-  console.log({projectNo})
-
   return (
     <Autocomplete
       disabled={projectNo!=='null'}

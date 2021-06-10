@@ -149,7 +149,7 @@ dragHandler: any}) => {
     }, []);
 
     const hideEditor = useCallback(() => {
-        setEventRecord(null);
+        //setEventRecord(null);
         showPopup(false);
     }, []);
 
@@ -523,13 +523,26 @@ dragHandler: any}) => {
             configFeatures.eventEdit.disabled = false;
             delete configFeatures.eventMenu.items.deleteEvent;
             configFeatures.eventMenu.items.copyEvent =
-                    {
-                        weight: 0,
-                        text: 'Duplicate',
-                        icon: 'b-fa-copy',
-                        onItem : () => {handlerOnCopy();}
-                    } ;
+                {
+                    weight: 0,
+                    text: 'Duplicate',
+                    style: {
+                        paddingRight: "40px",
+                        textAlign: "center"
+                    },
+                    onItem : () => {handlerOnCopy();}
+                };
+            configFeatures.eventMenu.items.deleteEvent = 
+                {
+                    weight: 1,
+                    text: 'Delete',
+                    icon: '',
+                    style: {
+                        paddingRight: "40px",
+                        textAlign: "center"
+                    },
                 }
+        }
 return (
         <>
             <NavigationPanel setAuthorized={setAuthorized} offLineEndDate={offLineEndDate} period={period} schedulerConfig = {config} />

@@ -35,7 +35,7 @@ export const updateTimeLine = async (startDate:Date, endDate:Date, view:string) 
         }
         else 
         {
-            serverView = 'other'
+            serverView = view;
         }
         console.log(serverView);
         const encoded = window.btoa(`${login}:${password}`);

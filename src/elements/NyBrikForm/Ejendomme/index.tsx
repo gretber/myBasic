@@ -1,5 +1,5 @@
 // Core
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 // Material
 import TextField from "@material-ui/core/TextField";
@@ -25,20 +25,63 @@ export const Ejendomme = ({ area, setArea, tons, setTons }: any) => {
   // Styles
   const classes = useStyles();
 
+  const [areaValue, setAreaValue] = useState<any>(area)
+  const [kgPrArea, setKgPrArea] = useState<any>((tons*1000)/area)
+  const [tonsValue, setTonsValue] = useState<any>(tons)
+
   // Area Handler
   const handlerOnAreaChange = (event: any) => {
-    if(event.target.value > 0){
+    if(event.target.value >= 0){
+      setAreaValue(event.target.value)
       setArea(parseInt(event.target.value))
+
+      setTonsValue(()=>{
+        const newState = (event.target.value * kgPrArea) / 1000
+        setTons(newState)
+        return newState
+      })
+    }
+  }
+
+  const handlerOnClickArea = () => {
+    if(areaValue === 0){
+      setAreaValue('')
     }
   }
 
   // Tons Handler
   const handlerOnTonsChange = (event: any) => {
-    if(event.target.value > 0){
-      setTons(parseInt(event.target.value))
+    if(event.target.value >= 0){
+      setTonsValue(event.target.value)
+      setTons(event.target.value)
     }
   }
 
+  const handlerOnClickTons = () => {
+    if(tonsValue === 0){
+      setTonsValue('')
+    }
+  }
+
+  // Kg pr. area handler
+  const handlerOnKgPrAreaChange = (event: any) => {
+    if(event.target.value >= 0){
+      setKgPrArea(event.target.value)
+    }
+
+    setTonsValue(()=>{
+      const newState = (event.target.value * areaValue) / 1000
+      setTons(newState)
+      return newState
+    })
+  }
+
+  const handlerOnClickKgPrArea = () => {
+    if(kgPrArea === 0){
+      setKgPrArea('')
+    }
+  }
+  
   return (
     <div className={`${classes.wrapper} ${classes.root}`}>
       <TextField
@@ -46,9 +89,26 @@ export const Ejendomme = ({ area, setArea, tons, setTons }: any) => {
         label="Area"
         type="number"
         onChange={handlerOnAreaChange}
-        value={area}
+        onClick={handlerOnClickArea}
+        value={areaValue}
         InputProps={{
           endAdornment: <InputAdornment position="end">m2</InputAdornment>,
+        }}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        variant="outlined"
+      />
+
+      <TextField
+        id="kgPrArea"
+        label="Kg pr. area"
+        type="number"
+        onChange={handlerOnKgPrAreaChange}
+        onClick={handlerOnClickKgPrArea}
+        value={kgPrArea}
+        InputProps={{
+          endAdornment: <InputAdornment position="end">Kg/m2</InputAdornment>,
         }}
         InputLabelProps={{
           shrink: true,
@@ -61,7 +121,8 @@ export const Ejendomme = ({ area, setArea, tons, setTons }: any) => {
         label="Tons"
         type="number"
         onChange={handlerOnTonsChange}
-        value={tons}
+        onClick={handlerOnClickTons}
+        value={tonsValue}
         InputProps={{
           endAdornment: <InputAdornment position="end">tons</InputAdornment>,
         }}

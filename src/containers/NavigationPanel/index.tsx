@@ -49,10 +49,17 @@ export const NavigationPanel = ({schedulerConfig, period, offLineEndDate, setAut
 
   // Event Handlers
   const logOutButtonClickHandler = () => {
-    
-      removeCookie('DomAuthSessId');
-      setAuthorized(false);
-      localStorage.clear();
+
+      for(let cook in cookies)
+      {
+        console.log('cook',cook);
+        removeCookie(cook);
+      }
+       setAuthorized(false);
+       localStorage.clear();
+       
+       // eslint-disable-next-line no-restricted-globals
+      //  location.replace('http://mail.vej.dk/sn/icokal.nsf/version/v87');
   }
 
   return (

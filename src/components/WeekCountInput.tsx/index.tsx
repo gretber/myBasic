@@ -49,32 +49,32 @@ type viewPresetType = 'Uge' | 'To uger' | 'Måned' | '24 uger' | 'Other'
     const submitButtonHandler = (event: any) => {
       if(weeksCount > 0){
       const newState = Object.assign({}, config);
-      // const newEndDate = moment(newState.startDate)
       const newStartDate = moment(newState.startDate);
-      let viewPreset: viewPresetType = 'Other';
+      let viewPreset: string = '';
 
       newState.startDate = newStartDate.toDate();
       newState.endDate = newStartDate.add(weeksCount, 'weeks').toDate();
       if(weeksCount === 1)
       {
-          newState.viewPreset = 'myDayAndWeekPreset';
           newState.weekStartDay = 1;
           viewPreset = "Uge";
 
       }
       else if(weeksCount === 2) {
-        newState.viewPreset = 'myDayAndWeekPreset';
         newState.weekStartDay = 1;
         viewPreset = "To uger";
       }
+      else if(weeksCount === 4)
+      {
+        newState.weekStartDay = 1;
+        viewPreset = "Måned";
+      }
       else if(weeksCount > 2 && weeksCount !== 24)
       {
-        newState.viewPreset = 'myDayAndMonthPreset';
-        viewPreset = "Other"
+        viewPreset = `${weeksCount} uger`;
       }
       else if(weeksCount === 24)
       {
-        newState.viewPreset = 'my24WeeksPreset';
         viewPreset = '24 uger';
       }
       console.log('S D', newState.startDate);
@@ -97,6 +97,7 @@ type viewPresetType = 'Uge' | 'To uger' | 'Måned' | '24 uger' | 'Other'
             shrink: true,
           }}
           variant="outlined"
+          value={weeksCount}
         />
         <Button variant='outlined' onClick = {submitButtonHandler}>Submit</Button>
         </div>

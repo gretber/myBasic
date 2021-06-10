@@ -7,12 +7,13 @@
 
 const schedulerConfig2: any = {
     weekStartDay: 1,
-    rowHeight: 50,
+    rowHeight: 30,
+    minHeight: '20em',
     showHeaderElemens: false,
     createEventOnDblClick: false,
-    cls: {
-    'b-scheduler-3': 1
-    },
+    // cls: {
+    // 'b-scheduler-3': 1
+    // },
     features: {
         nonWorkingTime : true,
         autoAdjustTimeAxis: false,
@@ -74,6 +75,7 @@ const schedulerConfig2: any = {
             showEventCount: false,
             showImage: false,
             width: 230,
+            height: 200,
              enableCellContextMenu: false,
             enableHeaderContextMenu: false,
             sortable : false,

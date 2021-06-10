@@ -23,6 +23,10 @@ import './App.scss';
 // Containers
 import { NavigationPanel } from './containers/NavigationPanel';
 
+// Resize
+// @ts-ignore: Unreachable code error
+import ResizePanel from "react-resize-panel";
+
 // Components
 // import Popup from './components/popup/popup';
 
@@ -55,8 +59,29 @@ import moment from 'moment';
 import { Factory, Project, SelectionValue, SelectionType } from './bus/briks/dataTypes';
 
 import Popup from './elements/popup/Popup';
+import { calculateWeekStartDate } from './helpers/calculateWeekStartDate';
 
-export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAuthorized: React.Dispatch<React.SetStateAction<boolean>>}) => {
+// Styles
+import { makeStyles } from '@material-ui/core';
+
+const useStyle = makeStyles({
+    dragDiv : {
+    height: 5,
+
+    position: 'absolute',
+    top: 0,
+    backgroundColor: '#4f5964',
+    },
+    resizePanel :{
+        backgroundColor: '#ff6207',
+        height: 1,
+        width: '100%',
+    },
+
+}) 
+
+export const App = ({isAuthorized, setAuthorized, dragHandler}: {isAuthorized:boolean, setAuthorized: React.Dispatch<React.SetStateAction<boolean>>,  
+dragHandler: any}) => {
 
     const initialBrik = {
     id: null,
@@ -88,6 +113,9 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
     // Ref
     const schedulerRef1 = useRef<typeof BryntumScheduler | null>(null);
     const schedulerRef2 = useRef<typeof BryntumScheduler | null>(null);
+
+    // Styles
+  const classes = useStyle();
 
     // Init state
 
@@ -141,8 +169,9 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                 const startDate = moment(data.root.view.startDate, "DD/MM/YYYY").toDate()
                 const endDate = moment(data.root.view.endDate, "DD/MM/YYYY").toDate()
                 
-                newState.startDate = startDate;
-                newState.endDate = endDate;
+                const {calculatedEndtDate, calculatedStartDate} = calculateWeekStartDate(startDate, endDate);
+                newState.startDate = calculatedStartDate;
+                newState.endDate = calculatedEndtDate;
 
                 saveOffLineEndDate(config.endDate);
 
@@ -167,8 +196,8 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                 }
                 else
                 {
-                    setPeriod('Other')
-                    newState.viewPreset = 'myDayAndMonthPreset';
+                    setPeriod(data.root.view.timeframe)
+                    newState.viewPreset = 'my24WeeksPreset';
                 }
                
                 return newState
@@ -459,6 +488,10 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
         copyBrik(projectCopy);
       }
 
+      const onResize = (e:any) => {
+        console.log(e);
+      }
+
     if(loading){
         return (
             <Fragment>
@@ -498,7 +531,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                     } ;
                 }
 return (
-        <Fragment>
+        <>
             <NavigationPanel setAuthorized={setAuthorized} offLineEndDate={offLineEndDate} period={period} schedulerConfig = {config} />
             <BryntumScheduler
                  {...Object.assign({}, config, configFeatures) }
@@ -532,13 +565,15 @@ return (
                     ></Popup>
                 ) : null}
             </div>
-            {schedulerRef1.current&&<div style={{height: '40%'}}><BryntumScheduler
+            {schedulerRef1.current&&    
+            <ResizePanel direction="n" handleClass={classes.resizePanel}><BryntumScheduler
                                             ref={schedulerRef2} 
                                             resources={bottomResources}
                                             events={bottomEvents}
                                             {...config2}
-                                            partner={schedulerRef1.current.schedulerInstance} /></div>}  
-                                                  </Fragment>
+                                            partner={schedulerRef1.current.schedulerInstance} />
+                                                             </ResizePanel>   }  
+                                                  </>
     );
 };
 

@@ -72,7 +72,26 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     periodSelect : {
       width: 105,
-    }
+    },
+
+    options : {
+      height: 30,
+      fontSize: 16,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      '&:hover': {
+        backgroundColor: 'rgba(192, 192, 192, 0.5)',
+        cursor: 'pointer',
+      },
+    },
+    disabledOption: {
+      borderBottom: 'solid 1px rgba(0, 0, 0, 0.23)',
+      '&:hover': {
+        backgroundColor: '#fff',
+        cursor: 'default',     
+      }
+    },
   })
 );
 
@@ -107,7 +126,6 @@ export const PeriodPicker = ({config, period }:
       
         if(event.target.value === 'Uge')
         {
-          // newState.viewPreset = 'myDayAndWeekPreset';
           newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(1, 'weeks').toDate();
@@ -116,7 +134,6 @@ export const PeriodPicker = ({config, period }:
 
         else if(event.target.value === 'To uger')
         {
-          // newState.viewPreset = 'myDayAndWeekPreset';
           newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(2, 'weeks').toDate();
@@ -125,16 +142,14 @@ export const PeriodPicker = ({config, period }:
 
        else if(event.target.value === 'Måned')
         {
-          // newState.viewPreset ='myDayAndMonthPreset';
           newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
-          newState.endDate = newEndDate.add(1, 'months').toDate();
+          newState.endDate = newEndDate.add(4, 'weeks').toDate();
           updateTimeLine(newState.startDate, newState.endDate, event.target.value as string);
         }
 
         else if(event.target.value === event.target.value as string)
         {
-          // newState.viewPreset ='my24WeeksPreset';
           newState.weekStartDay = 1;
           newState.startDate = newStartDate.toDate();
           newState.endDate = newEndDate.add(24, 'weeks').toDate();
@@ -145,83 +160,7 @@ export const PeriodPicker = ({config, period }:
    setPeriode(event.target.value as string);
   };
 
-  // Toggle Handlers
-
-  // const changeTimeLineByPeriod = (direction: string) => {
-
-  //   const newState = Object.assign({}, config);
-  //   newState.startDate = moment(newState.startDate);
-  //   const newEndDate = moment(newState.endDate);
-  //   switch(periode)
-  //   {
-  //     case "Uge":
-  //     {
-  //       if(direction === 'Left')
-  //     {
-  //       newState.startDate = newState.startDate.add(-1, 'week');
-  //       newEndDate.add(-1, 'week');
-  //       break;
-  //     }
-  //     else
-  //     {
-  //       newState.startDate = newState.startDate.add(1, 'week');
-  //       newEndDate.add(1, 'week');
-  //       break;
-  //     }
-  //     }
-  //     case "To uger" : 
-  //     {
-  //        if(direction === 'Left')
-  //     {
-  //       newState.startDate = newState.startDate.add(-2, 'week');
-  //      newEndDate.add(-2, 'week');
-  //       break;
-  //     }
-  //     else
-  //     {
-  //       newState.startDate = newState.startDate.add(2, 'week');
-  //       newEndDate.add(2, 'week');
-  //       break;
-  //     }
-  //     }
-  //     case "Måned": 
-  //     {
-  //       if(direction === 'Left')
-  //       {
-  //         newState.startDate.add(-1, 'months');
-  //         newEndDate.add(-1, 'months');
-  //       }
-  //   else
-  //      {
-  //         newState.startDate.add(1, 'months');
-  //         newEndDate.add(1, 'months');
-  //      }
-  //       break;
-  //     }
-
-  //     case "24 uger" : 
-  //     {
-  //       if(direction === 'Left')
-  //     {
-  //       newState.startDate = newState.startDate.add(-24, 'week');
-  //       newEndDate.add(-24, 'week');
-  //       break;
-  //     }
-  //     else
-  //     {
-  //       newState.startDate = newState.startDate.add(24, 'week');
-  //       newEndDate.add(24, 'week');
-  //       break;
-  //     }
-  //     }
-      
-  //   }
-  //   newState.startDate = newState.startDate.toDate();
- 
-  //   updateTimeLine(newState.startDate, newEndDate.toDate(), periode);
-  // }
-
-  const changeTimeLineByWeek = (direction: string) => {
+    const changeTimeLineByWeek = (direction: string) => {
     const newState = Object.assign({}, config);
     newState.startDate = moment(newState.startDate);
     const newEndDate = moment(newState.endDate);
@@ -238,7 +177,6 @@ export const PeriodPicker = ({config, period }:
     }
     newState.startDate = newState.startDate.toDate();
     
-    console.log({periode});
     updateTimeLine(newState.startDate, newEndDate.toDate(), periode);
     
   }
@@ -259,7 +197,7 @@ export const PeriodPicker = ({config, period }:
     }
     newState.startDate = newState.startDate.toDate();
     
-    console.log({periode});
+    // console.log({periode});
     updateTimeLine(newState.startDate, newEndDate.toDate(), periode);
   }
 
@@ -280,14 +218,14 @@ export const PeriodPicker = ({config, period }:
           id="periode"
           value={periode}
           onChange={handleChange}
-          label="periode"
+          label="Periode"
         > 
         
-          <MenuItem value={"Other"} disabled>Other</MenuItem>
-          <MenuItem value={"24 uger"}>24 uger</MenuItem>
-          <MenuItem value={"Måned"}>Måned</MenuItem>
-          <MenuItem value={"To uger"}>To uger</MenuItem>
-          <MenuItem value={"Uge"}>Uge</MenuItem>
+          <option className = {`${classes.options} ${classes.disabledOption}`} ria-disabled value={period} disabled>{period}</option>
+          <option className = {classes.options} value={"24 uger"}>24 uger</option>
+          <option className = {classes.options} value={"Måned"}>Måned</option>
+          <option className = {classes.options} value={"To uger"}>To uger</option>
+          <option className = {classes.options} value={"Uge"}>Uge</option>
         </Select>
         <WeekCountInput config={config}/>
       </FormControl>

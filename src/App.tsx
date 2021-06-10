@@ -65,17 +65,18 @@ import { calculateWeekStartDate } from './helpers/calculateWeekStartDate';
 import { makeStyles } from '@material-ui/core';
 
 const useStyle = makeStyles({
-    dragDiv : {
-    height: 5,
-
-    position: 'absolute',
-    top: 0,
-    backgroundColor: '#4f5964',
+    resizeWrapper : {
+    minHeight: '40%',
+   
     },
+   
     resizePanel :{
         backgroundColor: '#ff6207',
         height: 1,
         width: '100%',
+    },
+    schedulerWrapper: {
+        minHeight: 200,
     },
 
 }) 
@@ -488,9 +489,7 @@ dragHandler: any}) => {
         copyBrik(projectCopy);
       }
 
-      const onResize = (e:any) => {
-        console.log(e);
-      }
+      
 
     if(loading){
         return (
@@ -579,13 +578,13 @@ return (
                 ) : null}
             </div>
             {schedulerRef1.current&&    
-            <ResizePanel direction="n" handleClass={classes.resizePanel}><BryntumScheduler
+            <ResizePanel style={{height: '40%'}} direction="n" handleClass={classes.resizePanel}><BryntumScheduler
                                             ref={schedulerRef2} 
                                             resources={bottomResources}
                                             events={bottomEvents}
                                             {...config2}
                                             partner={schedulerRef1.current.schedulerInstance} />
-                                                             </ResizePanel>   }  
+                                                         </ResizePanel> }  
                                                   </>
     );
 };

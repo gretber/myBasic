@@ -31,12 +31,6 @@ import { useBriksMutations } from '../../bus/briks/';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      "& > *": {
-        margin: theme.spacing(1),
-        width: "96%",
-      },
-    },
     list: {
       width: "500px",
     },
@@ -200,29 +194,27 @@ export const NyBrik = () => {
         Ny brik
       </DialogTitle>
       <Divider />
-      <div className={classes.root}>
 
-        <NyBrikForm setNewBrik={setNewBrik} validation={validation} setValidation={setValidation} />
+      <NyBrikForm setNewBrik={setNewBrik} validation={validation} setValidation={setValidation} />
 
-        <Divider />
-        <DialogActions>
-          <Button
-            onClick={toggleDrawer("left", false)}
-            color="secondary"
-          >
-            CANCEL
-          </Button>
-          <Button
-            type="submit"
-            onMouseDown={ () => onSave() }
-            onMouseUp={ () => onMouseUpHandler() }
-            color="primary"
-          >
-            <SaveRoundedIcon />
-            SAVE
-          </Button>
-        </DialogActions>
-      </div>
+      <Divider />
+      <DialogActions>
+        <Button
+          onClick={toggleDrawer("left", false)}
+          color="secondary"
+        >
+          CANCEL
+        </Button>
+        <Button
+          type="submit"
+          onMouseDown={ () => onSave() }
+          onMouseUp={ () => onMouseUpHandler() }
+          color="primary"
+        >
+          <SaveRoundedIcon />
+          SAVE
+        </Button>
+      </DialogActions>
     </div>
   );
 

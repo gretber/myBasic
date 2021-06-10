@@ -188,11 +188,11 @@ export const Selection = () => {
         </DialogContent>
 
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color="secondary">
+          <Button onClick={handleClose} color="secondary">
             Cancel
           </Button>
 
-          <Button autoFocus onClick={handleOnSaveClick} color="primary">
+          <Button onClick={handleOnSaveClick} color="primary">
             <SaveRoundedIcon />
             Save
           </Button>

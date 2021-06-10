@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Region = ({setRegionId, projectNo, regionId}: any) => {
+export const Region = ({setRegionId, projectNo, regionId, validation, setValidation}: any) => {
   // Styles
   const classes = useStyles();
   // Get data
@@ -38,13 +38,16 @@ export const Region = ({setRegionId, projectNo, regionId}: any) => {
   })
 
   const [value, setValue] = useState(regionName)
-  const [error, setError] = useState("error message")
 
   // Handler
   const handlerOnChange = (event: any, value: any, reason: any) => {
     if(value && ('id' in value)){
       setRegionId(value.id)
       setValue(value)
+      setValidation((prevState: any)=>{
+        const newState = {...prevState, region: false}
+        return newState
+      })
     }
 
     if(reason==="clear"){
@@ -64,12 +67,14 @@ export const Region = ({setRegionId, projectNo, regionId}: any) => {
         options={regions?regions:[]}
         getOptionLabel={(option: any) =>  option.name }
         renderInput={(params) => (
-          <TextField {...params} label={"Region"} variant="outlined" />
+          <TextField {...params} label={"Region*"} variant="outlined" />
         )}
       />
-      {/* <FormHelperText error={true}>
-              {error}
-      </FormHelperText> */}
+      { validation.region == "null" &&
+        <FormHelperText style={{margin: "-8px 0 0 16px"}} error={true}>
+          Region er påkrævet
+        </FormHelperText>
+      }
     </div>
   );
 };

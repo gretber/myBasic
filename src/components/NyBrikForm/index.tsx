@@ -26,7 +26,7 @@ import { convertDate } from '../../helpers/convertDate';
 
 // type formFields = 'regionId' | 'projectName';
 
-export const NyBrikForm = ({ setNewBrik }: any) => {
+export const NyBrikForm = ({ setNewBrik, validation, setValidation }: any) => {
 
   // const [ formState, setFormState ] = useState({
   //   regionId: null,
@@ -234,7 +234,9 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
 
   return (
     <List>
-      <Region setRegionId={setRegionId}
+      <Region validation={validation}
+              setValidation={setValidation}
+              setRegionId={setRegionId}
               projectNo={projectNo}
               regionId={regionId} />
 
@@ -246,7 +248,9 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
                 setCustomerName={setCustomerName}
                 setCustomerId={setCustomerId} />
 
-      <Arbejdsplads projectName={projectName}
+      <Arbejdsplads validation={validation}
+                    setValidation={setValidation}
+                    projectName={projectName}
                     setProjectName={setProjectName} />
 
       <KalkuleBesk setName2={setName2} />
@@ -278,7 +282,9 @@ export const NyBrikForm = ({ setNewBrik }: any) => {
 
       <JobType jobTypeId={jobTypeId} setJobTypeId={setJobTypeId} />
 
-      <Hold setTeamId={setTeamId}/>
+      <Hold validation={validation}
+            setValidation={setValidation}
+            setTeamId={setTeamId}/>
 
       <EnterpriseLeder setLeaderId={setLeaderId} />
 

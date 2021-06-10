@@ -151,27 +151,15 @@ export const NyBrik = () => {
   }
 
   const initialValidation = {
-    region: '',
-    kundeNavn: '',
-    hold: ''
+    region: false,
+    kundeNavn: false,
+    hold: false
   }
 
   const [validation, setValidation] = useState<any>(initialValidation)
 
   const [newBrik, setNewBrik] = useState<Project>(initialBrik)
 
-  useEffect(()=>{
-    setValidation( (prevState: any) => {
-      const newState = { 
-        region: newBrik.regionId,
-        arbejdsplads: newBrik.name,
-        hold: newBrik.teamId,
-      }
-      return newState
-    })
-  },[newBrik])
-  
-  
   console.log("newBrik", newBrik)
   console.log({validation})
   // Clean request data
@@ -180,19 +168,25 @@ export const NyBrik = () => {
 
   const onSave = () => {
     if(newBrik.regionId !== 'null' && newBrik.name !== 'null' && newBrik.teamId !== 'null'){
-      //createBrik(newBrik)
-      console.log("success!!!")
+      createBrik(newBrik)
+
     } else {
+      setValidation( (prevState: any) => {
+        const newState = { 
+          region: newBrik.regionId,
+          arbejdsplads: newBrik.name,
+          hold: newBrik.teamId,
+        }
+        return newState
+      })
       console.log("fields not fill")
     }
   }
 
   const onMouseUpHandler = () => {
     if(newBrik.regionId !== 'null' && newBrik.name !== 'null' && newBrik.teamId !== 'null'){
-      //toggleDrawer("left", false)
-      console.log("success!!!")
+      toggleDrawer("left", false)
     } else {
-      console.log("fields not fill")
     }
     
   }
@@ -207,7 +201,8 @@ export const NyBrik = () => {
       </DialogTitle>
       <Divider />
       <div className={classes.root}>
-        <NyBrikForm setNewBrik={setNewBrik} />
+
+        <NyBrikForm setNewBrik={setNewBrik} validation={validation} setValidation={setValidation} />
 
         <Divider />
         <DialogActions>

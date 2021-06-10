@@ -92,6 +92,7 @@ const Popup = (props) => {
     useEffect(()=>{
         console.log(newBrik)
     },[newBrik])
+
     // State for region
     const [ regionId, setRegionId ] = useState(dataState.regionId);
 
@@ -281,14 +282,38 @@ const Popup = (props) => {
         })
     },[tons])
 
+    // State forvalidation
+    const initialValidation = {
+        region: false,
+        kundeNavn: false,
+        hold: false
+    }
+
+    const [validation, setValidation] = useState(initialValidation)
+
     const saveClickHandler = (newBrik) => {
-       
+    if(newBrik.regionId !== 'null' && newBrik.name !== 'null' && newBrik.teamId !== 'null'){
         updateProject(newBrik)
         props.closePopup();
 
+    } else {
+      setValidation( (prevState) => {
+        const newState = { 
+          region: newBrik.regionId,
+          arbejdsplads: newBrik.name,
+          hold: newBrik.teamId,
+        }
+        return newState
+      })
+      console.log("fields not fill")
+    }
+       
     } // saveClickHandler
 
     console.log({dataState})
+
+    // Value state for fabrik vare
+    const [valueFabrikVare, setValueFabrikVare] = useState({id: factoryItemId, name: factoryItemName})
 
     return (
         <div className='popup-mask'>
@@ -296,7 +321,9 @@ const Popup = (props) => {
                 <header>Edit Brik&nbsp;</header>
                 <article>
                     <List>
-                        <Region setRegionId={setRegionId}
+                        <Region validation={validation}
+                                setValidation={setValidation}
+                                setRegionId={setRegionId}
                                 projectNo={projectNo}
                                 regionId={regionId} />
 
@@ -310,8 +337,10 @@ const Popup = (props) => {
                                     setCustomerId={setCustomerId}
                                     setName2={setName2} />
 
-                        <Arbejdsplads projectName={projectName}
-                                    setProjectName={setProjectName} />
+                        <Arbejdsplads   validation={validation}
+                                        setValidation={setValidation}
+                                        projectName={projectName}
+                                        setProjectName={setProjectName} />
 
                         <KalkuleBesk setName2={setName2} name2={name2} />
 
@@ -343,15 +372,22 @@ const Popup = (props) => {
 
                         <JobType jobTypeId={jobTypeId} setJobTypeId={setJobTypeId} />
 
-                        <Hold teamId={teamId} setTeamId={setTeamId}/>
+                        <Hold   validation={validation}
+                                setValidation={setValidation}
+                                teamId={teamId} 
+                                setTeamId={setTeamId}/>
 
                         <EnterpriseLeder leaderId={leaderId} setLeaderId={setLeaderId} />
 
-                        <Fabrik setFactoryId={setFactoryId} factoryId={factoryId} />
+                        <Fabrik setValueFabrikVare={setValueFabrikVare}
+                                setFactoryId={setFactoryId}
+                                factoryId={factoryId}
+                                setFactoryItemName={setFactoryItemName}
+                                setFactoryItemId={setFactoryItemId} />
 
                         <FabrikVare factoryId={factoryId}
-                                    factoryItemName={factoryItemName}
-                                    factoryItemId={factoryItemId}
+                                    valueFabrikVare={valueFabrikVare}
+                                    setValueFabrikVare={setValueFabrikVare}
                                     setFactoryItemName={setFactoryItemName}
                                     setFactoryItemId={setFactoryItemId} />
 

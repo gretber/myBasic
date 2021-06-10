@@ -22,14 +22,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const FabrikVare = ({ factoryId, setFactoryItemName, setFactoryItemId, factoryItemName, factoryItemId }: any) => {
+export const FabrikVare = ({ factoryId, setFactoryItemName, setFactoryItemId, valueFabrikVare, setValueFabrikVare }: any) => {
   // Styles
   const classes = useStyles();
 
   // Initial State
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<Array<Item>>([]);
-  const [value, setValue] = useState({id: factoryItemId, name: factoryItemName})
+
 
   const loading = open && options.length === 0;
 
@@ -59,13 +59,13 @@ export const FabrikVare = ({ factoryId, setFactoryItemName, setFactoryItemId, fa
   // Handler
   const handlerOnChange = (event: any, value: any, reason: any) => {
     if(value && ('name' in value)){
-      setValue(value)
+      setValueFabrikVare(value)
       setFactoryItemName(value.name)
       setFactoryItemId(value.id)
     } 
 
     if(reason === 'clear'){
-      setValue({id: '', name: ''})
+      setValueFabrikVare({id: '', name: ''})
       setFactoryItemName('null')
       setFactoryItemId('null')
     }
@@ -74,7 +74,7 @@ export const FabrikVare = ({ factoryId, setFactoryItemName, setFactoryItemId, fa
 
   return (
     <Autocomplete
-      value={value}
+      value={valueFabrikVare}
       disabled={factoryId === 'null'}
       className={classes.Autocomplete}
       onChange={handlerOnChange}

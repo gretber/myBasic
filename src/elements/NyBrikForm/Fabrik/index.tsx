@@ -18,11 +18,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const Fabrik = ({ factoryId, setFactoryId }: any ) => {
+export const Fabrik = ({ factoryId, setFactoryId, setFactoryItemName, setFactoryItemId, setValueFabrikVare }: any ) => {
   // Style
   const classes = useStyles();
 
   const [ factory, setFactory ] = useState<any>(null)
+
 
   // Get data
   const factories: any = useSelector( state => {
@@ -38,12 +39,18 @@ export const Fabrik = ({ factoryId, setFactoryId }: any ) => {
   },[factoryId])
 
   // Handler
-  const handlerOnChange = (event: any, value: any) => {
+  const handlerOnChange = (event: any, value: any, reason: any) => {
     // Set factory name
     if(value && ('id' in value)){
+      setFactory(value)
       setFactoryId(value.id)
-    } else {
+    } 
+    if(reason==="clear"){
+      setFactory({id: '', name: ''})
+      setValueFabrikVare({id: '', name: ''})
       setFactoryId('null')
+      setFactoryItemName('null')
+      setFactoryItemId('null')
     }
 
   }

@@ -7,9 +7,11 @@
 
 const schedulerConfig2: any = {
     weekStartDay: 1,
-    rowHeight: 50,
+    rowHeight: 30,
     showHeaderElemens: false,
     createEventOnDblClick: false,
+    minRowHeight: 50,
+    barMargin: 0,
     cls: {
     'b-scheduler-3': 1
     },
@@ -18,16 +20,16 @@ const schedulerConfig2: any = {
         autoAdjustTimeAxis: false,
         showHeaderElemens: false,
         timeRanges : {
-                showCurrentTimeLine : true,
-                showHeaderElements  : false,
-                enableResizing      : false
-            },
-            scheduleMenu : {
+            showCurrentTimeLine : true,
+            showHeaderElements  : false,
+            enableResizing      : false
+        },
+        scheduleMenu : {
             items : {
                 addEvent : false
             },
         },
-         eventTooltip : {
+        eventTooltip : {
             template : ({eventRecord}:any) => {
             return `<div  class="b-sch-event-tooltip eventToolTip">
                     <span>${eventRecord.data.tons} tons</span>
@@ -72,9 +74,15 @@ const schedulerConfig2: any = {
             type: 'resourceInfo',
             text: 'Fabrik',
             showEventCount: false,
+            showMeta: (event: any)=>{
+                const allEvents = event.$project.$eventStore._data
+                const currentEvents = allEvents.filter( (item: any)=> item.resourceId === event.originalData.id )
+                const totalTons = currentEvents.reduce((a: any, b: any) => a + b.tons, 0)
+                return `Total ${totalTons} tons`
+            },
             showImage: false,
             width: 230,
-             enableCellContextMenu: false,
+            enableCellContextMenu: false,
             enableHeaderContextMenu: false,
             sortable : false,
             draggable: false,

@@ -117,18 +117,10 @@ const classes = useStyles();
        }
     }
 
-    const onMouseMoveHandler = (e: any) => {
-        console.log(e);
-
-    }
-    const dragHandler = (e:any) => {
-        console.log('click')
-    }
-
     if(isAuthorized)
     {
 
-       return (<App dragHandler={dragHandler} isAuthorized={isAuthorized}  setAuthorized={setAuthorized}/>)
+       return (<App isAuthorized={isAuthorized}  setAuthorized={setAuthorized}/>)
     }
     else 
     {

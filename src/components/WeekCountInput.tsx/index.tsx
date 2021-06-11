@@ -77,9 +77,9 @@ type viewPresetType = 'Uge' | 'To uger' | 'Måned' | '24 uger' | 'Other'
       {
         viewPreset = '24 uger';
       }
-      console.log('S D', newState.startDate);
-      console.log('E D: ',newState.endDate )
-      console.log('in input',{weeksCount});
+      // console.log('S D', newState.startDate);
+      // console.log('E D: ',newState.endDate )
+      // console.log('in input',{weeksCount});
         updateTimeLine(newState.startDate, newState.endDate, viewPreset);
        
       }

@@ -154,8 +154,8 @@ export const NyBrik = () => {
 
   const [newBrik, setNewBrik] = useState<Project>(initialBrik)
 
-  console.log("newBrik", newBrik)
-  console.log({validation})
+  // console.log("newBrik", newBrik)
+  // console.log({validation})
   // Clean request data
   const bodyNewBrik = { ...newBrik }
   delete bodyNewBrik.eventColor
@@ -173,7 +173,7 @@ export const NyBrik = () => {
         }
         return newState
       })
-      console.log("fields not fill")
+      // console.log("fields not fill")
     }
   }
 

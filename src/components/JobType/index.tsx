@@ -50,39 +50,40 @@ const MenuProps = {
 };
 
 
-export const JobType = () => {
+export const JobType = ({jobTypes, setJobTypes}: {jobTypes:any, setJobTypes:any}) => {
   // Styles
   const classes = useStyles();
 
   // Get job types
-  const jobs = useSelector( state => {
+ const jobs = useSelector( state => {
     if("root" in state.data){
       return state.data.root.jobTypes.jobType;
     }
   });
 
-  const initState = jobs?
-  jobs.reduce(function(result: any, item: any) {
-      result[item.name] = true;
-      return result;
-    }, {})
-  :null
-
+  // const initState = jobs?
+  // jobs.reduce(function(result: any, item: any) {
+  //     result[item.name] = true;
+  //     return result;
+  //   }, {})
+  // :null
   
   // Init State
-  const [jobType, setJobType] = React.useState<string[]>([]);
-  const [state, setState] = React.useState(initState);
+  const [selectJobs, setSelectJobs] = React.useState<string[]>([]);
+  // const [state, setState] = React.useState(initState);
+ 
 
   const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
 
-    if(state){
-      setState({ ...state, [event.target.name]: event.target.checked });
-      console.log(event.target.checked);
+    if(jobTypes){
+      setJobTypes({ ...jobTypes, [event.target.name]: event.target.checked });
+      // console.log('checkbox', jobTypes);
     }
   };
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setJobType(event.target.value as string[]);
+    // console.log('change', event);
+    setSelectJobs(event.target.value as string[]);
   };
 
   // Job list
@@ -94,7 +95,7 @@ export const JobType = () => {
         key={job.name}
         control={
           <Checkbox
-            checked={state[job.name]}
+            checked={jobTypes[job.name]}
             onChange={handleChangeCheckbox}
             name={job.name}
             color="primary"
@@ -111,7 +112,7 @@ export const JobType = () => {
         <Select
           multiple
           displayEmpty
-          value={jobType}
+          value={selectJobs}
           onChange={handleChange}
           input={<Input />}
           MenuProps={MenuProps}

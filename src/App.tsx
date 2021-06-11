@@ -44,6 +44,9 @@ import { sortSelectedFabriks } from './helpers/sortSelectedFabriks';
 import { lagInDays } from './helpers/lagInDays';
 import { subDays } from './helpers/subDays';
 import { transformFactoriesEvents } from './helpers/transformFactoriesEvents';
+import { calculateWeekStartDate } from './helpers/calculateWeekStartDate';
+import { sortByJobTypes } from './helpers/sortByJobTypes';
+
 
 // API
 import { updateProject } from './API/onSaveAPI/updateProject';
@@ -59,10 +62,10 @@ import moment from 'moment';
 import { Factory, Project, SelectionValue, SelectionType } from './bus/briks/dataTypes';
 
 import Popup from './elements/popup/Popup';
-import { calculateWeekStartDate } from './helpers/calculateWeekStartDate';
 
 // Styles
 import { makeStyles } from '@material-ui/core';
+
 
 const useStyle = makeStyles({
     resizeWrapper : {
@@ -81,35 +84,7 @@ const useStyle = makeStyles({
 
 }) 
 
-export const App = ({isAuthorized, setAuthorized, dragHandler}: {isAuthorized:boolean, setAuthorized: React.Dispatch<React.SetStateAction<boolean>>,  
-dragHandler: any}) => {
-
-    const initialBrik = {
-    id: null,
-    regionId: "",
-    leaderId: "",
-    projectNo: null,
-    factoryItemName: "",
-    factoryItemId: null,
-    customerId: null,
-    customerName: null,
-    state: "2",
-    status: "",
-    name: "",
-    name2: "",
-    startDate: "",
-    endDate: "",
-    duration: 0,
-    calculatedDuration: 0,
-    weekendWork: false,
-    jobType: null,
-    teamId: "",
-    factoryId: "",
-    tons: 0.0,
-    area: 0.0,
-    color: "",
-    details: ""
-  }
+export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAuthorized: React.Dispatch<React.SetStateAction<boolean>>}) => {
 
     // Ref
     const schedulerRef1 = useRef<typeof BryntumScheduler | null>(null);
@@ -130,13 +105,14 @@ dragHandler: any}) => {
     const [config2] = useState({...schedulerConfig2});
     const [period, setPeriod] = useState('');
 
-
-
-
     const [popupShown, showPopup] = useState(false);
     const [eventRecord, setEventRecord] = useState(null);
     const [eventStore, setEventStore] = useState(null);
     const [resourceStore, setResourceStore] = useState(null);
+
+    // JobTypes
+    
+    const [jobTypes, setJobTypes] = useState({'Fræs': true, 'Striber': true, 'Opretning': true});
 
     useEffect(() => {
         const { eventStore, resourceStore } = schedulerRef1.current.instance;
@@ -163,6 +139,8 @@ dragHandler: any}) => {
     useEffect(()=> {
 
         if("root" in data){
+
+            
 
             // Set Config
             setConfig( (prevState: any) => {
@@ -249,7 +227,7 @@ dragHandler: any}) => {
                     item["resourceId"] = item["factoryId"];  // Resource 
                 })
 
-                const transformFactories = transformFactoriesEvents(resourseFactoryId);
+                const transformFactories = transformFactoriesEvents(sortByJobTypes(resourseFactoryId, jobTypes));
                 const dropEmptyTons = transformFactories.filter( (item: any) => item.tons !== 0 )
 
                 const activeFactories: any = []
@@ -262,9 +240,10 @@ dragHandler: any}) => {
 
                 setBottomResources(activeFactories);
                 setBottomEvents(dropEmptyTons);
-
+                
+                const sortedByJobTypes = sortByJobTypes(sortedByRegions, jobTypes);
                 setTopResources(copySelectionTeams);
-                setTopEvents(sortedByRegions);
+                setTopEvents(sortedByJobTypes);
 
             } else {
                 console.log('selectedFabriksCount.length !== 0');
@@ -296,7 +275,7 @@ dragHandler: any}) => {
                 const sortedByRegions = sortSelectedRegions(sortedFabriks, selectionRegion)
 
                 const copySortedByRegions = sortedByRegions.map ((item: any)=> ({...item, resourceId: item["factoryId"]})) // Copy sortedByRegions and add id field resourceId
-                const eventsWithCountedTons = transformFactoriesEvents(copySortedByRegions)
+                const eventsWithCountedTons = transformFactoriesEvents(sortByJobTypes(copySortedByRegions, jobTypes))
                 const dropEmptyTons = eventsWithCountedTons.filter( (item: any) => item.tons !== 0 )
 
 
@@ -345,13 +324,14 @@ dragHandler: any}) => {
                 setBottomResources(activeFactories)
                 setBottomEvents(dropEmptyTons)
 
-                setTopEvents(events);
+                 const sortedByJobTypes = sortByJobTypes(events, jobTypes);
+                setTopEvents(sortedByJobTypes);
                 setTopResources(sortTeams);
                 
             }
         }
 
-    }, [data, loading, isAuthorized])
+    }, [data, loading, isAuthorized, jobTypes])
 
     // Drop event handler
     const handlerOnAfterEventDrop = (event: any) => {
@@ -494,7 +474,7 @@ dragHandler: any}) => {
     if(loading){
         return (
             <Fragment>
-                {(Object.keys(data).length !== 0) && <NavigationPanel setAuthorized={setAuthorized} offLineEndDate={offLineEndDate} period = {period} schedulerConfig = {config} />}
+                {(Object.keys(data).length !== 0) && <NavigationPanel jobTypes={jobTypes} setJobTypes={setJobTypes} setAuthorized={setAuthorized} period = {period} schedulerConfig = {config} />}
                 <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "500px", marginBottom: "500px"}}>
                     <CircularProgress color="primary" />
                 </div>
@@ -544,7 +524,7 @@ dragHandler: any}) => {
         }
 return (
         <>
-            <NavigationPanel setAuthorized={setAuthorized} offLineEndDate={offLineEndDate} period={period} schedulerConfig = {config} />
+            <NavigationPanel setAuthorized={setAuthorized} jobTypes={jobTypes} setJobTypes={setJobTypes} period={period} schedulerConfig = {config} />
             <BryntumScheduler
                  {...Object.assign({}, config, configFeatures) }
                 // {...config}

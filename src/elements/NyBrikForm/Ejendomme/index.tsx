@@ -55,6 +55,11 @@ export const Ejendomme = ({ area, setArea, tons, setTons }: any) => {
       setTonsValue(event.target.value)
       setTons(event.target.value)
     }
+
+    setKgPrArea(()=>{
+      const newState = (event.target.value * 1000) / areaValue
+      return newState
+    })
   }
 
   const handlerOnClickTons = () => {

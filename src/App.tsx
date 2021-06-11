@@ -84,33 +84,6 @@ const useStyle = makeStyles({
 export const App = ({isAuthorized, setAuthorized, dragHandler}: {isAuthorized:boolean, setAuthorized: React.Dispatch<React.SetStateAction<boolean>>,  
 dragHandler: any}) => {
 
-    const initialBrik = {
-    id: null,
-    regionId: "",
-    leaderId: "",
-    projectNo: null,
-    factoryItemName: "",
-    factoryItemId: null,
-    customerId: null,
-    customerName: null,
-    state: "2",
-    status: "",
-    name: "",
-    name2: "",
-    startDate: "",
-    endDate: "",
-    duration: 0,
-    calculatedDuration: 0,
-    weekendWork: false,
-    jobType: null,
-    teamId: "",
-    factoryId: "",
-    tons: 0.0,
-    area: 0.0,
-    color: "",
-    details: ""
-  }
-
     // Ref
     const schedulerRef1 = useRef<typeof BryntumScheduler | null>(null);
     const schedulerRef2 = useRef<typeof BryntumScheduler | null>(null);
@@ -204,7 +177,6 @@ dragHandler: any}) => {
                 return newState
             })
 
-           
             // Transform data
             const transformedProjects = data.root.projects.project.map((item) => {
                 item["resourceId"] = item["teamId"]; // add connection field between resource and events

@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const PeriodPicker = ({config, period }: 
-  {config: any,  period: string, offLineEndDate: Date}) => {
+  {config: any,  period: string}) => {
   const classes = useStyles();
   
   const [periode, setPeriode] = React.useState(period);
@@ -112,7 +112,7 @@ export const PeriodPicker = ({config, period }:
      const displayedEndDate = endDate.format('MMM, YYYY');
 
    useEffect(() => {
-     console.log({period});
+     
      setPeriode(period);
    }, [period])
   //   Select Handler
@@ -197,7 +197,7 @@ export const PeriodPicker = ({config, period }:
     }
     newState.startDate = newState.startDate.toDate();
     
-    // console.log({periode});
+    
     updateTimeLine(newState.startDate, newEndDate.toDate(), periode);
   }
 

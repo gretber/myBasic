@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const NavigationPanel = ({schedulerConfig, period, offLineEndDate, setAuthorized}:
-   {schedulerConfig: any, period: string, offLineEndDate: Date, setAuthorized:React.Dispatch<React.SetStateAction<boolean>>}) => {
+export const NavigationPanel = ({schedulerConfig, period, setAuthorized, jobTypes, setJobTypes}:
+   {schedulerConfig: any, period: string, setAuthorized:React.Dispatch<React.SetStateAction<boolean>>, jobTypes:any, setJobTypes:any}) => {
 
 
   //  Cookies
@@ -70,8 +70,8 @@ export const NavigationPanel = ({schedulerConfig, period, offLineEndDate, setAut
           <Selection />
           <div className={classes.gap} />
          
-          {/* <JobType /> */}
-          <PeriodPicker offLineEndDate={offLineEndDate} period ={period} config={schedulerConfig} />
+          <JobType jobTypes={jobTypes} setJobTypes={setJobTypes} /> 
+          <PeriodPicker  period ={period} config={schedulerConfig} />
            
           <Button disabled>
             <FullscreenIcon />

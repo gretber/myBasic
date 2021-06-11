@@ -47,8 +47,9 @@ export type Projects = {
 }
 
 export type Team = {
-  id: string,
-  distictId: string,
+  ["-id"]: string,
+  id?: string,
+  distictId?: string,
   name: string
 }
 

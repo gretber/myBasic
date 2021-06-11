@@ -56,13 +56,14 @@ import {copyBrik} from './bus/briks/api/copyBrik';
 import moment from 'moment';
 
 // Types
-import { Factory, Project, SelectionValue, SelectionType } from './bus/briks/dataTypes';
+import { Factory, Project, SelectionValue, SelectionType, Team } from './bus/briks/dataTypes';
 
 import Popup from './elements/popup/Popup';
 import { calculateWeekStartDate } from './helpers/calculateWeekStartDate';
 
 // Styles
 import { makeStyles } from '@material-ui/core';
+import { resourceBySelectedRegions } from './helpers/resourceBySelectedRegions';
 
 const useStyle = makeStyles({
     resizeWrapper : {
@@ -89,10 +90,9 @@ dragHandler: any}) => {
     const schedulerRef2 = useRef<typeof BryntumScheduler | null>(null);
 
     // Styles
-  const classes = useStyle();
+    const classes = useStyle();
 
     // Init state
-
     const [topEvents, setTopEvents] = useState<Array<Project> | []>([]);
     const [topResources, setTopResources] = useState<Array<SelectionValue> | []>([]);
 
@@ -102,9 +102,6 @@ dragHandler: any}) => {
     const [config, setConfig] = useState({...schedulerConfig});
     const [config2] = useState({...schedulerConfig2});
     const [period, setPeriod] = useState('');
-
-
-
 
     const [popupShown, showPopup] = useState(false);
     const [eventRecord, setEventRecord] = useState(null);
@@ -196,27 +193,31 @@ dragHandler: any}) => {
 
             if(selectedFabriksCount.length === 0){
                 // console.log('selectedFabriksCount.length === 0');
+                const allTeams: any = data.root.selections.selection[0].values.value
+                console.log({allTeams})
                 // Sort by selected Teams
-                const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: SelectionValue) => item['-selected'] === true ) // Filter by selected teams
+                const selectedTeams = allTeams.filter( (item: SelectionValue) => item['-selected'] === true ) // Filter by selected teams
                 
                 // Transform teams ( add id fields )
-                const copySelectionTeams = selectionTeams.map( item => {
+                const copySelectionTeams = selectedTeams.map( (item: any) => {
                     return { ...item }
                 })
-                copySelectionTeams.map( item =>  {
+                // console.log({copySelectionTeams})
+                copySelectionTeams.map( (item: any) =>  {
                     item["id"] = item["-id"]
                 })
 
                 // Sort Regions
                 const selectionRegion = data.root.selections.selection[1].values.value // All Regions
                 const sortedByRegions = sortSelectedRegions(transformedProjects, selectionRegion) // Projects containing selected regions
-
+                console.log({sortedByRegions})
                 const factories = data.root.factories.factory.map( (item: Factory) => {
                     return {...item} 
                 })
 
                 const resourseFactoryId = sortedByRegions.map((a: any) => ({...a})); // Copy projects containing selected regions
-
+                const resourseFACTORY = resourceBySelectedRegions(sortedByRegions, allTeams)
+                console.log({resourseFACTORY})
                 resourseFactoryId.map((item: any)=> {  
                     item["resourceId"] = item["factoryId"];  // Resource 
                 })

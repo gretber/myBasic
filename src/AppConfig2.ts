@@ -15,6 +15,11 @@ const schedulerConfig2: any = {
     cls: {
     'b-scheduler-3': 1
     },
+    eventRenderer: ({ eventRecord, resourceRecord,  renderData, tplData }: any) => {
+
+            tplData.wrapperStyle='z-index: 6;'
+              return `${eventRecord.name}`;
+        },
     features: {
         nonWorkingTime : true,
         autoAdjustTimeAxis: false,

@@ -67,7 +67,12 @@ align-items: flex-start;
 }
 
 .b-sch-nonworkingtime {
-    background-color: rgba(255, 136, 0, 0.3)!important;
+    // background-color: rgba(255, 136, 0, 0.5)!important;
+    background-color: rgba(197, 197, 197, 0.5)!important;
+     z-index: 5;
+}
+.b-sch-event-wrap {
+    z-index: auto;
 }
 
 .b-column-line {
@@ -89,3 +94,15 @@ border-bottom: 1px solid rgb(182, 182, 182);
 // .b-sch-style-plain  {
 // max-height: 30px;
 // }
+
+.eventWrapper
+{
+    border: dotted 2px rgba(255, 136, 0, 1);
+    box-sizing: border-box;
+    // z-index: 6;
+}
+
+.eventStyle {
+   z-index: 6;
+    
+}

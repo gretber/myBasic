@@ -46,6 +46,8 @@ import { subDays } from './helpers/subDays';
 import { transformFactoriesEvents } from './helpers/transformFactoriesEvents';
 import { calculateWeekStartDate } from './helpers/calculateWeekStartDate';
 import { sortByJobTypes } from './helpers/sortByJobTypes';
+import { resourceOnlyExistsTeams } from './helpers/resourceOnlyExistsTeams';
+import { bottomResourceOnlyExistsFabrics } from './helpers/bottomResourceOnlyExistsFabrics';
 
 
 // API
@@ -54,6 +56,7 @@ import { deleteProject } from './API/onDeleteAPI/deleteProject';
 import { dropProject } from './API/onDropAPI/dropProject';
 import { onResizeProject } from './API/onResize/onResizeProject';
 import {copyBrik} from './bus/briks/api/copyBrik';
+import { fetchData } from './bus/briks/api';
 
 // Moment
 import moment from 'moment';
@@ -65,8 +68,7 @@ import Popup from './elements/popup/Popup';
 
 // Styles
 import { makeStyles } from '@material-ui/core';
-import { resourceOnlyExistsTeams } from './helpers/resourceOnlyExistsTeams';
-import { bottomResourceOnlyExistsFabrics } from './helpers/bottomResourceOnlyExistsFabrics';
+
 
 
 const useStyle = makeStyles({
@@ -131,14 +133,13 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
         showPopup(false);
     }, []);
 
-      // Displayed Date in header
-    const [offLineEndDate, saveOffLineEndDate] = useState(new Date());
+
     // Get data
     const { data, loading } = useDataQuery();
     // console.log('\n\n', {data}, '\n\n');
 
     useEffect(()=> {
-
+        const updateInterval = setInterval(() => {fetchData();}, 300_000)
         if("root" in data){
 
             
@@ -152,8 +153,6 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                 const {calculatedEndtDate, calculatedStartDate} = calculateWeekStartDate(startDate, endDate);
                 newState.startDate = calculatedStartDate;
                 newState.endDate = calculatedEndtDate;
-
-                saveOffLineEndDate(config.endDate);
 
                 if(data.root.view.timeframe === 'week')
                 {
@@ -335,7 +334,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                 
             }
         }
-
+        return () => {clearInterval(updateInterval);}
     }, [data, loading, isAuthorized, jobTypes])
 
     // Drop event handler

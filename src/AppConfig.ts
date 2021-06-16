@@ -230,6 +230,28 @@ const schedulerConfig: any = {
     weekStartDay: 1,
     presets: [myDayAndMonthPreset, myDayAndWeekPreset, my24WeeksPreset],
     viewPreset: 'my24WeeksPreset',
+    eventRenderer: ({ eventRecord, resourceRecord,  renderData, tplData }: any) => {
+        //   tplData.eventColor = 'red';
+          // Add your styling here
+          console.log('Event recprd: ',eventRecord);
+        //   console.log('resourceRecord: ', resourceRecord);
+          console.log({renderData});
+
+          if(eventRecord.data.weekendWork)
+          {
+            // renderData.iconCls += "b-fa b-fa-calendar-check";
+            renderData.wrapperStyle='z-index: 6;'
+          }
+          if(eventRecord.data.status === '2')
+          {
+              renderData.wrapperCls += "eventWrapper";
+          }
+          console.log({tplData});
+
+        //   renderData.eventColor = ''
+          return `${eventRecord.name}`;
+        },
+
       columns: [
         {
             type: 'resourceInfo',

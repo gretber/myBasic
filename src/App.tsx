@@ -66,6 +66,7 @@ import Popup from './elements/popup/Popup';
 // Styles
 import { makeStyles } from '@material-ui/core';
 import { resourceBySelectedRegions } from './helpers/resourceBySelectedRegions';
+import { fetchData } from './bus/briks/api';
 
 
 const useStyle = makeStyles({
@@ -130,14 +131,13 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
         showPopup(false);
     }, []);
 
-      // Displayed Date in header
-    const [offLineEndDate, saveOffLineEndDate] = useState(new Date());
+
     // Get data
     const { data, loading } = useDataQuery();
     // console.log('\n\n', {data}, '\n\n');
 
     useEffect(()=> {
-
+        const updateInterval = setInterval(() => {fetchData();}, 300_000)
         if("root" in data){
 
             
@@ -151,8 +151,6 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                 const {calculatedEndtDate, calculatedStartDate} = calculateWeekStartDate(startDate, endDate);
                 newState.startDate = calculatedStartDate;
                 newState.endDate = calculatedEndtDate;
-
-                saveOffLineEndDate(config.endDate);
 
                 if(data.root.view.timeframe === 'week')
                 {
@@ -333,7 +331,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                 
             }
         }
-
+        return () => {clearInterval(updateInterval);}
     }, [data, loading, isAuthorized, jobTypes])
 
     // Drop event handler

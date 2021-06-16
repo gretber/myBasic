@@ -14,7 +14,7 @@ if(!jobTypes.Striber)
 {
      filteredEvents = filteredEvents.filter((event) => {return event.jobType !== '2'})
 }
-console.log('filtered: ',filteredEvents);
+
 return filteredEvents;
 
 }

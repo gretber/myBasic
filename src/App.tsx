@@ -65,7 +65,8 @@ import Popup from './elements/popup/Popup';
 
 // Styles
 import { makeStyles } from '@material-ui/core';
-import { resourceBySelectedRegions } from './helpers/resourceBySelectedRegions';
+import { resourceOnlyExistsTeams } from './helpers/resourceOnlyExistsTeams';
+import { bottomResourceOnlyExistsFabrics } from './helpers/bottomResourceOnlyExistsFabrics';
 
 
 const useStyle = makeStyles({
@@ -196,56 +197,57 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
             // Sort Fabrik
             const selectionFabriks = data.root.selections.selection[2].values.value // All fabriks
             const sortedFabriks = sortSelectedFabriks(transformedProjects, selectionFabriks) // Sorted projects by fabriks 
-            const selectedFabriksCount = selectionFabriks.filter( item => item["-selected"] === true ) // Only selected 
-            // console.log({selectedFabriksCount});
+            const selectedFabriksCount = selectionFabriks.filter( item => item["-selected"] === true ) // Only selected fabriks
 
             if(selectedFabriksCount.length === 0){
-                // console.log('selectedFabriksCount.length === 0');
                 const allTeams: any = data.root.selections.selection[0].values.value
-                console.log({allTeams})
+               
                 // Sort by selected Teams
-                const selectedTeams = allTeams.filter( (item: SelectionValue) => item['-selected'] === true ) // Filter by selected teams
-                
-                // Transform teams ( add id fields )
-                const copySelectionTeams = selectedTeams.map( (item: any) => {
-                    return { ...item }
-                })
-                // console.log({copySelectionTeams})
-                copySelectionTeams.map( (item: any) =>  {
-                    item["id"] = item["-id"]
-                })
+                // const selectedTeams = allTeams.filter( (item: SelectionValue) => item['-selected'] === true ) // Filter by selected teams
+
+                // // Transform teams ( add id fields )
+                // const copySelectionTeams = selectedTeams.map( (item: any) => {
+                //     return { ...item }
+                // })
+                // // console.log({copySelectionTeams})
+                // copySelectionTeams.map( (item: any) =>  {
+                //     item["id"] = item["-id"]
+                // })
 
                 // Sort Regions
-                const selectionRegion = data.root.selections.selection[1].values.value // All Regions
-                const sortedByRegions = sortSelectedRegions(transformedProjects, selectionRegion) // Projects containing selected regions
-                console.log({sortedByRegions})
+                // const selectionRegion = data.root.selections.selection[1].values.value // All Regions
+                // console.log({transformedProjects})
+                // const sortedByRegions = sortSelectedRegions(transformedProjects, selectionRegion) // Projects containing selected regions
+                
                 const factories = data.root.factories.factory.map( (item: Factory) => {
                     return {...item} 
                 })
 
-                const resourseFactoryId = sortedByRegions.map((a: any) => ({...a})); // Copy projects containing selected regions
-                const resourseFACTORY = resourceBySelectedRegions(sortedByRegions, allTeams)
-                console.log({resourseFACTORY})
-                resourseFactoryId.map((item: any)=> {  
+                const resourseFactoryId = transformedProjects.map((a: any) => ({...a})); // Copy projects containing selected regions
+
+                const resource = resourceOnlyExistsTeams(transformedProjects, allTeams)
+                
+                resourseFactoryId.map((item: any)=> {
                     item["resourceId"] = item["factoryId"];  // Resource 
                 })
 
                 const transformFactories = transformFactoriesEvents(sortByJobTypes(resourseFactoryId, jobTypes));
                 const dropEmptyTons = transformFactories.filter( (item: any) => item.tons !== 0 )
+                const bottomResource = bottomResourceOnlyExistsFabrics(dropEmptyTons, factories)
+                // const activeFactories: any = []
+                // factories.forEach( forEachItem => {
+                //     const resultItem = transformFactories.find( (findItem: any) => forEachItem.id === findItem.resourceId)
+                //     if (resultItem) {
+                //         activeFactories.push(forEachItem)
+                //     }
+                // })
 
-                const activeFactories: any = []
-                factories.forEach( forEachItem => {
-                    const resultItem = transformFactories.find( (findItem: any) => forEachItem.id === findItem.resourceId)
-                    if (resultItem) {
-                        activeFactories.push(forEachItem)
-                    }
-                })
 
-                setBottomResources(activeFactories);
+                setBottomResources(bottomResource);
                 setBottomEvents(dropEmptyTons);
                 
-                const sortedByJobTypes = sortByJobTypes(sortedByRegions, jobTypes);
-                setTopResources(copySelectionTeams);
+                const sortedByJobTypes = sortByJobTypes(transformedProjects, jobTypes);
+                setTopResources(resource);
                 setTopEvents(sortedByJobTypes);
 
             } else {

@@ -39,8 +39,6 @@ import { useDataQuery } from './bus/briks';
 // Helpers
 import { formatDate } from './helpers/formatDate';
 import { swap } from './helpers/swapElArr';
-import { sortSelectedRegions } from './helpers/sortSelectedRegions';
-import { sortSelectedFabriks } from './helpers/sortSelectedFabriks';
 import { lagInDays } from './helpers/lagInDays';
 import { subDays } from './helpers/subDays';
 import { transformFactoriesEvents } from './helpers/transformFactoriesEvents';
@@ -136,13 +134,11 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
 
     // Get data
     const { data, loading } = useDataQuery();
-    // console.log('\n\n', {data}, '\n\n');
+    //console.log('\n\n', {data}, '\n\n');
 
     useEffect(()=> {
         const updateInterval = setInterval(() => {fetchData();}, 300_000)
         if("root" in data){
-
-            
 
             // Set Config
             setConfig( (prevState: any) => {
@@ -195,29 +191,11 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
 
             // Sort Fabrik
             const selectionFabriks = data.root.selections.selection[2].values.value // All fabriks
-            const sortedFabriks = sortSelectedFabriks(transformedProjects, selectionFabriks) // Sorted projects by fabriks 
             const selectedFabriksCount = selectionFabriks.filter( item => item["-selected"] === true ) // Only selected fabriks
 
             if(selectedFabriksCount.length === 0){
                 const allTeams: any = data.root.selections.selection[0].values.value
                
-                // Sort by selected Teams
-                // const selectedTeams = allTeams.filter( (item: SelectionValue) => item['-selected'] === true ) // Filter by selected teams
-
-                // // Transform teams ( add id fields )
-                // const copySelectionTeams = selectedTeams.map( (item: any) => {
-                //     return { ...item }
-                // })
-                // // console.log({copySelectionTeams})
-                // copySelectionTeams.map( (item: any) =>  {
-                //     item["id"] = item["-id"]
-                // })
-
-                // Sort Regions
-                // const selectionRegion = data.root.selections.selection[1].values.value // All Regions
-                // console.log({transformedProjects})
-                // const sortedByRegions = sortSelectedRegions(transformedProjects, selectionRegion) // Projects containing selected regions
-                
                 const factories = data.root.factories.factory.map( (item: Factory) => {
                     return {...item} 
                 })
@@ -233,14 +211,6 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                 const transformFactories = transformFactoriesEvents(sortByJobTypes(resourseFactoryId, jobTypes));
                 const dropEmptyTons = transformFactories.filter( (item: any) => item.tons !== 0 )
                 const bottomResource = bottomResourceOnlyExistsFabrics(dropEmptyTons, factories)
-                // const activeFactories: any = []
-                // factories.forEach( forEachItem => {
-                //     const resultItem = transformFactories.find( (findItem: any) => forEachItem.id === findItem.resourceId)
-                //     if (resultItem) {
-                //         activeFactories.push(forEachItem)
-                //     }
-                // })
-
 
                 setBottomResources(bottomResource);
                 setBottomEvents(dropEmptyTons);
@@ -251,87 +221,34 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
 
             } else {
                 console.log('selectedFabriksCount.length !== 0');
-                type ISelectionType = 'team' | 'region' | 'factory';
+                // Top resources and events
+                const copyProjectsSelectedByFabric = transformedProjects.map((a: any) => ({...a})); // Copy projects containing selected fabric
+                 const allTeams: any = data.root.selections.selection[0].values.value
+                 const resource = resourceOnlyExistsTeams(copyProjectsSelectedByFabric, allTeams)
+                console.log({copyProjectsSelectedByFabric})
+                // *********
 
-                const getEntitiesSelectionByType= (data: any, type: ISelectionType) => {
-                    return data.root.selections.selection
-                        .find((selection: {type: SelectionType, values: any}) => selection.type === type)
-                        ?.values
-                        ?.value
-                        ?.filter((entity: any) => entity['-selected'] === true)
-                        ?.map((selectedEntity: any) => selectedEntity['-id']);
-                }
+                // Bottom resources and events
+                const copyProjectsWithResourceIdFactoryId = copyProjectsSelectedByFabric.map((item: any)=> {
+                    return {...item, resourceId: item.factoryId}
 
-
-                const selectedFactoriesIds = getEntitiesSelectionByType(data, 'factory');
-                console.log({selectedFactoriesIds});
-             
-                const selectedProjects = data.root.projects.project.filter((project: Project) => selectedFactoriesIds?.includes(project.factoryId));
-                const selectedTeams = data.root.teams.team.filter((team) => selectedProjects.find((project) => project.teamId === team.id));
-               
-                // @ts-ignore
-                setTopEvents(selectedProjects);
-                // @ts-ignore
-                setTopResources(selectedTeams);
-               
-                // Sort Regions
-                const selectionRegion = data.root.selections.selection[1].values.value
-                const sortedByRegions = sortSelectedRegions(sortedFabriks, selectionRegion)
-
-                const copySortedByRegions = sortedByRegions.map ((item: any)=> ({...item, resourceId: item["factoryId"]})) // Copy sortedByRegions and add id field resourceId
-                const eventsWithCountedTons = transformFactoriesEvents(sortByJobTypes(copySortedByRegions, jobTypes))
-                const dropEmptyTons = eventsWithCountedTons.filter( (item: any) => item.tons !== 0 )
-
-
-                const copySelectedFabriks = selectedFabriksCount.map( (item: any) => ({...item, id: item["-id"]}) ) // Copy selected fabriks and add id field id
-                const activeFactories: any = []
-                copySelectedFabriks.forEach( forEachItem => {
-                    const resultItem = eventsWithCountedTons.find( (findItem: any) => forEachItem.id === findItem.resourceId)
-                    if (resultItem) {
-                        activeFactories.push(forEachItem)
-                    }
                 })
-           
-                // Sorted Teams
-                const selectionTeams = data.root.selections.selection[0].values.value.filter( (item: any) => item['-selected'] === true )
-                
-                // Transform teams
-                const copySelectionTeams = [...selectionTeams];
-                copySelectionTeams.map( (item: any) =>  {
-                    item["resourceId"] = item["-id"]
-                    item["id"] = item["-id"]
+                const transformFactories = transformFactoriesEvents(sortByJobTypes(copyProjectsWithResourceIdFactoryId, jobTypes));
+                console.log({transformFactories})
+                const dropEmptyTons = transformFactories.filter( (item: any) => item.tons !== 0 )
+                console.log({dropEmptyTons})
+                const factories = data.root.factories.factory.map( (item: Factory) => {
+                    return {...item} 
                 })
+                const bottomResource = bottomResourceOnlyExistsFabrics(dropEmptyTons, factories)
+                // *********
 
-
-                const events = sortedByRegions.filter( (item: any) => {
-                    // Project date
-                    const projectStartDate = moment(item.startDate, "YYYY-MM-DD").unix()
-                    const projectEndDate = moment(item.endDate, "YYYY-MM-DD").unix()
-
-                    // View date
-                    const viewStartDate = moment(config.startDate).unix()
-                    const viewEndDate = moment(config.endDate).unix()
-
-                    return projectEndDate > viewStartDate || projectStartDate < viewEndDate
-                })
-               
-                const sortTeams: any = []
-                 copySelectionTeams.map( (team: any) => {
-                    const hasIvent = sortedByRegions.find( (event: any) => {
-                        return event.teamId === team.id
-                    })
-                    if (hasIvent){
-                        sortTeams.push(team)
-                    }
-                })
-                
-                setBottomResources(activeFactories)
-                setBottomEvents(dropEmptyTons)
-
-                 const sortedByJobTypes = sortByJobTypes(events, jobTypes);
+                const sortedByJobTypes = sortByJobTypes(copyProjectsSelectedByFabric, jobTypes);
                 setTopEvents(sortedByJobTypes);
-                setTopResources(sortTeams);
-                
+                setTopResources(resource);
+
+                setBottomResources(bottomResource)
+                setBottomEvents(dropEmptyTons)              
             }
         }
         return () => {clearInterval(updateInterval);}

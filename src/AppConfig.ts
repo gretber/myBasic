@@ -234,7 +234,7 @@ const schedulerConfig: any = {
        
           if(eventRecord.data.weekendWork)
           {
-            // renderData.iconCls += "b-fa b-fa-calendar-check";
+            renderData.iconCls += " b-fa b-fa-calendar-check";
             renderData.wrapperStyle='z-index: 6;'
           }
           if(eventRecord.data.status === '2')

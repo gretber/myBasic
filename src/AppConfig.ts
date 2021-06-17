@@ -7,7 +7,7 @@
 // Date
 import moment from 'moment';
 
-import copyIcon from './copy-two.png';
+
 
 // Config
 export let eventRecordData:any = {};
@@ -231,12 +231,7 @@ const schedulerConfig: any = {
     presets: [myDayAndMonthPreset, myDayAndWeekPreset, my24WeeksPreset],
     viewPreset: 'my24WeeksPreset',
     eventRenderer: ({ eventRecord, resourceRecord,  renderData, tplData }: any) => {
-        //   tplData.eventColor = 'red';
-          // Add your styling here
-          console.log('Event recprd: ',eventRecord);
-        //   console.log('resourceRecord: ', resourceRecord);
-          console.log({renderData});
-
+       
           if(eventRecord.data.weekendWork)
           {
             // renderData.iconCls += "b-fa b-fa-calendar-check";
@@ -246,8 +241,7 @@ const schedulerConfig: any = {
           {
               renderData.wrapperCls += "eventWrapper";
           }
-          console.log({tplData});
-
+        
         //   renderData.eventColor = ''
           return `${eventRecord.name}`;
         },

@@ -1,0 +1,18 @@
+# support for non-compatible babel-eslint version
+
+SKIP_PREFLIGHT_CHECK=true
+GENERATE_SOURCEMAP=false
+
+
+# Project environment variables
+
+REACT_APP_INIT_BRIK_URL = 'http://mail.vej.dk/IcopalKal/icokal.nsf/jsoninital?OpenAgent'
+REACT_APP_SELECTION_PROJECT = 'http://mail.vej.dk/IcopalKal/icokal.nsf/JSONselectionList?OpenAgent&Selection=project'
+REACT_APP_SELECTION_PROJECT_DETAILS = 'http://mail.vej.dk/IcopalKal/icokal.nsf/JSONselectionList?OpenAgent&Selection=project&Key='
+REACT_APP_GET_PROJECT_DETAILS = 'http://mail.vej.dk/IcopalKal/icokal.nsf/JSONselectionList?OpenAgent&Selection=projectDetail&Key='
+REACT_APP_GET_CUSTOMERS = 'http://mail.vej.dk/IcopalKal/icokal.nsf/JSONselectionList?OpenAgent&Selection=customer'
+REACT_APP_SELECTION_ITEM = 'http://mail.vej.dk/IcopalKal/icokal.nsf/JSONselectionList?OpenAgent&Selection=item'
+REACT_APP_SELECTION_ITEM_DETAILS = 'http://mail.vej.dk/IcopalKal/icokal.nsf/JSONselectionList?OpenAgent&Selection=item&Key='
+REACT_APP_CREATE_PROJECT = 'http://mail.vej.dk/IcopalKal/icokal.nsf/jsonimport?OpenAgent&ImportType=project'
+REACT_APP_UPDATE_SELECTION = 'http://mail.vej.dk/IcopalKal/icokal.nsf/jsonimport?OpenAgent&ImportType=selection'
+REACT_APP_UPDATE_PROJECT = 'http://mail.vej.dk/IcopalKal/icokal.nsf/jsonimport?OpenAgent&ImportType=project&Key='

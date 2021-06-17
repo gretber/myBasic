@@ -159,8 +159,9 @@ export const Selection = () => {
     if(fabrik){
       const isFabrikChosen = fabrik.findIndex( (item: any) =>  item["-selected"] === true )
       isFabrikChosen === -1?setIsFabrikChosen(false):setIsFabrikChosen(true)
+      console.log({isFabrikChosen})
     }
-  },[open])
+  },[fabrik])
 
   return (
     <div>

@@ -17,28 +17,31 @@ export const SelectionFabrik = ({ fabrik, setFabrik, isFabrikChosen, setIsFabrik
   });
 
   useEffect(()=>{
-    setRegion((prevState: any)=>{
-      const newState = prevState.map( (item: any) => {
-        return (
-          {...item, "-selected": true}
-        ) 
+    if(isFabrikChosen){
+      setRegion((prevState: any)=>{
+        const newState = prevState.map( (item: any) => {
+          return (
+            {...item, "-selected": true}
+          ) 
+        })
+        return newState
       })
-      
-      return newState
-    })
-  },[isFabrikChosen])
+    }
+  },[fabrik])
 
   useEffect(()=>{
-    setHold((prevState: any)=>{
-      const newState = prevState.map( (item: any) => {
-        return (
-          {...item, "-selected": true}
-        ) 
+    if(isFabrikChosen){
+      setHold((prevState: any)=>{
+        const newState = prevState.map( (item: any) => {
+          return (
+            {...item, "-selected": true}
+          ) 
+        })
+        
+        return newState
       })
-      
-      return newState
-    })
-  },[isFabrikChosen])
+    }
+  },[fabrik])
 
   const itemJSX = fabrik?fabrik.map((item: any, index: number) => {
     return (

@@ -16,7 +16,7 @@ const endFormat = (el: any) => {
 };
 
 const calculateWeekend = (startDate: any, endDate: any) => {
-  const totalDays = moment(endDate).diff(moment(startDate), "days") + 1;
+  const totalDays = moment(endDate).diff(moment(startDate), "days") + 1; // Number of days between start and end days
   const dayOfWeek = moment(startDate).isoWeekday();
   let totalWorkdays = 0;
 
@@ -31,20 +31,20 @@ const calculateWeekend = (startDate: any, endDate: any) => {
 export const transformFactoriesEvents = (events: any) => {
   
   const modifiedDB: any = [];
-  
+  // console.log(events)
   events.forEach((el: any) => {
+    
     let startDate = startFormat(el);
-    let endDate = endFormat(el);
+    let endDate =  endFormat(el);
     let weekends = !el.weekendWork ? calculateWeekend(startDate, endDate) : 0;
     let daysAmount = Math.abs(moment(startDate).diff(endDate, "days"))+1;
     let avgTotal = Math.round(el.tons / (daysAmount - weekends));
-    
+
     for (let i = 0; i < daysAmount; i++) {
       let _startDate = moment(startDate).add(i, "days").format("YYYY-MM-DD");
-
       modifiedDB.push(
         new Object({
-          resourceId: el.resourceId,
+          resourceId: el.resourceId,  // Change el.resourceID to el.factoryId !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           startDate: _startDate,
           endDate: _startDate,
           tons: avgTotal,
@@ -56,53 +56,65 @@ export const transformFactoriesEvents = (events: any) => {
       );
     }
   });
-
-  const weekendRemove = () => {
-    modifiedDB.forEach((el: any, i: any) => {
+ 
+   const weekendRemove = (modifiedDB: any) => {
+    const copyModDB = modifiedDB.map((item: any) => ({...item}))
+    copyModDB.forEach((el: any, i: any) => {
       if (el.weekendWork === false && moment(el.startDate).day() === 6) {
-        modifiedDB.splice(i, 1);
+        copyModDB.splice(i, 1);
       }
     });
-    modifiedDB.forEach((el: any, i: any) => {
+    copyModDB.forEach((el: any, i: any) => {
       if (el.weekendWork === false && moment(el.startDate).day() === 0) {
-        modifiedDB.splice(i, 1);
+        copyModDB.splice(i, 1);
       }
     });
+    return copyModDB;
   };
-  weekendRemove();
 
-   let sorted: any = [];
+  const modDBRemovedWeekends = weekendRemove(modifiedDB);
+ 
+  let sorted: any = [];
 
   const letSplice = () => {
-    modifiedDB.forEach((el: any) => {
-      modifiedDB.forEach((elem: any, j: any) => {
+    modDBRemovedWeekends.forEach((el: any) => {
+     modDBRemovedWeekends.forEach((elem: any, j: any) => {
         if (
-          el.startDate === modifiedDB[j].startDate &&
+          el.startDate === modDBRemovedWeekends[j].startDate &&
           el !== elem &&
           el.resourceId === elem.resourceId
         ) {
-          sorted.push(modifiedDB[j]);
-          modifiedDB.splice(j, 1);
+          sorted.push(modDBRemovedWeekends[j]);
+          modDBRemovedWeekends.splice(j, 1);
         }
       });
     });
   };
+
   letSplice();
 
-  const letAssign = () => {
-    modifiedDB.map((el: any) => {
-      sorted.forEach((elem: any) => {
-        if (el.startDate === elem.startDate) {
-          el.tons = el.tons + elem.tons
-          el.name = `${el.tons} tons`
-        }
-      });
-    });
-  };
+const calculateTons = () => {
+  const calculatedTons: any = [];
+  modDBRemovedWeekends.forEach((unic: any, i: any) => {
 
-  letAssign();
+    const filtered =  sorted.filter((el: any) =>  el.startDate === unic.startDate && el.resourceId === unic.resourceId && el.endDate === unic.endDate)
+     const reducer = (accumulator: any, currentValue: any) => accumulator + currentValue.tons;
+    const tons = filtered.reduce(reducer, unic.tons);
 
-  return modifiedDB
+    
+    if (calculatedTons.length === 0)
+    calculatedTons.push({...unic, tons: tons, name: `${tons} tons`});
+    
+    const filteredCalcTons = calculatedTons.filter((el: any) =>  el.startDate === unic.startDate && el.resourceId === unic.resourceId && el.endDate === unic.endDate)
+    if(filteredCalcTons.length === 0)
+    calculatedTons.push({...unic, tons: tons, name: `${tons} tons`});
+  })
+  return calculatedTons;
+}
+
+const calculatedTons = calculateTons()
+
+return calculatedTons
 }
 
  

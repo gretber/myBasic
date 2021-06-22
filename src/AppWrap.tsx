@@ -45,16 +45,17 @@ const [password, setPassword] = useState('');
 const classes = useStyles();
 
  useEffect(()=> {
-        if(localStorage.getItem('schedulerUserLogin') !== null)
+        if(localStorage.getItem('schedulerUserLogin') !== null && localStorage.getItem('schedulerUserLogin'))
         {
-            if(localStorage.getItem('schedulerUserPassword') !== null)
+            if(localStorage.getItem('schedulerUserPassword') !== null && localStorage.getItem('schedulerUserPassword'))
             {
-              setAuthorized(true);
+                if(localStorage.getItem('schedulerUserType') === 'edit' || localStorage.getItem('schedulerUserType') === 'read')
+                 setAuthorized(true);
               
             }
         }
         
-    }, []);
+    }, [isAuthorized]);
 
     // Authorization
         const InitBriksUrl = process.env.REACT_APP_INIT_BRIK_URL;

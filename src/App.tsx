@@ -442,6 +442,9 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                     },
                 }
         }
+
+
+     
 return (
         <>
             <NavigationPanel setAuthorized={setAuthorized} jobTypes={jobTypes} setJobTypes={setJobTypes} period={period} schedulerConfig = {config} />
@@ -482,7 +485,30 @@ return (
                                             ref={schedulerRef2} 
                                             resources={bottomResources}
                                             events={bottomEvents}
-                                            {...config2}
+                                            // {...config2}
+                                             {...Object.assign({}, config2, config2.columns = [ {
+                                                            type: 'resourceInfo',
+                                                            text: 'Fabrik',
+                                                            showEventCount: false,
+                                                            showMeta: (event: any)=>{
+                                                                console.log({event})
+                                                                const allEvents = event.$project.$eventStore._data
+                                                                const currentEvents = allEvents.filter( (item: any)=> item.resourceId === event.originalData.id )
+                                                                const actualEvents = currentEvents.filter((e :any) => {return moment(e.startDate, 'YYYY-MM-DD').unix() < moment(config.endDate).unix()})
+                                                                
+                                                                const totalTons = actualEvents.reduce((a: any, b: any) => a + b.tons, 0)
+
+                                                                return `Total ${totalTons} tons`
+                                                            },
+                                                            showImage: false,
+                                                            width: 230,
+                                                            enableCellContextMenu: false,
+                                                            enableHeaderContextMenu: false,
+                                                            sortable : false,
+                                                            draggable: false,
+                                                            editor: false
+                                                        },]) 
+                                            }
                                             partner={schedulerRef1.current.schedulerInstance} />
                                                          </ResizePanel> }  
                                                   </>

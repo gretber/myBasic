@@ -203,8 +203,8 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
 
                 const resource = resourceOnlyExistsTeams(transformedProjects, allTeams)
                 
-                resourseFactoryId.map((item: any)=> {
-                    item["resourceId"] = item["factoryId"];  // Resource 
+                resourseFactoryId.map((item: any) => {
+                    item["resourceId"] = item["factoryId"];  // Resource
                 })
 
                 const transformFactories = transformFactoriesEvents(sortByJobTypes(resourseFactoryId, jobTypes));
@@ -219,7 +219,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                 setTopEvents(sortedByJobTypes);
 
             } else {
-                console.log('selectedFabriksCount.length !== 0');
+
                 // Top resources and events
                 const copyProjectsSelectedByFabric = transformedProjects.map((a: any) => ({...a})); // Copy projects containing selected fabric
                 const allTeams: any = data.root.selections.selection[0].values.value
@@ -235,7 +235,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
                 const transformFactories = transformFactoriesEvents(sortByJobTypes(copyProjectsWithResourceIdFactoryId, jobTypes));
 
                 const dropEmptyTons = transformFactories.filter( (item: any) => item.tons !== 0 )
-                console.log({dropEmptyTons})
+
                 const factories = data.root.factories.factory.map( (item: Factory) => {
                     return {...item} 
                 })

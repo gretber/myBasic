@@ -17,10 +17,6 @@ import { NyBrik } from "../NyBrik";
 import { PeriodPicker } from "../../components/PeriodPicker";
 import { JobType } from "../../components/JobType";
 import { Selection } from "../../components/Selection";
-import { WeekCountInput } from "../../components/WeekCountInput.tsx";
-
-// Cookies
-import { useCookies } from "react-cookie";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -37,30 +33,30 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const NavigationPanel = ({schedulerConfig, period, setAuthorized, jobTypes, setJobTypes}:
-   {schedulerConfig: any, period: string, setAuthorized:React.Dispatch<React.SetStateAction<boolean>>, jobTypes:any, setJobTypes:any}) => {
+export const NavigationPanel = ({schedulerConfig, period, jobTypes, setJobTypes}:
+   {schedulerConfig: any, period: string, jobTypes:any, setJobTypes:any}) => {
 
 
   //  Cookies
-   const [cookies, setCookie, removeCookie] = useCookies([]);
+  //  const [cookies, setCookie, removeCookie] = useCookies([]);
 
   // Styles
   const classes = useStyles();
 
   // Event Handlers
-  const logOutButtonClickHandler = () => {
+  // const logOutButtonClickHandler = () => {
 
-      for(let cook in cookies)
-      {
-        console.log('cook',cook);
-        removeCookie(cook);
-      }
-       setAuthorized(false);
-       localStorage.clear();
+  //     for(let cook in cookies)
+  //     {
+  //       console.log('cook',cook);
+  //       removeCookie(cook);
+  //     }
+  //      setAuthorized(false);
+  //      localStorage.clear();
        
        // eslint-disable-next-line no-restricted-globals
       //  location.replace('http://mail.vej.dk/sn/icokal.nsf/version/v87');
-  }
+  // }
 
   return (
     <div className={classes.root}>
@@ -76,9 +72,9 @@ export const NavigationPanel = ({schedulerConfig, period, setAuthorized, jobType
           <Button disabled>
             <FullscreenIcon />
           </Button>
-          <Button onClick = {logOutButtonClickHandler}>
+          {/* <Button onClick = {logOutButtonClickHandler}>
             <ExitToAppIcon />
-          </Button>
+          </Button> */}
         </Toolbar>
       </AppBar>
     </div>

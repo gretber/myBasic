@@ -74,27 +74,6 @@ const schedulerConfig2: any = {
             },
         ],
     },
-    // columns: [
-    //     {
-    //         type: 'resourceInfo',
-    //         text: 'Fabrik',
-    //         showEventCount: false,
-    //         showMeta: (event: any)=>{
-    //             const allEvents = event.$project.$eventStore._data
-    //             const currentEvents = allEvents.filter( (item: any)=> item.resourceId === event.originalData.id )
-    //             const totalTons = currentEvents.reduce((a: any, b: any) => a + b.tons, 0)
-    //             return `Total ${totalTons} tons`
-    //         },
-    //         showImage: false,
-    //         width: 230,
-    //         enableCellContextMenu: false,
-    //         enableHeaderContextMenu: false,
-    //         sortable : false,
-    //         draggable: false,
-    //         editor: false
-    //     },
-    // ],
-
 };
 
 

@@ -35,7 +35,12 @@ export const fetchData: FetchData = async () => {
         }
 
         const data: Data = await response.json();
-
+        
+        if("root" in data)
+        {
+            if(localStorage.getItem('schedulerUserType') !== data.root.user.type)
+            localStorage.setItem('schedulerUserType', `${data.root.user.type}`);
+        }
         store.dispatch(setBriksAction(data));
     } catch (error) {
         console.log(error);

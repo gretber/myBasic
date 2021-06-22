@@ -85,7 +85,7 @@ const useStyle = makeStyles({
 
 }) 
 
-export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAuthorized: React.Dispatch<React.SetStateAction<boolean>>}) => {
+export const App = () => {
 
     // Ref
     const schedulerRef1 = useRef<typeof BryntumScheduler | null>(null);
@@ -251,7 +251,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
             }
         }
         return () => {clearInterval(updateInterval);}
-    }, [data, loading, isAuthorized, jobTypes])
+    }, [data, loading, jobTypes])
 
     // Drop event handler
     const handlerOnAfterEventDrop = (event: any) => {
@@ -394,7 +394,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
     if(loading){
         return (
             <Fragment>
-                {(Object.keys(data).length !== 0) && <NavigationPanel jobTypes={jobTypes} setJobTypes={setJobTypes} setAuthorized={setAuthorized} period = {period} schedulerConfig = {config} />}
+                {(Object.keys(data).length !== 0) && <NavigationPanel jobTypes={jobTypes} setJobTypes={setJobTypes} period = {period} schedulerConfig = {config} />}
                 <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "500px", marginBottom: "500px"}}>
                     <CircularProgress color="primary" />
                 </div>
@@ -447,7 +447,7 @@ export const App = ({isAuthorized, setAuthorized}: {isAuthorized:boolean, setAut
      
 return (
         <>
-            <NavigationPanel setAuthorized={setAuthorized} jobTypes={jobTypes} setJobTypes={setJobTypes} period={period} schedulerConfig = {config} />
+            <NavigationPanel jobTypes={jobTypes} setJobTypes={setJobTypes} period={period} schedulerConfig = {config} />
             <BryntumScheduler
                  {...Object.assign({}, config, configFeatures) }
                 // {...config}

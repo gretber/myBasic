@@ -1,8 +1,10 @@
 export const getUserLoginData = () => {
-    const login = localStorage.getItem('schedulerUserLogin');
-    const password = localStorage.getItem('schedulerUserPassword');
+    const login = 'lei-lmk'
+    const password = 'AAABBB'
     const type = localStorage.getItem('schedulerUserType');
 
+    // const login = ' ';
+    // const password = ' ';
 return {login, password, type};
 
 };

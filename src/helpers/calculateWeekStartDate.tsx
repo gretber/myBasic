@@ -3,7 +3,7 @@ import moment from "moment";
 
 export const calculateWeekStartDate = (startDate: Date, endDate: Date) => {
     const momentStartDate = moment(startDate);
-    const momentEndDate = moment(endDate);
+    const momentEndDate = moment(endDate).add(1, 'day');
     const startDateDayNumber = momentStartDate.isoWeekday();
     const endDateDayNumber = momentEndDate.isoWeekday();
    

@@ -12,8 +12,9 @@ const InitBriksUrl = process.env.REACT_APP_INIT_BRIK_URL;
 export const updateTimeLine = async (startDate:Date, endDate:Date, view:string) => {
     
         const {login, password} = getUserLoginData();
+        const momentEndDate = moment(endDate).subtract(1, 'day');
         const strStartDate = moment(startDate).format('DD, MM, YYYY').replace(/[^0-9]/g, '');
-        const strEndDate = moment(endDate).format('DD, MM, YYYY').replace(/[^0-9]/g, '')
+        const strEndDate = momentEndDate.format('DD, MM, YYYY').replace(/[^0-9]/g, '')
 
         let serverView = '';
         

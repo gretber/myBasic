@@ -18,7 +18,7 @@ export const selectionProjectDetails = async ( setOptions: any, active: boolean,
         
   const projects: any = await response.json();
 
-  if (active) {
+  if (active && projects.root.projectsList.projectNo.length > 0) {
     setOptions(projects.root.projectsList.projectNo);
-  }
+  } else setOptions([{id:'', name: 'ingen projekter for denne region'}])
 };

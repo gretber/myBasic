@@ -22,7 +22,7 @@ export const Fabrik = ({ factoryId, setFactoryId, setFactoryItemName, setFactory
   // Style
   const classes = useStyles();
 
-  const [ factory, setFactory ] = useState<any>(null)
+  const [ factory, setFactory ] = useState<any>('null')
 
 
   // Get data

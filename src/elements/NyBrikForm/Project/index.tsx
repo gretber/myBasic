@@ -43,17 +43,15 @@ export const Project = ({ setProjectName, setProjectNo, regionId, setRegionId, s
     }
 
     // If there is no region get all projects
-    if(!regionId){
+    if(!regionId || regionId === 'null'){
       selectionProjects(setOptions, active)
     }
 
     // If region exist get projects in this region
-    if(regionId && regionId !== ""){
+    if(regionId && regionId !== 'null'){
       selectionProjectDetails(setOptions, active, regionId)
-    } else {
-      setOptions([{id: '', name: ''}])
-    }
-
+    } 
+    
     return () => {
       active = false;
     };
@@ -75,10 +73,7 @@ export const Project = ({ setProjectName, setProjectNo, regionId, setRegionId, s
     }
 
     if(value && ('name' in value) && ('id' in value)){
-      console.log('get PROJECTS')
       getProjectDetails(setRegionId, value.id, setCustomerName, setCustomerId, setFactoryId, setProjectName, setProjectNo, setCurrentProject, setName2)
-      // setProjectName(value.name)
-      // setProjectNo(value.id)
     }
   }
 

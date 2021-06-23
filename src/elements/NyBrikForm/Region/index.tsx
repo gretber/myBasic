@@ -1,5 +1,5 @@
 // Core
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Material
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme: Theme) =>
 export const Region = ({setRegionId, projectNo, regionId, validation, setValidation}: any) => {
   // Styles
   const classes = useStyles();
+
+  const [ region, setRegion ] = useState<any>('null')
+
   // Get data
   const regions = useSelector( state => {
      if("root" in state.data){
@@ -29,21 +32,24 @@ export const Region = ({setRegionId, projectNo, regionId, validation, setValidat
     }
   })
 
-  // Get region name
-  const regionName = useSelector( state => {
-     if("root" in state.data && regionId){
-      const region = state.data.root.districs.district.filter( item => item.id === regionId)
-      return region[0]
-    }
-  })
+  // // Get region name
+  // const regionName = useSelector( state => {
+  //    if("root" in state.data && regionId){
+  //     const region = state.data.root.districs.district.filter( item => item.id === regionId)
+  //     return region[0]
+  //   }
+  // })
 
-  const [value, setValue] = useState(regionName)
+  useEffect(()=>{
+    const region = regions?regions.find( (item: any) => item.id === regionId ):null
+    setRegion(region)
+  },[regionId])
 
   // Handler
   const handlerOnChange = (event: any, value: any, reason: any) => {
     if(value && ('id' in value)){
       setRegionId(value.id)
-      setValue(value)
+      setRegion(value)
       setValidation((prevState: any)=>{
         const newState = {...prevState, region: false}
         return newState
@@ -51,7 +57,7 @@ export const Region = ({setRegionId, projectNo, regionId, validation, setValidat
     }
 
     if(reason==="clear"){
-      setValue({id: '', name: ''})
+      setRegion({id: '', name: ''})
       setRegionId('null')
     }
   }
@@ -62,7 +68,7 @@ export const Region = ({setRegionId, projectNo, regionId, validation, setValidat
         disabled={projectNo!=='null'}
         className={classes.Autocomplete}
         id="region"
-        value={value}
+        value={region?region:null}
         onChange={handlerOnChange}
         options={regions?regions:[]}
         getOptionLabel={(option: any) =>  option.name }

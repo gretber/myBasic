@@ -29,6 +29,7 @@ export const getProjectDetails = async (
     } = project.root.projects.project[0]
     
     if(name2){setName2(name2)}
+    console.log(regionId)
     setRegionId(regionId)
     setCustomerName(customerName)
     setFactoryId(factoryId)

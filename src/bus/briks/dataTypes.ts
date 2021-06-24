@@ -30,7 +30,7 @@ export type Project = {
             duration?: number,
             weekendWork: boolean,
             jobType: string | null,
-            teamId: string,
+            teamId?: string,
             factoryId: string,
             tons: number,
             area: number,

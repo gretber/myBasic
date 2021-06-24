@@ -6,7 +6,7 @@ import { useSelector } from '../../hooks';
 import { fetchData,
     createBrik,
     updateSelection,
-   
+    fetchNonScheduledBriks,
 } from './api';
 
 // Toglers
@@ -15,8 +15,19 @@ import { useTogglersRedux } from '../client';
 export const useDataQuery = () => {
     
     useEffect(() => {
-        fetchData();
+        const fetch = async () => {await fetchData(); fetchNonScheduledBriks();}
+         fetch();
+      
+    // fetchData();
+    // fetchNonScheduledBriks();
+        
     }, []);
+    
+    // useEffect(() => {
+    //     // fetchData();
+    //     fetchNonScheduledBriks();
+    // }, []);
+    
 
     const data = useSelector(({ data }) => data);
     const { togglersRedux: { isDataFetching }} = useTogglersRedux();

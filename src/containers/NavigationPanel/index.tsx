@@ -22,7 +22,8 @@ import { Selection } from "../../components/Selection";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      flexGrow: 1,
+      // flexGrow: 1,
+      height: '72px',
     },
     title: {
       flexGrow: 1,

@@ -11,6 +11,7 @@ export type Data = {
         districs: Districs,
         jobTypes: JobTypes,
         selections: Selections,
+        nonScheduled?: Array<Project>
     }
 } | {};
 
@@ -21,6 +22,17 @@ export type SetDataActionType = {
     payload: Data;
 };
 export type SetDataContract = (payload: Data) => SetDataActionType
+
+// ----------------------------- Fetch non scheduled briks -----------------------------
+
+export const SET_NON_SCHEDULED_BRIKS = 'SET_NON_SCHEDULED_BRIKS';
+export type setNonScheduledBriksActionType = {
+    type: typeof SET_NON_SCHEDULED_BRIKS,
+    payload: Array<Project>,
+}
+
+export type setNonScheduledBriksContract = (payload: Array<Project>) => setNonScheduledBriksActionType
+
 
 
 // ----------------------------- Create -----------------------------
@@ -48,6 +60,24 @@ export type UpdateSelectionActionType = {
 export type UpdateSelectionContract = (payload: UpdateSelectionPayload) => UpdateSelectionActionType
 
 
+// // ----------------------------- Update on drag and drop -----------------------------
+
+export const SCHEDULE_PROJECT = 'SCHEDULE_PROJECT';
+type ScheduleProjectActionType = {
+    type: typeof SCHEDULE_PROJECT,
+    payload: Project
+} 
+
+export type ScheduleProjectContract = (payload: Project) => ScheduleProjectActionType
+
+
+export const UN_SCHEDULE_PROJECT = 'UN_SCHEDULE_PROJECT';
+type UnSheduleProjectAtionType = {
+    type: typeof UN_SCHEDULE_PROJECT,
+    payload: Project,
+} 
+
+export type UnScheduleProjectContract = (payload:Project) => UnSheduleProjectAtionType
 
 // --------------------------------Delete project-----------------------
 
@@ -77,4 +107,6 @@ export type ProjectActionTypes =
     | UpdateSelectionActionType
     | DeleteProjectActionType
     | UpdateProjectActionType
-
+    | setNonScheduledBriksActionType
+    | ScheduleProjectActionType
+    | UnSheduleProjectAtionType

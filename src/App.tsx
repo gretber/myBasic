@@ -53,7 +53,7 @@ import { deleteProject } from './API/onDeleteAPI/deleteProject';
 import { dropProject } from './API/onDropAPI/dropProject';
 import { onResizeProject } from './API/onResize/onResizeProject';
 import {copyBrik} from './bus/briks/api/copyBrik';
-import { fetchData } from './bus/briks/api';
+import { fetchData, fetchNonScheduledBriks } from './bus/briks/api';
 
 // Moment
 import moment from 'moment';
@@ -64,7 +64,15 @@ import { Factory, Project, SelectionValue, SelectionType, Team } from './bus/bri
 import Popup from './elements/popup/Popup';
 
 // Styles
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, TextField } from '@material-ui/core';
+
+// Lib
+import TaskStore from './lib/TaskStore'
+import Drag from './lib/Drag';
+import UnplannedGridComponent from './components/unplannedGrid/UnplannedGrid';
+import { useDispatch } from 'react-redux';
+import { scheduleBrik, setNuBrikAction, unScheduleBrik } from './bus/briks/actions';
+import { updateDragAndDropProject } from './bus/briks/api/updateOnDrop';
 
 
 
@@ -90,33 +98,42 @@ export const App = () => {
     // Ref
     const schedulerRef1 = useRef<typeof BryntumScheduler | null>(null);
     const schedulerRef2 = useRef<typeof BryntumScheduler | null>(null);
+    const grid = useRef<any>(null);
+    const [autoReschedule, setAutoReschedule] = useState(true);
+
+    //  Redux
+
+    const dispatch = useDispatch();
 
     // Styles
     const classes = useStyle();
 
     // Init state
-    const [topEvents, setTopEvents] = useState<Array<Project> | []>([]);
-    const [topResources, setTopResources] = useState<Array<SelectionValue> | []>([]);
+    // const [topEvents, setTopEvents] = useState<Array<Project> | []>([]);
+    // const [topResources, setTopResources] = useState<Array<SelectionValue> | []>([]);
+
 
     const [bottomEvents, setBottomEvents] = useState<any>([]);
     const [bottomResources, setBottomResources] = useState<any>([]);
-
+    const [filterValue, setFilterValue] = useState('');
+    
     const [config, setConfig] = useState({...schedulerConfig});
     const [config2] = useState({...schedulerConfig2});
     const [period, setPeriod] = useState('');
 
     const [popupShown, showPopup] = useState(false);
     const [eventRecord, setEventRecord] = useState(null);
-    const [eventStore, setEventStore] = useState(null);
+    const [eventStore, setEventStore] = useState(new TaskStore());
     const [resourceStore, setResourceStore] = useState(null);
-
+    const [gridData, setGridData] = useState<Array<Project>>([]);
+    
     // JobTypes
     
     const [jobTypes, setJobTypes] = useState({'Fræs': true, 'Striber': true, 'Opretning': true});
 
     useEffect(() => {
-        const { eventStore, resourceStore } = schedulerRef1.current.instance;
-        setEventStore(eventStore);
+        const { resourceStore } = schedulerRef1.current.instance;
+        // setEventStore(eventStore);
         setResourceStore(resourceStore);
     }, []);
 
@@ -179,6 +196,7 @@ export const App = () => {
 
             // Transform data
             const transformedProjects = data.root.projects.project.map((item) => {
+                if(!item["resourceId"])
                 item["resourceId"] = item["teamId"]; // add connection field between resource and events
 
                 if(!("eventColor" in item)){
@@ -215,9 +233,12 @@ export const App = () => {
                 setBottomEvents(dropEmptyTons);
                 
                 const sortedByJobTypes = sortByJobTypes(transformedProjects, jobTypes);
-                setTopResources(resource);
-                setTopEvents(sortedByJobTypes);
-
+                  //@ts-ignore: 
+                eventStore.loadDataAsync(sortedByJobTypes);
+                if(resourceStore !== null){
+                     //@ts-ignore: 
+                resourceStore.data = resource;
+                }
             } else {
 
                 // Top resources and events
@@ -243,15 +264,48 @@ export const App = () => {
                 // *********
 
                 const sortedByJobTypes = sortByJobTypes(copyProjectsSelectedByFabric, jobTypes);
-                setTopEvents(sortedByJobTypes);
-                setTopResources(resource);
-
+                            
+                //@ts-ignore: 
+                eventStore.loadDataAsync(sortedByJobTypes);
+                if(resourceStore !== null){
+                     //@ts-ignore: 
+                resourceStore.data = resource;
+                }
                 setBottomResources(bottomResource)
                 setBottomEvents(dropEmptyTons)              
             }
+              if('nonScheduled' in data.root && data.root.nonScheduled) 
+            {
+                if(data.root.nonScheduled?.length !== 0)
+
+                setGridData(data.root.nonScheduled.map((p:Project) => {
+                    let duration = 1;
+                    if(p.startDate !== 'null' && p.endDate !== 'null')
+                    {
+                    //     console.log('start', p.startDate);
+                    //     console.log('end', p.endDate);
+                    // console.log(moment(p.endDate, 'DD-MM-YYYY').diff(moment(p.startDate, 'DD-MM-YYYY'), 'd') + 1);
+                    const difference = moment(p.endDate, 'DD-MM-YYYY').diff(moment(p.startDate, 'DD-MM-YYYY'), 'd') + 1;
+                    if(difference < 1)
+                    duration = 1
+                    else 
+                    duration = difference;
+                    
+                    }
+                    // delete p.resourceId;
+                    delete p.teamId;
+                    return {...p, starDate: 'null', endDate: 'null', duration: duration}}).filter((project)=> { 
+                                   return project.name.toLowerCase().indexOf(filterValue.trim().toLowerCase()) > -1;}))
+
+                  
+           
+            }
+            // setAutoReschedule(!autoReschedule)
+            console.log({gridData});
         }
         return () => {clearInterval(updateInterval);}
-    }, [data, loading, jobTypes])
+    }, [data, loading, jobTypes, filterValue]);
+
 
     // Drop event handler
     const handlerOnAfterEventDrop = (event: any) => {
@@ -389,7 +443,79 @@ export const App = () => {
         copyBrik(projectCopy);
       }
 
+      //   Drag and drop from grid to scheduler
+
+    const onEventStoreUpdate = useCallback(
+        ({ record, source: eventStore }) => {
+            if (autoReschedule) {
+                // console.log('on event update');
+                eventStore.rescheduleOverlappingTasks(record);
+            }
+        },
+        [autoReschedule]
+    );
+
+    const onEventStoreAdd = useCallback(
+      ({ records, source: eventStore }) => {
+          const project = {...records[0].data}
+        //   dispatch(setNuBrikAction(records[0]))
+        delete project.allDay;
+        delete project.cls;
+        delete project.draggable; 
+        delete project.durationUnit; 
+        delete project.exceptionDates;
+        delete project.keepDuration;
+        delete project.parentIndex;
+        delete project.resizable;
+        delete project.starDate;
+
+        project.teamId = project.resourceId;
+        delete project.resourceId;
+
+        project.startDate = moment(project.startDate).format("DD/MM/YYYY");
+        project.endDate = moment(project.endDate).format("DD/MM/YYYY");
+        project.state = "2"
       
+        console.log('on add: ', {project})
+        // updateDragAndDropProject(project);
+        dispatch(scheduleBrik(project));
+         
+        console.log(project);
+        //   console.log({records});
+        //   records[0]._duration = 5;
+        //   records[0].data.duration = 5;
+        
+            if (autoReschedule) {
+                records.forEach((eventRecord:any) =>
+                    eventStore.rescheduleOverlappingTasks(eventRecord)
+                );
+            }
+        },
+        [autoReschedule]
+    );
+
+       useEffect(() => {
+        Object.assign(eventStore, {
+            onUpdate: onEventStoreUpdate,
+            onAdd: onEventStoreAdd
+        });
+        // console.log({eventStore});
+        //@ts-ignore: 
+        new Drag({
+            grid: grid.current.unplannedGrid,
+            schedule: schedulerRef1.current.instance,
+            constrain: false,
+            outerElement: grid.current.unplannedGrid.element
+        });
+        
+          
+    }, [eventStore, onEventStoreAdd, onEventStoreUpdate]);
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setFilterValue(event.target.value.trim())
+ 
+  }
+     
 
     if(loading){
         return (
@@ -440,7 +566,20 @@ export const App = () => {
                         paddingRight: "40px",
                         textAlign: "center"
                     },
+                };
+                 configFeatures.eventMenu.items.unassign =
+                {
+                    text: 'Unassign',
+                    // icon: 'b-fa b-fa-user-times',
+                    weight: 200,
+                    onItem: ({ eventRecord, resourceRecord }:any) =>{
+                        console.log({eventRecord})
+                    updateDragAndDropProject({...eventRecord.originalData, state: '1'});
+                    dispatch(unScheduleBrik({...eventRecord.originalData, state: '1'}))
+                    eventRecord.unassign(resourceRecord)
+                  
                 }
+                };
         }
 
 
@@ -448,6 +587,8 @@ export const App = () => {
 return (
         <>
             <NavigationPanel jobTypes={jobTypes} setJobTypes={setJobTypes} period={period} schedulerConfig = {config} />
+            <ResizePanel style={{height: '60%', zIndex: '0'}} direction="s" handleClass={classes.resizePanel}>
+            <div id='schedulerWrapper'>
             <BryntumScheduler
                  {...Object.assign({}, config, configFeatures) }
                 // {...config}
@@ -457,19 +598,41 @@ return (
                     source.eventRecord.resourceId = source.resourceRecord.id;
                     showEditor(source.eventRecord);
                     return false;
-                    }
+                    },
+                 eventClick: () => {
+                    //  console.log('clicked');
+                     setAutoReschedule(!autoReschedule);
+                 }
                 }}
+                
                 ref={schedulerRef1}
-                events={topEvents}
-                resources={topResources}
+                // events={topEvents}
+                // resources={topResources}
                 barMargin={3}
                 onCopy={handlerOnCopy}
                 onEventResizeEnd={handlerOnEventResizeEnd}
                 onBeforeEventSave={handlerOnBeforeSave}
                 onAfterEventDrop={handlerOnAfterEventDrop}
                 onBeforeEventDelete={handlerOnAfterEventDelete}
-                
-            /><div>
+                crudManager={{
+                        autoLoad: true,
+                        eventStore: eventStore,
+                        resourceStore: resourceStore
+                        // eventStore: schedulerEventStore,
+                        // assignmentStore: eventStore
+                        //  transport: {
+                        //     load: {
+                        //         url: 'data/data.json'
+                        //     }
+                        // }
+                        
+                    }}
+               />
+               <input id='filterInput' type="text" onChange={handleInputChange} value={filterValue}/>
+               <UnplannedGridComponent key='1' ref={grid} eventStore={eventStore} data={gridData} setAutoReschedule={setAutoReschedule} />
+               </div>
+                </ResizePanel>
+               <div>
                 {popupShown ? (
                     <Popup
                         text="Popup text"
@@ -480,8 +643,9 @@ return (
                     ></Popup>
                 ) : null}
             </div>
+            {/* <button style = {{height: '50px', width: '100px', position: 'absolute'}} onClick = {() => {setAutoReschedule(!autoReschedule)}}></button> */}
             {schedulerRef1.current&&    
-            <ResizePanel style={{height: '40%'}} direction="n" handleClass={classes.resizePanel}><BryntumScheduler
+            <BryntumScheduler
                                             ref={schedulerRef2} 
                                             resources={bottomResources}
                                             events={bottomEvents}
@@ -491,7 +655,7 @@ return (
                                                             text: 'Fabrik',
                                                             showEventCount: false,
                                                             showMeta: (event: any)=>{
-                                                                console.log({event})
+                                                                // console.log({event})
                                                                 const allEvents = event.$project.$eventStore._data
                                                                 const currentEvents = allEvents.filter( (item: any)=> item.resourceId === event.originalData.id )
                                                                 const actualEvents = currentEvents.filter((e :any) => {return moment(e.startDate, 'YYYY-MM-DD').unix() < moment(config.endDate).unix()})
@@ -510,7 +674,7 @@ return (
                                                         },]) 
                                             }
                                             partner={schedulerRef1.current.schedulerInstance} />
-                                                         </ResizePanel> }  
+                                                         }  
                                                   </>
     );
 };

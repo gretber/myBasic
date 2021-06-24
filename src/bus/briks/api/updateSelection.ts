@@ -7,6 +7,7 @@ import { getUserLoginData } from '../../../helpers/getUserLoginData';
 // Actions
 import { togglerCreatorAction } from '../../client';
 import { fetchData } from './fetchData';
+import { fetchNonScheduledBriks } from './fetchNonScheduledBriks';
 
 // Types
 import { UpdateSelection } from './types';
@@ -62,6 +63,7 @@ export const updateSelection: UpdateSelection = async (body) => {
       throw new Error('Todo create failed');
     }
      fetchData();
+     fetchNonScheduledBriks();
   } catch (error) {
       console.log(error);
   } finally {

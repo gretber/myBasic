@@ -96,6 +96,7 @@ export const Selection = () => {
     }
   });
 
+  console.log({initialHoldState})
   // Get region data
   const initialRegionState = useSelector( state => {
     if("root" in state.data){

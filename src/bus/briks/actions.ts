@@ -25,3 +25,18 @@ export const updateProjectAction: types.UpdateProjectContract = (payload) => ({
     type: types.UPDATE_PROJECT,
     payload,
 });
+
+export const setNonScheduledBriksAction: types.setNonScheduledBriksContract = (payload) => ({
+    type: types.SET_NON_SCHEDULED_BRIKS,
+    payload, 
+})
+
+export const scheduleBrik: types.ScheduleProjectContract = (payload) => ({
+    type: types.SCHEDULE_PROJECT,
+    payload,
+})
+
+export const unScheduleBrik: types.UnScheduleProjectContract = (payload) => ({
+    type: types.UN_SCHEDULE_PROJECT,
+    payload,
+})

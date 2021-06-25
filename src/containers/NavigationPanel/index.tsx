@@ -34,8 +34,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const NavigationPanel = ({schedulerConfig, period, jobTypes, setJobTypes}:
-   {schedulerConfig: any, period: string, jobTypes:any, setJobTypes:any}) => {
+export const NavigationPanel = ({schedulerConfig, period, jobTypes, setJobTypes, setIsNonScheduleShow, isNonScheduleShow}:
+   {schedulerConfig: any, period: string, jobTypes: any, setJobTypes: any, setIsNonScheduleShow: any, isNonScheduleShow: any}) => {
 
 
   //  Cookies
@@ -76,6 +76,7 @@ export const NavigationPanel = ({schedulerConfig, period, jobTypes, setJobTypes}
           {/* <Button onClick = {logOutButtonClickHandler}>
             <ExitToAppIcon />
           </Button> */}
+          <Button variant='outlined' onClick={()=>setIsNonScheduleShow(!isNonScheduleShow)}>Hide/Show Not scheduled</Button>
         </Toolbar>
       </AppBar>
     </div>

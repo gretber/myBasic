@@ -33,7 +33,7 @@ class UnplannedGridComponent extends Component {
     render() {
         if(this.unplannedGrid && this.props.data )
         this.unplannedGrid.data = this.props.data;
-        return (<div id="unplannedContainer"></div>);
+        return (<div id="unplannedContainer" style={this.props.style}></div>);
     }
 };
 

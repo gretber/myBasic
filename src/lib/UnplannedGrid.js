@@ -32,7 +32,7 @@ export default class UnplannedGrid extends Grid {
                 flex       : 1,
                 field      : 'name',
                 htmlEncode : false,
-                renderer   : (data) => `${data.record.name}`
+                renderer   : (data) => data.record.projectNo !== 'null'?`${data.record.projectNo} - ${data.record.name}`:`${data.record.name}`
             }, ],
 
             rowHeight : 50,

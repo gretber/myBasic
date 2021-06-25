@@ -126,6 +126,8 @@ export const App = () => {
     const [eventStore, setEventStore] = useState(new TaskStore());
     const [resourceStore, setResourceStore] = useState(null);
     const [gridData, setGridData] = useState<Array<Project>>([]);
+
+    const[isNonScheduleShow, setIsNonScheduleShow] = useState(false)
     
     // JobTypes
     
@@ -521,7 +523,7 @@ export const App = () => {
     if(loading){
         return (
             <Fragment>
-                {(Object.keys(data).length !== 0) && <NavigationPanel jobTypes={jobTypes} setJobTypes={setJobTypes} period = {period} schedulerConfig = {config} />}
+                {(Object.keys(data).length !== 0) && <NavigationPanel jobTypes={jobTypes} setJobTypes={setJobTypes} period = {period} schedulerConfig = {config} isNonScheduleShow={isNonScheduleShow} setIsNonScheduleShow={setIsNonScheduleShow} />}
                 <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "500px", marginBottom: "500px"}}>
                     <CircularProgress color="primary" />
                 </div>
@@ -589,11 +591,13 @@ export const App = () => {
                 };
         }
 
+        const hide = isNonScheduleShow?
+        { display: 'none'}
+        :{};
 
-     
 return (
         <>
-            <NavigationPanel jobTypes={jobTypes} setJobTypes={setJobTypes} period={period} schedulerConfig = {config} />
+            <NavigationPanel jobTypes={jobTypes} setJobTypes={setJobTypes} period={period} schedulerConfig = {config} isNonScheduleShow={isNonScheduleShow} setIsNonScheduleShow={setIsNonScheduleShow} />
             <ResizePanel style={{height: '60%', zIndex: '0'}} direction="s" handleClass={classes.resizePanel}>
             <div id='schedulerWrapper'>
             <BryntumScheduler
@@ -635,8 +639,8 @@ return (
                         
                     }}
                />
-               <input id='filterInput' type="text" onChange={handleInputChange} value={filterValue}/>
-               <UnplannedGridComponent ref={grid} eventStore={eventStore} data={gridData} autoReschedule={autoReschedule} setAutoReschedule={setAutoReschedule} />
+               <input style={hide} id='filterInput' type="text" onChange={handleInputChange} value={filterValue}/>
+               <UnplannedGridComponent style={hide} ref={grid} eventStore={eventStore} data={gridData} autoReschedule={autoReschedule} setAutoReschedule={setAutoReschedule} />
                </div>
                 </ResizePanel>
                <div>

@@ -35,7 +35,14 @@ export default class UnplannedGrid extends Grid {
                 renderer   : (data) => `${data.record.name}`
             }, ],
 
-            rowHeight : 50
+            rowHeight : 50,
+            features : {
+                cellMenu : {
+                    items : {
+                        removeRow : false
+                    },
+                },
+            },
         };
     }
 

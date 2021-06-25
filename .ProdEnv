@@ -7,6 +7,7 @@ GENERATE_SOURCEMAP=false
 # Project environment variables
 
 REACT_APP_INIT_BRIK_URL = 'http://mail.vej.dk/IcopalKal/icokal.nsf/jsoninital?OpenAgent'
+REACT_APP_NON_SCHEDULED_BRIK_URL = 'http://mail.vej.dk/IcopalKal/icokal.nsf/jsoninital?OpenAgent&state=nonscheduled'
 REACT_APP_SELECTION_PROJECT = 'http://mail.vej.dk/IcopalKal/icokal.nsf/JSONselectionList?OpenAgent&Selection=project'
 REACT_APP_SELECTION_PROJECT_DETAILS = 'http://mail.vej.dk/IcopalKal/icokal.nsf/JSONselectionList?OpenAgent&Selection=project&Key='
 REACT_APP_GET_PROJECT_DETAILS = 'http://mail.vej.dk/IcopalKal/icokal.nsf/JSONselectionList?OpenAgent&Selection=projectDetail&Key='

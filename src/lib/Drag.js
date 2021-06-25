@@ -15,7 +15,7 @@ export default class Drag extends DragHelper {
             dropTargetSelector : '.b-timeline-subgrid',
 
             // Only allow drag of row elements inside on the unplanned grid
-            targetSelector : '.b-grid-row'
+            targetSelector : '.b-grid-row',
         };
     }
 
@@ -33,7 +33,7 @@ export default class Drag extends DragHelper {
     }
 
     onTaskDragStart({ context }) {
-        console.log('drag start');
+
         const
             me = this,
             { schedule } = me,
@@ -70,8 +70,7 @@ export default class Drag extends DragHelper {
     }
 
     onTaskDrag({ context }) {
-        // console.log('on task drag')
-        // console.log({context})
+
         const
             me           = this,
             { schedule } = me,
@@ -92,13 +91,11 @@ export default class Drag extends DragHelper {
 
     // Drop callback after a mouse up, take action and transfer the unplanned task to the real EventStore (if it's valid)
     onTaskDrop({ context }) {
-        console.log('drop')
-        console.log({context})
         const
             me = this,
             task = context.task,
             target = context.target;
-        console.log({task});
+
         // If drop was done in a valid location, set the startDate and transfer the task to the Scheduler event store
         if (context.valid && target) {
             const
@@ -119,7 +116,7 @@ export default class Drag extends DragHelper {
 
             // Dropped on a scheduled event, display toast
             if (targetEventRecord) {
-                WidgetHelper.toast(`Dropped on ${targetEventRecord.name}`);
+                // WidgetHelper.toast(`Dropped on ${targetEventRecord.name}`);
             }
 
             me.context.finalize();

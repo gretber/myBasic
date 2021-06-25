@@ -283,7 +283,7 @@ export const App = () => {
                     if(p.startDate !== 'null' && p.endDate !== 'null')
                     {
                     //     console.log('start', p.startDate);
-                    //     console.log('end', p.endDate);
+                        //  console.log('end', p.endDate);
                     // console.log(moment(p.endDate, 'DD-MM-YYYY').diff(moment(p.startDate, 'DD-MM-YYYY'), 'd') + 1);
                     const difference = moment(p.endDate, 'DD-MM-YYYY').diff(moment(p.startDate, 'DD-MM-YYYY'), 'd') + 1;
                     if(difference < 1)
@@ -301,7 +301,7 @@ export const App = () => {
            
             }
             // setAutoReschedule(!autoReschedule)
-            console.log({gridData});
+            // console.log({gridData});
         }
         return () => {clearInterval(updateInterval);}
     }, [data, loading, jobTypes, filterValue]);
@@ -457,8 +457,8 @@ export const App = () => {
 
     const onEventStoreAdd = useCallback(
       ({ records, source: eventStore }) => {
-          const project = {...records[0].data}
-        //   dispatch(setNuBrikAction(records[0]))
+        const project = {...records[0].data}
+        // dispatch(setNuBrikAction(records[0]))
         delete project.allDay;
         delete project.cls;
         delete project.draggable; 
@@ -468,19 +468,20 @@ export const App = () => {
         delete project.parentIndex;
         delete project.resizable;
         delete project.starDate;
+        delete project.eventColor;
 
         project.teamId = project.resourceId;
         delete project.resourceId;
 
         project.startDate = moment(project.startDate).format("DD/MM/YYYY");
-        project.endDate = moment(project.endDate).format("DD/MM/YYYY");
+        project.endDate = moment(project.endDate).subtract(1, 'd').format("DD/MM/YYYY");
         project.state = "2"
       
-        console.log('on add: ', {project})
-        // updateDragAndDropProject(project);
+        // console.log('on add: ', {project})
+        updateDragAndDropProject(project);
         dispatch(scheduleBrik(project));
          
-        console.log(project);
+        // console.log(project);
         //   console.log({records});
         //   records[0]._duration = 5;
         //   records[0].data.duration = 5;
@@ -567,15 +568,21 @@ export const App = () => {
                         textAlign: "center"
                     },
                 };
-                 configFeatures.eventMenu.items.unassign =
+            configFeatures.eventMenu.items.unassign =
                 {
                     text: 'Unassign',
                     // icon: 'b-fa b-fa-user-times',
                     weight: 200,
                     onItem: ({ eventRecord, resourceRecord }:any) =>{
-                        console.log({eventRecord})
-                    updateDragAndDropProject({...eventRecord.originalData, state: '1'});
-                    dispatch(unScheduleBrik({...eventRecord.originalData, state: '1'}))
+              
+                    const startDate =  moment(eventRecord.originalData.startDate).format("DD/MM/YYYY");
+                    const endDate =  moment(eventRecord.originalData.endDate).format("DD/MM/YYYY");
+                    delete eventRecord.originalData.eventColor
+                    delete eventRecord.originalData.resourceId
+                    
+                    console.log({...eventRecord.originalData, state: '1', startDate, endDate})
+                    updateDragAndDropProject({...eventRecord.originalData, state: '1', startDate, endDate});
+                    dispatch(unScheduleBrik({...eventRecord.originalData, state: '1', startDate, endDate}))
                     eventRecord.unassign(resourceRecord)
                   
                 }
@@ -629,7 +636,7 @@ return (
                     }}
                />
                <input id='filterInput' type="text" onChange={handleInputChange} value={filterValue}/>
-               <UnplannedGridComponent key='1' ref={grid} eventStore={eventStore} data={gridData} setAutoReschedule={setAutoReschedule} />
+               <UnplannedGridComponent ref={grid} eventStore={eventStore} data={gridData} autoReschedule={autoReschedule} setAutoReschedule={setAutoReschedule} />
                </div>
                 </ResizePanel>
                <div>
@@ -644,38 +651,37 @@ return (
                 ) : null}
             </div>
             {/* <button style = {{height: '50px', width: '100px', position: 'absolute'}} onClick = {() => {setAutoReschedule(!autoReschedule)}}></button> */}
-            {schedulerRef1.current&&    
-            <BryntumScheduler
-                                            ref={schedulerRef2} 
-                                            resources={bottomResources}
-                                            events={bottomEvents}
-                                            // {...config2}
-                                             {...Object.assign({}, config2, config2.columns = [ {
-                                                            type: 'resourceInfo',
-                                                            text: 'Fabrik',
-                                                            showEventCount: false,
-                                                            showMeta: (event: any)=>{
-                                                                // console.log({event})
-                                                                const allEvents = event.$project.$eventStore._data
-                                                                const currentEvents = allEvents.filter( (item: any)=> item.resourceId === event.originalData.id )
-                                                                const actualEvents = currentEvents.filter((e :any) => {return moment(e.startDate, 'YYYY-MM-DD').unix() < moment(config.endDate).unix()})
-                                                                
-                                                                const totalTons = actualEvents.reduce((a: any, b: any) => a + b.tons, 0)
+            {schedulerRef1.current &&    
+            <BryntumScheduler   ref={schedulerRef2}
+                                resources={bottomResources}
+                                events={bottomEvents}
+                                // {...config2}
+                                    {...Object.assign({}, config2, config2.columns = [ {
+                                        type: 'resourceInfo',
+                                        text: 'Fabrik',
+                                        showEventCount: false,
+                                        showMeta: (event: any)=>{
+                                            // console.log({event})
+                                            const allEvents = event.$project.$eventStore._data
+                                            const currentEvents = allEvents.filter( (item: any)=> item.resourceId === event.originalData.id )
+                                            const actualEvents = currentEvents.filter((e :any) => {return moment(e.startDate, 'YYYY-MM-DD').unix() < moment(config.endDate).unix()})
+                                            
+                                            const totalTons = actualEvents.reduce((a: any, b: any) => a + b.tons, 0)
 
-                                                                return `Total ${totalTons} tons`
-                                                            },
-                                                            showImage: false,
-                                                            width: 230,
-                                                            enableCellContextMenu: false,
-                                                            enableHeaderContextMenu: false,
-                                                            sortable : false,
-                                                            draggable: false,
-                                                            editor: false
-                                                        },]) 
-                                            }
-                                            partner={schedulerRef1.current.schedulerInstance} />
-                                                         }  
-                                                  </>
+                                            return `Total ${totalTons} tons`
+                                        },
+                                        showImage: false,
+                                        width: 230,
+                                        enableCellContextMenu: false,
+                                        enableHeaderContextMenu: false,
+                                        sortable : false,
+                                        draggable: false,
+                                        editor: false
+                                    },])
+                                }
+                                partner={schedulerRef1.current.schedulerInstance} />
+            }  
+                </>
     );
 };
 

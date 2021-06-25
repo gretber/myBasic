@@ -96,7 +96,6 @@ export const Selection = () => {
     }
   });
 
-  console.log({initialHoldState})
   // Get region data
   const initialRegionState = useSelector( state => {
     if("root" in state.data){
@@ -160,7 +159,7 @@ export const Selection = () => {
     if(fabrik){
       const isFabrikChosen = fabrik.findIndex( (item: any) =>  item["-selected"] === true )
       isFabrikChosen === -1?setIsFabrikChosen(false):setIsFabrikChosen(true)
-      console.log({isFabrikChosen})
+      // console.log({isFabrikChosen})
     }
   },[fabrik])
 

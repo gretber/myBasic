@@ -17,7 +17,7 @@ class UnplannedGridComponent extends Component {
             eventStore : this.props.eventStore,
             data: this.props.data,
             listeners: {
-                cellMouseOver: () => {this.props.setAutoReschedule(false)}
+                cellMouseOver: () => {this.props.setAutoReschedule(!this.props.autoReschedule)},
             },
             store      : {
                 modelClass : Task,

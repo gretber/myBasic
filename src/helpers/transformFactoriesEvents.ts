@@ -33,7 +33,6 @@ export const transformFactoriesEvents = (events: any) => {
   const modifiedDB: any = [];
   // console.log(events)
   events.forEach((el: any) => {
-    
     let startDate = startFormat(el);
     let endDate =  endFormat(el);
     let weekends = !el.weekendWork ? calculateWeekend(startDate, endDate) : 0;

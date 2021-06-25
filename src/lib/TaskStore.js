@@ -36,7 +36,6 @@ export default class TaskStore extends EventStore {
 
             futureEvents.sort((a, b) => a.startDate > b.startDate ? 1 : -1);
             earlierEvents.sort((a, b) => a.startDate > b.startDate ? -1 : 1);
-
             this.beginBatch();
 
             futureEvents.forEach((ev, i) => {

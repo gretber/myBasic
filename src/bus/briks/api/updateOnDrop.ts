@@ -42,7 +42,7 @@ export const updateDragAndDropProject = async (body: Project) => {
     });
 
     if (response.status !== 200) {
-      throw new Error('Todo create failed');
+      throw new Error('update drag and drop project failed');
     }
     // store.dispatch(updateProjectAction(body));
     

@@ -154,8 +154,6 @@ export const NyBrik = () => {
 
   const [newBrik, setNewBrik] = useState<Project>(initialBrik)
 
-  // console.log("newBrik", newBrik)
-  // console.log({validation})
   // Clean request data
   const bodyNewBrik = { ...newBrik }
   delete bodyNewBrik.eventColor
@@ -163,17 +161,16 @@ export const NyBrik = () => {
   const onSave = () => {
     if(newBrik.regionId !== 'null' && newBrik.name !== 'null' && newBrik.teamId !== 'null'){
       createBrik(newBrik)
-
+      toggleDrawer("left", false)
     } else {
       setValidation( (prevState: any) => {
-        const newState = { 
+        const newState = {
           region: newBrik.regionId,
           arbejdsplads: newBrik.name,
           hold: newBrik.teamId,
         }
         return newState
       })
-      // console.log("fields not fill")
     }
   }
 

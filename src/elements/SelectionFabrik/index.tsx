@@ -7,7 +7,22 @@ import { useSelector } from "../../hooks/useSelector";
 // Components
 import { Item } from "./item";
 
+// Material
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    fabrikTitle: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginBottom: 16,
+    }
+  })
+);
+
 export const SelectionFabrik = ({ fabrik, setFabrik, isFabrikChosen, setIsFabrikChosen, setRegion, setHold }: any) => {
+
+  const classes = useStyles();
   
   // Get data
   const initialState = useSelector( state => {
@@ -56,5 +71,10 @@ export const SelectionFabrik = ({ fabrik, setFabrik, isFabrikChosen, setIsFabrik
     )})
     :null;
 
-  return <>{itemJSX}</>;
+  return (
+    <>
+      <div className={classes.fabrikTitle}>Brikker placeret på en angivet enhed.</div>
+      {itemJSX}
+    </>
+  );
 };

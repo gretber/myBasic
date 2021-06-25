@@ -1,14 +1,27 @@
 // Core
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 
 // Material
-import Button from "@material-ui/core/Button";
+import Button from '@material-ui/core/Button';
 import { Divider } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
 // Components
 import { Item } from "./item";
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    regionTitle: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginBottom: 16,
+    }
+  })
+);
+
 export const SelectionRegion = ({ region, setRegion, isFabrikChosen }: any) => {
+
+  const classes = useStyles();
   
   useEffect(()=>{
     if(isFabrikChosen){
@@ -61,6 +74,7 @@ export const SelectionRegion = ({ region, setRegion, isFabrikChosen }: any) => {
   
   return (
     <>
+      <div className={classes.regionTitle}>Ikke placeret brikker pr. region.</div>
       <Button variant="contained"
               disabled={isFabrikChosen}
               color="primary"
